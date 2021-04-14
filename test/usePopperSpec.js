@@ -63,9 +63,11 @@ describe('usePopper', () => {
 
       result.mount.unmount();
 
-      expect(
-        document.querySelector('[aria-describedby="example123"]'),
-      ).to.equal(null);
+      setTimeout(() => {
+        expect(
+          document.querySelector('[aria-describedby="example123"]'),
+        ).to.equal(null);
+      });
 
       done();
     });
@@ -89,11 +91,13 @@ describe('usePopper', () => {
 
       result.mount.unmount();
 
-      expect(
-        document.querySelector('[aria-describedby="foo, bar , baz "]'),
-      ).to.equal(elements.reference);
+      setTimeout(() => {
+        expect(
+          document.querySelector('[aria-describedby="foo, bar , baz "]'),
+        ).to.equal(elements.reference);
 
-      done();
+        done();
+      });
     });
   });
 
@@ -127,11 +131,13 @@ describe('usePopper', () => {
 
       result.mount.unmount();
 
-      expect(document.querySelector('[aria-describedby="foo"]')).to.equal(
-        elements.reference,
-      );
+      setTimeout(() => {
+        expect(document.querySelector('[aria-describedby="foo"]')).to.equal(
+          elements.reference,
+        );
 
-      done();
+        done();
+      });
     });
   });
 });

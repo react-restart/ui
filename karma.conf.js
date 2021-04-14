@@ -34,7 +34,6 @@ module.exports = (config) => {
       },
       plugins: [
         plugins.define({
-          'process.env.NODE_ENV': JSON.stringify('test'),
           __DEV__: true,
         }),
         new webpack.ProvidePlugin({
@@ -44,15 +43,10 @@ module.exports = (config) => {
       devtool: 'inline-cheap-module-source-map',
     },
 
-    reporters: ['mocha', 'coverage'],
+    reporters: ['mocha'],
 
     mochaReporter: {
       output: 'autowatch',
-    },
-
-    coverageReporter: {
-      type: 'lcov',
-      dir: 'coverage',
     },
 
     customLaunchers: {

@@ -1,11 +1,9 @@
 /* eslint-disable mocha/no-hooks-for-single-case, mocha/no-top-level-hooks */
 
-import '@babel/polyfill';
-
 import { format } from 'util';
 import chai from 'chai';
 import Enzyme, { ReactWrapper, ShallowWrapper } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import sinonChai from 'sinon-chai';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -76,7 +74,7 @@ describe('Process environment for tests', () => {
   });
 });
 
-// Ensure all files in src folder are loaded for proper code coverage analysis
+// // Ensure all files in src folder are loaded for proper code coverage analysis
 const srcContext = require.context('../src', true, /.*\.js$/);
 srcContext.keys().forEach(srcContext);
 
