@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
+
+import { useSSRSafeId } from '@react-aria/ssr';
 import React, { useContext, useCallback } from 'react';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export interface UseDropdownToggleProps {
+  id: string;
   ref: DropdownContextValue['setToggle'];
   onClick: React.MouseEventHandler;
   'aria-haspopup': boolean;
@@ -26,6 +29,7 @@ export function useDropdownToggle(): [
   UseDropdownToggleProps,
   UseDropdownToggleMetadata,
 ] {
+  const id = useSSRSafeId();
   const { show = false, toggle = noop, setToggle } =
     useContext(DropdownContext) || {};
   const handleClick = useCallback(
@@ -37,6 +41,7 @@ export function useDropdownToggle(): [
 
   return [
     {
+      id,
       ref: setToggle || noop,
       onClick: handleClick,
       'aria-haspopup': true,
@@ -84,7 +89,7 @@ function DropdownToggle({ children }: DropdownToggleProps) {
   return <>{children(props, meta)}</>;
 }
 
-DropdownToggle.displayName = 'ReactOverlaysDropdownToggle';
+DropdownToggle.displayName = 'DropdownToggle';
 DropdownToggle.propTypes = propTypes;
 
 /** @component */

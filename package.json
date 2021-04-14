@@ -61,6 +61,7 @@
   "dependencies": {
     "@babel/runtime": "^7.13.10",
     "@popperjs/core": "^2.9.2",
+    "@react-aria/ssr": "^3.0.1",
     "@restart/hooks": "^0.3.26",
     "@types/warning": "^3.0.0",
     "dom-helpers": "^5.2.0",
