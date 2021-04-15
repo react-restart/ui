@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 import TabContext from './TabContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
 import {
+  EventKey,
   DynamicRefForwardingComponent,
   TransitionCallbacks,
   TransitionType,
-} from './helpers';
-import { EventKey } from './types';
+} from './types';
 
 export interface TabPaneProps
   extends TransitionCallbacks,

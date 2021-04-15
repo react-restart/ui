@@ -6,8 +6,7 @@ import { useSSRSafeId } from '@react-aria/ssr';
 
 import TabContext, { TabContextType } from './TabContext';
 import SelectableContext from './SelectableContext';
-import { SelectCallback, TransitionType } from './helpers';
-import { EventKey } from './types';
+import { EventKey, SelectCallback, TransitionType } from './types';
 
 export interface TabContainerProps extends React.PropsWithChildren<unknown> {
   id?: string;

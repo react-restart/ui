@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { DynamicRefForwardingComponent } from './helpers';
+import { DynamicRefForwardingComponent } from './types';
 import { useButtonProps } from './Button';
 import { useEventCallback } from '@restart/hooks';
 

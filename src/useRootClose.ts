@@ -1,11 +1,10 @@
 import contains from 'dom-helpers/contains';
 import listen from 'dom-helpers/listen';
+import ownerDocument from 'dom-helpers/ownerDocument';
 import { useCallback, useEffect, useRef } from 'react';
 
 import useEventCallback from '@restart/hooks/useEventCallback';
 import warning from 'warning';
-
-import ownerDocument from './ownerDocument';
 
 const escapeKeyCode = 27;
 const noop = () => {};
@@ -90,7 +89,7 @@ function useRootClose(
     // https://github.com/facebook/react/issues/20074
     let currentEvent = window.event;
 
-    const doc = ownerDocument(getRefTarget(ref));
+    const doc = ownerDocument(getRefTarget(ref)!);
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM

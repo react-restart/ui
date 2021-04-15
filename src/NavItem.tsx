@@ -6,9 +6,9 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 import warning from 'warning';
 import NavContext from './NavContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
-import { DynamicRefForwardingComponent } from './helpers';
-import { EventKey } from './types';
-import Anchor from './Anchor';
+import { EventKey, DynamicRefForwardingComponent } from './types';
+import Button from './Button';
+import { dataAttr } from './DataKey';
 
 export interface NavItemProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
@@ -43,11 +43,11 @@ const defaultProps = {
 };
 
 const NavItem: DynamicRefForwardingComponent<
-  'a',
+  typeof Button,
   NavItemProps
 > = React.forwardRef<HTMLElement, NavItemProps>(
   (
-    { active, eventKey, onSelect, onClick, as: Component = Anchor, ...props },
+    { active, eventKey, onSelect, onClick, as: Component = Button, ...props },
     ref,
   ) => {
     const navKey = makeEventKey(eventKey, props.href);
@@ -71,7 +71,7 @@ const NavItem: DynamicRefForwardingComponent<
       );
 
       // @ts-ignore
-      props['data-rb-event-key'] = navKey;
+      props[dataAttr('event-key')] = navKey;
 
       props.id = contextControllerId || props.id;
       props['aria-controls'] = contextControlledId || props['aria-controls'];
@@ -92,9 +92,16 @@ const NavItem: DynamicRefForwardingComponent<
 
     const handleOnclick = useEventCallback((e) => {
       onClick?.(e);
-      if (navKey == null) return;
+
+      if (navKey == null) {
+        return;
+      }
+
       onSelect?.(navKey, e);
-      parentOnSelect?.(navKey, e);
+
+      if (parentOnSelect && !e.isPropagationStopped()) {
+        parentOnSelect?.(navKey, e);
+      }
     });
 
     return <Component {...props} ref={ref} onClick={handleOnclick} />;

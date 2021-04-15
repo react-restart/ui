@@ -1,6 +1,13 @@
 import matches from 'dom-helpers/matches';
 import qsa from 'dom-helpers/querySelectorAll';
-import React, { useCallback, useRef, useEffect, useMemo } from 'react';
+import addEventListener from 'dom-helpers/addEventListener';
+import React, {
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+  useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
@@ -11,6 +18,10 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 import DropdownContext, { DropDirection } from './DropdownContext';
 import DropdownMenu from './DropdownMenu';
 import DropdownToggle from './DropdownToggle';
+import SelectableContext from './SelectableContext';
+import { SelectCallback } from './types';
+import DropdownItem from './DropdownItem';
+import { dataAttr } from './DataKey';
 
 const propTypes = {
   /**
@@ -85,12 +96,18 @@ export interface DropdownInjectedProps {
   onKeyDown: React.KeyboardEventHandler;
 }
 
+export interface ToggleMetadata {
+  source: string | undefined;
+  originalEvent: React.SyntheticEvent | Event | undefined;
+}
+
 export interface DropdownProps {
   drop?: DropDirection;
   alignEnd?: boolean;
   defaultShow?: boolean;
   show?: boolean;
-  onToggle: (nextShow: boolean, event?: React.SyntheticEvent | Event) => void;
+  onSelect?: SelectCallback;
+  onToggle: (nextShow: boolean, meta: ToggleMetadata) => void;
   itemSelector?: string;
   focusFirstItemOnShow?: false | true | 'keyboard';
   children: React.ReactNode;
@@ -119,8 +136,9 @@ function Dropdown({
   alignEnd,
   defaultShow,
   show: rawShow,
+  onSelect,
   onToggle: rawOnToggle,
-  itemSelector = '* > *',
+  itemSelector = `* [${dataAttr('dropdown-item')}]`,
   focusFirstItemOnShow,
   children,
 }: DropdownProps) {
@@ -142,12 +160,31 @@ function Dropdown({
   const lastShow = usePrevious(show);
   const lastSourceEvent = useRef<string | null>(null);
   const focusInDropdown = useRef(false);
+  const onSelectCtx = useContext(SelectableContext);
 
   const toggle = useCallback(
-    (nextShow: boolean, event?: Event | React.SyntheticEvent) => {
-      onToggle(nextShow, event);
+    (
+      nextShow: boolean,
+      event?: Event | React.SyntheticEvent,
+      source = event?.type,
+    ) => {
+      onToggle(nextShow, { originalEvent: event, source });
     },
     [onToggle],
+  );
+
+  const handleSelect = useEventCallback(
+    (key: string | null, event: React.SyntheticEvent) => {
+      onSelect?.(key, event);
+
+      if (!event.isDefaultPrevented()) {
+        toggle(false, event, 'select');
+      }
+
+      if (!event.isPropagationStopped()) {
+        onSelectCtx?.(key, event);
+      }
+    },
   );
 
   const context = useMemo(
@@ -248,7 +285,7 @@ function Dropdown({
     }
 
     lastSourceEvent.current = event.type;
-
+    let meta = { originalEvent: event, source: event.type };
     switch (key) {
       case 'ArrowUp': {
         const next = getNextFocusedChild(target, -1);
@@ -260,37 +297,58 @@ function Dropdown({
       case 'ArrowDown':
         event.preventDefault();
         if (!show) {
-          onToggle(true, event);
+          onToggle(true, meta);
         } else {
           const next = getNextFocusedChild(target, 1);
           if (next && next.focus) next.focus();
         }
         return;
-      case 'Escape':
       case 'Tab':
+        // on keydown the target is the element being tabbed FROM, we need that
+        // to know if this event is relevant to this dropdown (e.g. in this menu).
+        // On `keyup` the target is the element being tagged TO which we use to check
+        // if focus has left the menu
+        addEventListener(
+          document as any,
+          'keyup',
+          (e) => {
+            if (
+              (e.key === 'Tab' && !e.target) ||
+              !menuRef.current!.contains(e.target as HTMLElement)
+            ) {
+              onToggle(false, meta);
+            }
+          },
+          { once: true },
+        );
+        break;
+      case 'Escape':
         if (key === 'Escape') {
           event.preventDefault();
           event.stopPropagation();
         }
 
-        onToggle(false, event);
+        onToggle(false, meta);
         break;
       default:
     }
   });
 
   return (
-    <DropdownContext.Provider value={context}>
-      {children}
-    </DropdownContext.Provider>
+    <SelectableContext.Provider value={handleSelect}>
+      <DropdownContext.Provider value={context}>
+        {children}
+      </DropdownContext.Provider>
+    </SelectableContext.Provider>
   );
 }
 
-Dropdown.displayName = 'ReactOverlaysDropdown';
+Dropdown.displayName = 'Dropdown';
 
 Dropdown.propTypes = propTypes;
 
 Dropdown.Menu = DropdownMenu;
 Dropdown.Toggle = DropdownToggle;
+Dropdown.Item = DropdownItem;
 
 export default Dropdown;
