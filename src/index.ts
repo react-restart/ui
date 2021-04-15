@@ -7,7 +7,7 @@ import Overlay from './Overlay';
 import Portal from './Portal';
 import useRootClose from './useRootClose';
 import Nav from './Nav';
-import NavItem from './NavItem';
+import NavItem, { useNavItem } from './NavItem';
 import Button from './Button';
 import TabContainer from './TabContainer';
 import TabPane from './TabPane';
@@ -20,6 +20,7 @@ export {
   useDropdownItem,
   Nav,
   NavItem,
+  useNavItem,
   Modal,
   Overlay,
   Portal,

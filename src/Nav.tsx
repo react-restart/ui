@@ -70,6 +70,7 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
     if (tabContext) {
       role = role || 'tablist';
       activeKey = tabContext.activeKey;
+      // TODO: do we need to duplicate these?
       getControlledId = tabContext.getControlledId;
       getControllerId = tabContext.getControllerId;
     }
