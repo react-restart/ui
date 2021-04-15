@@ -6,9 +6,9 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 import warning from 'warning';
 import NavContext from './NavContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
-import { DynamicRefForwardingComponent } from './helpers';
-import { EventKey } from './types';
-import Anchor from './Anchor';
+import { EventKey, DynamicRefForwardingComponent } from './types';
+import Button from './Button';
+import { dataAttr } from './DataKey';
 
 export interface NavItemProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
@@ -38,71 +38,88 @@ const propTypes = {
   'aria-controls': PropTypes.string,
 };
 
-const defaultProps = {
-  disabled: false,
-};
+export interface UseNavItemOptions {
+  key?: string | null;
+  onClick?: React.MouseEventHandler;
+  active?: boolean;
+  disabled?: boolean;
+  id?: string;
+  role?: string;
+}
+
+export function useNavItem({
+  key,
+  onClick,
+  active,
+  id,
+  role,
+  disabled,
+}: UseNavItemOptions) {
+  const parentOnSelect = useContext(SelectableContext);
+  const navContext = useContext(NavContext);
+
+  let isActive = active;
+  let props = {} as any;
+
+  if (navContext) {
+    if (!role && navContext.role === 'tablist') props.role = 'tab';
+
+    const contextControllerId = navContext.getControllerId(key ?? null);
+    const contextControlledId = navContext.getControlledId(key ?? null);
+
+    // @ts-ignore
+    props[dataAttr('event-key')] = key;
+
+    props.id = contextControllerId || id;
+    props['aria-controls'] = contextControlledId;
+
+    isActive =
+      active == null && key != null ? navContext.activeKey === key : active;
+  }
+
+  if (props.role === 'tab') {
+    if (disabled) {
+      props.tabIndex = -1;
+      props['aria-disabled'] = true;
+    }
+    props['aria-selected'] = isActive;
+  }
+
+  props.onClick = useEventCallback((e: React.MouseEvent) => {
+    if (disabled) return;
+
+    onClick?.(e);
+
+    if (key == null) {
+      return;
+    }
+
+    if (parentOnSelect && !e.isPropagationStopped()) {
+      parentOnSelect?.(key, e);
+    }
+  });
+
+  return [props, { isActive }] as const;
+}
 
 const NavItem: DynamicRefForwardingComponent<
-  'a',
+  typeof Button,
   NavItemProps
 > = React.forwardRef<HTMLElement, NavItemProps>(
-  (
-    { active, eventKey, onSelect, onClick, as: Component = Anchor, ...props },
-    ref,
-  ) => {
-    const navKey = makeEventKey(eventKey, props.href);
-    const parentOnSelect = useContext(SelectableContext);
-    const navContext = useContext(NavContext);
-
-    let isActive = active;
-    if (navContext) {
-      if (!props.role && navContext.role === 'tablist') props.role = 'tab';
-
-      const contextControllerId = navContext.getControllerId(navKey);
-      const contextControlledId = navContext.getControlledId(navKey);
-
-      warning(
-        !contextControllerId || !props.id,
-        `The provided id '${props.id}' was overwritten by the current navContext with '${contextControllerId}'.`,
-      );
-      warning(
-        !contextControlledId || !props['aria-controls'],
-        `The provided aria-controls value '${props['aria-controls']}' was overwritten by the current navContext with '${contextControlledId}'.`,
-      );
-
-      // @ts-ignore
-      props['data-rb-event-key'] = navKey;
-
-      props.id = contextControllerId || props.id;
-      props['aria-controls'] = contextControlledId || props['aria-controls'];
-
-      isActive =
-        active == null && navKey != null
-          ? navContext.activeKey === navKey
-          : active;
-    }
-
-    if (props.role === 'tab') {
-      if (props.disabled) {
-        props.tabIndex = -1;
-        props['aria-disabled'] = true;
-      }
-      props['aria-selected'] = isActive;
-    }
-
-    const handleOnclick = useEventCallback((e) => {
-      onClick?.(e);
-      if (navKey == null) return;
-      onSelect?.(navKey, e);
-      parentOnSelect?.(navKey, e);
+  ({ as: Component = Button, eventKey, href, ...options }, ref) => {
+    const [props, meta] = useNavItem({
+      key: makeEventKey(eventKey, href),
+      ...options,
     });
 
-    return <Component {...props} ref={ref} onClick={handleOnclick} />;
+    // @ts-ignore
+    props[dataAttr('active')] = meta.isActive;
+
+    return <Component {...options} {...props} ref={ref} />;
   },
 );
 
 NavItem.displayName = 'NavItem';
 NavItem.propTypes = propTypes;
-NavItem.defaultProps = defaultProps;
 
 export default NavItem;

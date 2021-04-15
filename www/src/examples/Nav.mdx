@@ -1,0 +1,71 @@
+```jsx
+import { Nav, NavItem } from "react-overlays";
+
+<Nav className="flex space-x-4" activeKey="/home">
+  <NavItem href="/home">Active</NavItem>
+
+  <NavItem eventKey="link-1">Link</NavItem>
+
+  <NavItem eventKey="link-2">Link</NavItem>
+
+  <NavItem eventKey="disabled" disabled>
+    Disabled
+  </NavItem>
+</Nav>;
+```
+
+# Customize
+
+A `NavItem`s implement a few bits of state that likely need visual styling to use.
+
+- `disabled` whether the navitem is actionable or not
+- `active` whether the nav item is "selected", this may be because the `activeKey`
+  on Nav matches the `NavItem`'s key, or because the `active` prop was passed to it
+
+``
+
+```jsx
+import { Nav, useNavItem } from "react-overlays";
+
+function NavLink({ href, disabled, children }) {
+  const [navItemProps, meta] = useNavItem({
+    key: href,
+    disabled,
+  });
+
+  return (
+    <a
+      href={href}
+      {...navItemProps}
+      className={`py-3 px-4 rounded ${
+        meta.isActive
+          ? "bg-primary text-white"
+          : "hover:text-primary hover:bg-gray-200"
+      }${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+    >
+      {children}
+    </a>
+  );
+}
+
+function Example() {
+  const [activeKey, setActiveKey] = useState("/home");
+  return (
+    <Nav
+      className="flex"
+      activeKey={activeKey}
+      onSelect={setActiveKey}
+    >
+      <NavLink href="/home">Home</NavLink>
+
+      <NavLink href="/about">About</NavLink>
+
+      <NavLink href="orderd" disabled>
+        Orders
+      </NavLink>
+    </Nav>
+  );
+}
+
+<Example />;
+```

@@ -29,7 +29,6 @@ describe('<Dropdown>', () => {
             {...menuProps}
             data-show={show}
             className="menu"
-            onClick={() => toggle(false)}
             style={{ display: show ? 'flex' : 'none' }}
           />
         );
@@ -57,10 +56,10 @@ describe('<Dropdown>', () => {
         <>
           <Toggle key="toggle">Child Title</Toggle>,
           <Menu key="menu" renderSpy={menuSpy} usePopper={usePopper}>
-            <button type="button">Item 1</button>
-            <button type="button">Item 2</button>
-            <button type="button">Item 3</button>
-            <button type="button">Item 4</button>
+            <Dropdown.Item>Item 1</Dropdown.Item>
+            <Dropdown.Item>Item 2</Dropdown.Item>
+            <Dropdown.Item>Item 3</Dropdown.Item>
+            <Dropdown.Item>Item 4</Dropdown.Item>
           </Menu>
         </>
       )}
@@ -110,10 +109,10 @@ describe('<Dropdown>', () => {
     const wrapper = mount(<SimpleDropdown />);
 
     wrapper.assertNone('.show');
-    wrapper.assertNone('ReactOverlaysDropdownMenu > *');
+    wrapper.assertNone('DropdownMenu > *');
     wrapper.assertSingle('button[aria-expanded=false]').simulate('click');
 
-    wrapper.assertSingle('ReactOverlaysDropdown');
+    wrapper.assertSingle('Dropdown');
 
     wrapper.assertSingle('div[data-show=true]');
 
@@ -173,7 +172,7 @@ describe('<Dropdown>', () => {
       key: 'ArrowDown',
     });
 
-    wrapper.update().assertSingle('ReactOverlaysDropdownMenu div');
+    wrapper.update().assertSingle('DropdownMenu div');
   });
 
   it('closes when item is clicked', () => {
@@ -184,9 +183,19 @@ describe('<Dropdown>', () => {
       onToggle,
     });
 
-    wrapper.assertSingle('ReactOverlaysDropdown[show=true]');
+    wrapper.assertSingle('Dropdown[show=true]');
 
     wrapper.find('button').last().simulate('click');
+
+    onToggle.should.have.been.calledWith(false);
+  });
+
+  it.only('closes when child Dropdown.Item is selected', () => {
+    const onToggle = sinon.spy();
+
+    const wrapper = mount(<SimpleDropdown show onToggle={onToggle} />);
+
+    wrapper.find('DropdownItem button').first().simulate('click');
 
     onToggle.should.have.been.calledWith(false);
   });
@@ -200,7 +209,7 @@ describe('<Dropdown>', () => {
     wrapper.find('.menu > button').first().simulate('click');
 
     onToggle.should.have.been.calledWith(false);
-    wrapper.find('ReactOverlaysDropdown').prop('show').should.equal(true);
+    wrapper.find('Dropdown').prop('show').should.equal(true);
   });
 
   it('has aria-labelledby same id as toggle button', () => {

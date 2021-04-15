@@ -7,8 +7,12 @@ import useMergedRefs from '@restart/hooks/useMergedRefs';
 import NavContext from './NavContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
 import TabContext from './TabContext';
-import { DynamicRefForwardingComponent, SelectCallback } from './helpers';
-import { EventKey } from './types';
+import {
+  EventKey,
+  DynamicRefForwardingComponent,
+  SelectCallback,
+} from './types';
+import { dataAttr, dataProp } from './DataKey';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -34,6 +38,8 @@ interface NavProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
   onSelect?: SelectCallback;
   parentOnSelect?: SelectCallback;
 }
+
+const EVENT_KEY_ATTR = dataAttr('event-key');
 
 const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
   HTMLElement,
@@ -64,18 +70,25 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
     if (tabContext) {
       role = role || 'tablist';
       activeKey = tabContext.activeKey;
+      // TODO: do we need to duplicate these?
       getControlledId = tabContext.getControlledId;
       getControllerId = tabContext.getControllerId;
     }
 
     const listNode = useRef<HTMLElement>(null);
 
-    const getNextActiveChild = (offset: number) => {
+    const getNextActiveTab = (offset: number) => {
       const currentListNode = listNode.current;
       if (!currentListNode) return null;
 
-      const items = qsa(currentListNode, '[data-rb-event-key]:not(.disabled)');
-      const activeChild = currentListNode.querySelector<HTMLElement>('.active');
+      const items = qsa(
+        currentListNode,
+        `[${EVENT_KEY_ATTR}]:not([aria-disabled=true])`,
+      );
+
+      const activeChild = currentListNode.querySelector<HTMLElement>(
+        '[aria-selected=true]',
+      );
       if (!activeChild) return null;
 
       const index = items.indexOf(activeChild);
@@ -96,15 +109,19 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
     const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
       onKeyDown?.(event);
 
+      if (!tabContext) {
+        return;
+      }
+
       let nextActiveChild;
       switch (event.key) {
         case 'ArrowLeft':
         case 'ArrowUp':
-          nextActiveChild = getNextActiveChild(-1);
+          nextActiveChild = getNextActiveTab(-1);
           break;
         case 'ArrowRight':
         case 'ArrowDown':
-          nextActiveChild = getNextActiveChild(1);
+          nextActiveChild = getNextActiveTab(1);
           break;
         default:
           return;
@@ -112,7 +129,12 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
       if (!nextActiveChild) return;
 
       event.preventDefault();
-      handleSelect(nextActiveChild.dataset.rbEventKey || null, event);
+
+      handleSelect(
+        nextActiveChild.dataset[dataProp('EventKey')] || null,
+        event,
+      );
+
       needsRefocusRef.current = true;
       forceUpdate();
     };
@@ -120,7 +142,7 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
     useEffect(() => {
       if (listNode.current && needsRefocusRef.current) {
         const activeChild = listNode.current.querySelector<HTMLElement>(
-          '[data-rb-event-key].active',
+          `[${EVENT_KEY_ATTR}].active`,
         );
 
         activeChild?.focus();

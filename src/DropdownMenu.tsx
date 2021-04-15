@@ -216,7 +216,7 @@ function DropdownMenu({ children, ...options }: DropdownMenuProps) {
   return <>{meta.hasShown ? children(props, meta) : null}</>;
 }
 
-DropdownMenu.displayName = 'ReactOverlaysDropdownMenu';
+DropdownMenu.displayName = 'DropdownMenu';
 
 DropdownMenu.propTypes = propTypes;
 DropdownMenu.defaultProps = defaultProps;
