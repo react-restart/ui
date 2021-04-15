@@ -11,6 +11,8 @@ const brand = {
 };
 
 module.exports = {
+  mode: 'jit',
+  purge: ['./docs/**/*.{js,ts,tsx,mdx}', './src/**/*.{js,ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -18,14 +20,6 @@ module.exports = {
         primary: brand['500'],
         accent: brand['800'],
         subtle: brand['100'],
-      },
-      CodeBlock: {
-        '@apply text-sm': true,
-      },
-      LiveCode: {
-        '& .editor': {
-          '@apply text-sm': true,
-        },
       },
     },
   },

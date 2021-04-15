@@ -2,29 +2,29 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 import Nav from '../src/Nav';
 import NavItem from '../src/NavItem';
-import TabPane from '../src/TabPane';
-import TabContainer from '../src/TabContainer';
+import TabPanel from '../src/TabPanel';
+import Tabs from '../src/Tabs';
 
-describe('<TabContainer>', () => {
-  it('should not propagate context past TabPanes', () => {
+describe('<Tabs>', () => {
+  it('should not propagate context past TabPanels', () => {
     const onSelect = sinon.spy();
 
     let instance = mount(
-      <TabContainer id="custom-id" onSelect={onSelect}>
+      <Tabs id="custom-id" onSelect={onSelect}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
         </Nav>
         <div>
-          <TabPane eventKey="1">
+          <TabPanel eventKey="1">
             <Nav>
               <NavItem eventKey="2">One</NavItem>
             </Nav>
-          </TabPane>
+          </TabPanel>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
-    instance.find('TabPane Nav a').simulate('click');
+    instance.find('TabPanel Nav a').simulate('click');
 
     onSelect.should.not.have.been.called;
 
@@ -37,16 +37,16 @@ describe('<TabContainer>', () => {
     const generateChildIdSpy = sinon.spy(() => 'test-id');
 
     let instance = mount(
-      <TabContainer generateChildId={generateChildIdSpy}>
+      <Tabs generateChildId={generateChildIdSpy}>
         <div>
           <Nav>
             <NavItem eventKey="1">One</NavItem>
           </Nav>
           <div>
-            <TabPane eventKey="1" />
+            <TabPanel eventKey="1" />
           </div>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
     instance.assertSingle(`a[id="test-id"]`);
@@ -54,21 +54,21 @@ describe('<TabContainer>', () => {
 
   it('should match up ids', () => {
     let instance = mount(
-      <TabContainer>
+      <Tabs>
         <div>
           <Nav>
             <NavItem eventKey="1">One</NavItem>
           </Nav>
           <div>
-            <TabPane eventKey="1" />
+            <TabPanel eventKey="1" />
           </div>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
     let tabId = instance.find('NavItem a').first().prop('id');
 
-    let paneId = instance.find('TabPane div').first().prop('id');
+    let paneId = instance.find('TabPanel div').first().prop('id');
 
     expect(tabId).to.exist;
     expect(paneId).to.exist;
@@ -79,13 +79,13 @@ describe('<TabContainer>', () => {
 
   it('should default Nav role to tablist', () => {
     let instance = mount(
-      <TabContainer>
+      <Tabs>
         <div>
           <Nav>
             <NavItem eventKey="1">One</NavItem>
           </Nav>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
     instance.assertSingle('div[role="tablist"]');
@@ -100,7 +100,7 @@ describe('<TabContainer>', () => {
 
   it('should use explicit Nav role', () => {
     let instance = mount(
-      <TabContainer>
+      <Tabs>
         <div>
           <Nav role="navigation">
             <NavItem href="#foo" eventKey="1">
@@ -108,7 +108,7 @@ describe('<TabContainer>', () => {
             </NavItem>
           </Nav>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
     instance.assertSingle('div[role="navigation"]');
@@ -120,17 +120,17 @@ describe('<TabContainer>', () => {
 
   it('Should show the correct tab when selected', () => {
     const wrapper = mount(
-      <TabContainer defaultActiveKey={1} transition={false}>
+      <Tabs defaultActiveKey={1} transition={false}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
 
           <NavItem eventKey="2">Two</NavItem>
         </Nav>
         <div>
-          <TabPane eventKey="1">Tab 1</TabPane>
-          <TabPane eventKey="2">Tab 2</TabPane>
+          <TabPanel eventKey="1">Tab 1</TabPanel>
+          <TabPanel eventKey="2">Tab 2</TabPanel>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
     wrapper
@@ -150,22 +150,17 @@ describe('<TabContainer>', () => {
 
   it('Should mount and unmount tabs when set', () => {
     const wrapper = mount(
-      <TabContainer
-        mountOnEnter
-        unmountOnExit
-        defaultActiveKey={1}
-        transition={false}
-      >
+      <Tabs mountOnEnter unmountOnExit defaultActiveKey={1} transition={false}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
 
           <NavItem eventKey="2">Two</NavItem>
         </Nav>
         <div>
-          <TabPane eventKey="1">Tab 1</TabPane>
-          <TabPane eventKey="2">Tab 2</TabPane>
+          <TabPanel eventKey="1">Tab 1</TabPanel>
+          <TabPanel eventKey="2">Tab 2</TabPanel>
         </div>
-      </TabContainer>,
+      </Tabs>,
     );
 
     wrapper

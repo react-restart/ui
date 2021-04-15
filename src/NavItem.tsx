@@ -82,7 +82,11 @@ export function useNavItem({
       props.tabIndex = -1;
       props['aria-disabled'] = true;
     }
-    props['aria-selected'] = isActive;
+    if (isActive) {
+      props['aria-selected'] = isActive;
+    } else {
+      props.tabIndex = -1;
+    }
   }
 
   props.onClick = useEventCallback((e: React.MouseEvent) => {

@@ -9,8 +9,8 @@ import useRootClose from './useRootClose';
 import Nav from './Nav';
 import NavItem, { useNavItem } from './NavItem';
 import Button from './Button';
-import TabContainer from './TabContainer';
-import TabPane from './TabPane';
+import Tabs from './Tabs';
+import TabPanel from './TabPanel';
 
 export {
   Button,
@@ -25,6 +25,6 @@ export {
   Overlay,
   Portal,
   useRootClose,
-  TabContainer,
-  TabPane,
+  Tabs,
+  TabPanel,
 };
