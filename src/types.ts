@@ -47,12 +47,14 @@ export interface TransitionCallbacks {
   onExiting?(node: HTMLElement): any;
 }
 
-export type TransitionComponent = React.ComponentType<
-  {
-    in?: boolean;
-    appear?: boolean;
-    children: React.ReactElement;
-  } & TransitionCallbacks
->;
+export interface TransitionProps extends TransitionCallbacks {
+  in?: boolean;
+  appear?: boolean;
+  children: React.ReactElement;
+  mountOnEnter?: boolean;
+  unmountOnExit: boolean;
+}
+
+export type TransitionComponent = React.ComponentType<TransitionProps>;
 
 export type TransitionType = boolean | TransitionComponent;

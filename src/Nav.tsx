@@ -142,7 +142,7 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
     useEffect(() => {
       if (listNode.current && needsRefocusRef.current) {
         const activeChild = listNode.current.querySelector<HTMLElement>(
-          `[${EVENT_KEY_ATTR}].active`,
+          `[${EVENT_KEY_ATTR}][aria-selected=true]`,
         );
 
         activeChild?.focus();

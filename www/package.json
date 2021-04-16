@@ -1,32 +1,31 @@
 {
-  "name": "www",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "name": "my-website",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "gatsby develop",
-    "build": "gatsby build"
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-alpha.72",
+    "@docusaurus/preset-classic": "2.0.0-alpha.72",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.3.0",
+    "@mdx-js/react": "^1.6.21",
+    "clsx": "^1.1.1",
+    "emotion": "^11.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "tailwindcss": "^2.1.1"
   },
   "devDependencies": {
-    "@docpocalypse/gatsby-theme": "^0.11.30",
-    "@emotion/core": "^10.1.1",
-    "@emotion/styled": "^10.0.27",
-    "astroturf": "^0.10.5",
-    "bootstrap": "^4.6.0",
-    "dom-helpers": "^5.2.0",
-    "emotion": "^10.0.27",
-    "gatsby": "^2.32.11",
-    "gatsby-plugin-astroturf": "^0.2.1",
-    "gatsby-plugin-sass": "^2.8.0",
-    "lodash": "^4.17.21",
-    "prop-types": "^15.7.2",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-transition-group": "^4.4.1",
-    "sass": "^1.32.8"
-  },
-  "resolutions": {
-    "ast-types": "^0.14.2"
+    "postcss": "^8.2.10"
   }
 }

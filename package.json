@@ -36,7 +36,7 @@
     "build": "rimraf lib && 4c build src && yarn build:popper && yarn build:pick",
     "build:pick": "cherry-pick --cwd=lib --input-dir=../src --cjs-dir=cjs --esm-dir=esm",
     "build:popper": "rollup src/popper.ts --file lib/cjs/popper.js --format cjs --name popper --plugin @rollup/plugin-node-resolve",
-    "deploy-docs": "yarn --cwd www build --prefix-paths && gh-pages -d www/public",
+    "deploy-docs": "yarn --cwd www deploy",
     "lint": "eslint www/*.js www/src src test *.js  --ext .js,.ts,.tsx",
     "prepublishOnly": "yarn build",
     "release": "rollout",
@@ -59,6 +59,7 @@
     "conventionalCommits": true
   },
   "dependencies": {
+    "@4c/docusaurus-preset": "^0.2.4",
     "@babel/runtime": "^7.13.10",
     "@popperjs/core": "^2.9.2",
     "@react-aria/ssr": "^3.0.1",

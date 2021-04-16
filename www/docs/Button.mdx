@@ -1,0 +1,24 @@
+An abstract button component.
+
+```jsx live
+import { Button } from "@restart/ui";
+
+<Button>I'm a Button</Button>;
+```
+
+Not very impressive on it's own, Button comes with a few conveniences over the
+plain HTML element.
+
+- `type` defaults to `button`
+- Ensures that non `button` `as` options remain accessible
+- contextually renders an `<a>` if href or other anchor props are added.
+
+```jsx live
+import { Button } from "@restart/ui";
+
+<div className="space-x-4">
+  <Button>I'm a Button</Button>
+  <Button href="/home">I'm a link</Button>
+  <Button as="span">I'm a span but also a button</Button>
+</div>;
+```
