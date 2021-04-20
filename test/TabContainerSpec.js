@@ -1,5 +1,4 @@
 import { mount } from 'enzyme';
-import * as React from 'react';
 import Nav from '../src/Nav';
 import NavItem from '../src/NavItem';
 import TabPanel from '../src/TabPanel';

@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import ReactDOM from 'react-dom';
 import simulant from 'simulant';
 import { mount } from 'enzyme';

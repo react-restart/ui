@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
-import React from 'react';
+import * as React from 'react';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 
 const propTypes = {

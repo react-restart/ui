@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 
 import { useSSRSafeId } from '@react-aria/ssr';
-import React, { useContext, useCallback } from 'react';
+import { useContext, useCallback } from 'react';
+import * as React from 'react';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export interface UseDropdownToggleProps {
