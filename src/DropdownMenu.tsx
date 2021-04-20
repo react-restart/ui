@@ -10,12 +10,13 @@ import usePopper, {
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
+import { placements } from './popper';
 
 export interface UseDropdownMenuOptions {
   flip?: boolean;
   show?: boolean;
   fixed?: boolean;
-  alignEnd?: boolean;
+  placement?: Placement;
   usePopper?: boolean;
   offset?: Offset;
   rootCloseEvent?: RootCloseOptions['clickTrigger'];
@@ -35,7 +36,7 @@ export type UserDropdownMenuArrowProps = Record<string, any> & {
 
 export interface UseDropdownMenuMetadata {
   show: boolean;
-  alignEnd?: boolean;
+  placement?: Placement;
   hasShown: boolean;
   toggle?: DropdownContextValue['toggle'];
   popper: UsePopperState | null;
@@ -66,13 +67,12 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     offset,
     rootCloseEvent,
     fixed = false,
+    placement: placementOverride,
     popperConfig = {},
     usePopper: shouldUsePopper = !!context,
   } = options;
 
   const show = context?.show == null ? !!options.show : context.show;
-  const alignEnd =
-    context?.alignEnd == null ? options.alignEnd : context.alignEnd;
 
   if (show && !hasShownRef.current) {
     hasShownRef.current = true;
@@ -82,19 +82,14 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     context?.toggle(false, e);
   };
 
-  const { drop, setMenu, menuElement, toggleElement } = context || {};
-
-  let placement: Placement = alignEnd ? 'bottom-end' : 'bottom-start';
-  if (drop === 'up') placement = alignEnd ? 'top-end' : 'top-start';
-  else if (drop === 'right') placement = alignEnd ? 'right-end' : 'right-start';
-  else if (drop === 'left') placement = alignEnd ? 'left-end' : 'left-start';
+  const { placement, setMenu, menuElement, toggleElement } = context || {};
 
   const popper = usePopper(
     toggleElement,
     menuElement,
     mergeOptionsWithPopperConfig({
-      placement,
-      enabled: !!(shouldUsePopper && show),
+      placement: placementOverride || placement || 'bottom-start',
+      enabled: shouldUsePopper,
       enableEvents: show,
       offset,
       flip,
@@ -113,7 +108,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
 
   const metadata: UseDropdownMenuMetadata = {
     show,
-    alignEnd,
+    placement,
     hasShown: hasShownRef.current,
     toggle: context?.toggle,
     popper: shouldUsePopper ? popper : null,
@@ -141,7 +136,6 @@ const propTypes = {
    *
    * @type {Function ({
    *   show: boolean,
-   *   alignEnd: boolean,
    *   close: (?SyntheticEvent) => void,
    *   placement: Placement,
    *   update: () => void,
@@ -167,11 +161,11 @@ const propTypes = {
   show: PropTypes.bool,
 
   /**
-   * Aligns the dropdown menu to the 'end' of it's placement position.
+   * The PopperJS placement for positioning the Dropdown menu in relation to it's Toggle.
    * Generally this is provided by the parent `Dropdown` component,
    * but may also be specified as a prop directly.
    */
-  alignEnd: PropTypes.bool,
+  placement: PropTypes.oneOf(placements),
 
   /**
    * Enables the Popper.js `flip` modifier, allowing the Dropdown to
@@ -213,7 +207,7 @@ export interface DropdownMenuProps extends UseDropdownMenuOptions {
 function DropdownMenu({ children, ...options }: DropdownMenuProps) {
   const [props, meta] = useDropdownMenu(options);
 
-  return <>{meta.hasShown ? children(props, meta) : null}</>;
+  return <>{children(props, meta)}</>;
 }
 
 DropdownMenu.displayName = 'DropdownMenu';

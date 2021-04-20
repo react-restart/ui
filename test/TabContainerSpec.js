@@ -24,11 +24,11 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    instance.find('TabPanel Nav a').simulate('click');
+    instance.find('TabPanel Nav button').simulate('click');
 
     onSelect.should.not.have.been.called;
 
-    instance.find('Nav a').first().simulate('click');
+    instance.find('Nav button').first().simulate('click');
 
     onSelect.should.have.been.calledOnce;
   });
@@ -49,7 +49,7 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    instance.assertSingle(`a[id="test-id"]`);
+    instance.assertSingle(`button[id="test-id"]`);
   });
 
   it('should match up ids', () => {
@@ -66,14 +66,14 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    let tabId = instance.find('NavItem a').first().prop('id');
+    let tabId = instance.find('NavItem button').first().prop('id');
 
     let paneId = instance.find('TabPanel div').first().prop('id');
 
     expect(tabId).to.exist;
     expect(paneId).to.exist;
 
-    instance.assertSingle(`a[aria-controls="${paneId}"]`);
+    instance.assertSingle(`button[aria-controls="${paneId}"]`);
     instance.assertSingle(`div[aria-labelledby="${tabId}"]`);
   });
 
@@ -91,7 +91,7 @@ describe('<Tabs>', () => {
     instance.assertSingle('div[role="tablist"]');
 
     instance
-      .find('NavItem a')
+      .find('NavItem button')
       .first()
       .getDOMNode()
       .getAttribute('role')
@@ -114,8 +114,9 @@ describe('<Tabs>', () => {
     instance.assertSingle('div[role="navigation"]');
 
     // make sure its not passed to the NavItem
-    expect(instance.find('NavItem a').first().getDOMNode().getAttribute('role'))
-      .to.not.exist;
+    expect(
+      instance.find('NavItem button').first().getDOMNode().getAttribute('role'),
+    ).to.not.exist;
   });
 
   it('Should show the correct tab when selected', () => {
@@ -139,7 +140,7 @@ describe('<Tabs>', () => {
       .text()
       .should.equal('Tab 1');
 
-    wrapper.find('a[role="tab"]').last().simulate('click');
+    wrapper.find('button[role="tab"]').last().simulate('click');
 
     wrapper
       .find('div[aria-hidden=false]')
@@ -169,7 +170,7 @@ describe('<Tabs>', () => {
       .text()
       .should.equal('Tab 1');
 
-    wrapper.find('a[role="tab"]').last().simulate('click');
+    wrapper.find('button[role="tab"]').last().simulate('click');
 
     wrapper
       .find('div[role="tabpanel"]')
