@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useRef } from 'react';
+import { useContext, useRef } from 'react';
+import * as React from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 import usePopper, {

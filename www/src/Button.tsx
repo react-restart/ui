@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Button as BaseButton } from '@restart/ui';
 import clsx from 'clsx';
 

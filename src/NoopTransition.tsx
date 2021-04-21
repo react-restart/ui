@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { TransitionProps } from './types';
-import useMounted from '@restart/hooks/useMounted';
 
 function NoopTransition({
   children,

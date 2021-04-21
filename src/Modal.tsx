@@ -5,7 +5,7 @@ import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
 import PropTypes from 'prop-types';
-import React, {
+import {
   useState,
   useRef,
   useCallback,
@@ -13,6 +13,7 @@ import React, {
   forwardRef,
   useEffect,
 } from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 import useMounted from '@restart/hooks/useMounted';
 import useWillUnmount from '@restart/hooks/useWillUnmount';

@@ -1,13 +1,8 @@
 import matches from 'dom-helpers/matches';
 import qsa from 'dom-helpers/querySelectorAll';
 import addEventListener from 'dom-helpers/addEventListener';
-import React, {
-  useCallback,
-  useRef,
-  useEffect,
-  useMemo,
-  useContext,
-} from 'react';
+import { useCallback, useRef, useEffect, useMemo, useContext } from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
