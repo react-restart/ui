@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import simulant from 'simulant';
 import Dropdown from '../src/Dropdown';
+import DropdownItem from '../src/DropdownItem';
 
 describe('<Dropdown>', () => {
   const Menu = ({
@@ -19,7 +20,7 @@ describe('<Dropdown>', () => {
       rootCloseEvent={rootCloseEvent}
     >
       {(menuProps, meta) => {
-        const { show, toggle } = meta;
+        const { show } = meta;
         renderSpy && renderSpy(meta);
 
         return (
@@ -89,13 +90,18 @@ describe('<Dropdown>', () => {
     buttonNode.getAttribute('id').should.be.ok;
   });
 
-  it('forwards alignEnd to menu', () => {
+  it('forwards placement to menu', () => {
     const renderSpy = sinon.spy((meta) => {
-      meta.alignEnd.should.equal(true);
+      meta.placement.should.equal('bottom-end');
     });
 
     mount(
-      <SimpleDropdown show alignEnd usePopper={false} menuSpy={renderSpy} />,
+      <SimpleDropdown
+        show
+        placement="bottom-end"
+        usePopper={false}
+        menuSpy={renderSpy}
+      />,
     );
 
     renderSpy.should.have.been.called;
@@ -108,7 +114,7 @@ describe('<Dropdown>', () => {
     const wrapper = mount(<SimpleDropdown />);
 
     wrapper.assertNone('.show');
-    wrapper.assertNone('DropdownMenu > *');
+
     wrapper.assertSingle('button[aria-expanded=false]').simulate('click');
 
     wrapper.assertSingle('Dropdown');
@@ -189,7 +195,7 @@ describe('<Dropdown>', () => {
     onToggle.should.have.been.calledWith(false);
   });
 
-  it.only('closes when child Dropdown.Item is selected', () => {
+  it('closes when child Dropdown.Item is selected', () => {
     const onToggle = sinon.spy();
 
     const wrapper = mount(<SimpleDropdown show onToggle={onToggle} />);
@@ -205,7 +211,8 @@ describe('<Dropdown>', () => {
     const wrapper = mount(<SimpleDropdown show onToggle={onToggle} />);
 
     wrapper.find('.toggle').simulate('click');
-    wrapper.find('.menu > button').first().simulate('click');
+
+    wrapper.find('.menu button').first().simulate('click');
 
     onToggle.should.have.been.calledWith(false);
     wrapper.find('Dropdown').prop('show').should.equal(true);
@@ -244,14 +251,14 @@ describe('<Dropdown>', () => {
       document.activeElement.should.equal(wrapper.find('.toggle').getDOMNode());
     });
 
-    it('when focused and closed sets focus on first menu item when the key "down" is pressed for role="menu"', () => {
+    it('when focused and closed sets focus on first menu item when the key "down" is pressed for role="menu"', (done) => {
       const wrapper = mount(
         <Dropdown>
           <div>
             <Toggle>Child Title</Toggle>,
             <Menu role="menu">
-              <button type="button">Item 1</button>
-              <button type="button">Item 2</button>
+              <DropdownItem>Item 1</DropdownItem>
+              <DropdownItem>Item 2</DropdownItem>
             </Menu>
           </div>
         </Dropdown>,
@@ -265,9 +272,12 @@ describe('<Dropdown>', () => {
         key: 'ArrowDown',
       });
 
-      document.activeElement.should.equal(
-        wrapper.update().find('.menu > button').first().getDOMNode(),
-      );
+      setTimeout(() => {
+        document.activeElement.should.equal(
+          wrapper.update().find('.menu button').first().getDOMNode(),
+        );
+        done();
+      });
     });
 
     it('when focused and closed sets focus on first menu item when the focusFirstItemOnShow is true', () => {
@@ -276,8 +286,8 @@ describe('<Dropdown>', () => {
           <div>
             <Toggle>Child Title</Toggle>,
             <Menu>
-              <button type="button">Item 1</button>
-              <button type="button">Item 2</button>
+              <DropdownItem>Item 1</DropdownItem>
+              <DropdownItem>Item 2</DropdownItem>
             </Menu>
           </div>
         </Dropdown>,
@@ -288,9 +298,11 @@ describe('<Dropdown>', () => {
 
       wrapper.find('.toggle').simulate('click');
 
-      document.activeElement.should.equal(
-        wrapper.find('.menu > button').first().getDOMNode(),
-      );
+      return Promise.resolve().then(() => {
+        document.activeElement.should.equal(
+          wrapper.find('.menu button').first().getDOMNode(),
+        );
+      });
     });
 
     it('when open and the key "Escape" is pressed the menu is closed and focus is returned to the button', () => {
@@ -298,7 +310,7 @@ describe('<Dropdown>', () => {
         attachTo: focusableContainer,
       });
 
-      const firstItem = wrapper.find('.menu > button').first().getDOMNode();
+      const firstItem = wrapper.find('.menu button').first().getDOMNode();
 
       firstItem.focus();
       document.activeElement.should.equal(firstItem);
@@ -309,7 +321,6 @@ describe('<Dropdown>', () => {
         });
       });
 
-      console.log(document.activeElement);
       document.activeElement.should.equal(
         wrapper.update().find('.toggle').getDOMNode(),
       );
@@ -329,6 +340,9 @@ describe('<Dropdown>', () => {
       toggle.focus();
 
       simulant.fire(toggle, 'keydown', {
+        key: 'Tab',
+      });
+      simulant.fire(document, 'keyup', {
         key: 'Tab',
       });
 

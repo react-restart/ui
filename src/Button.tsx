@@ -2,6 +2,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { DynamicRefForwardingComponent } from './types';
+
 export type ButtonType = 'button' | 'reset' | 'submit' | string;
 
 interface UseButtonPropsOptions {

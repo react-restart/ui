@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useContext } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
-import warning from 'warning';
 import NavContext from './NavContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
 import { EventKey, DynamicRefForwardingComponent } from './types';
@@ -59,7 +58,7 @@ export function useNavItem({
   const navContext = useContext(NavContext);
 
   let isActive = active;
-  let props = {} as any;
+  const props = {} as any;
 
   if (navContext) {
     if (!role && navContext.role === 'tablist') props.role = 'tab';
