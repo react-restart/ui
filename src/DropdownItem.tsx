@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useContext } from 'react';
@@ -6,7 +5,7 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 
 import SelectableContext, { makeEventKey } from './SelectableContext';
 import NavContext from './NavContext';
-// import SafeAnchor from './SafeAnchor';
+
 import {
   EventKey,
   DynamicRefForwardingComponent,
@@ -66,6 +65,10 @@ interface UseDropdownItemOptions {
   onClick?: React.MouseEventHandler;
 }
 
+/**
+ * Create a dropdown item. Returns a set of props for the dropdown item component
+ * including an `onClick` handler that prevents selection when the item is disabled
+ */
 export function useDropdownItem({
   key,
   active,

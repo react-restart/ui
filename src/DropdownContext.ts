@@ -1,6 +1,5 @@
 import React from 'react';
-
-export type DropDirection = 'up' | 'down' | 'left' | 'right';
+import type { Placement } from './usePopper';
 
 export type DropdownContextValue = {
   toggle: (nextShow: boolean, event?: React.SyntheticEvent | Event) => void;
@@ -10,8 +9,7 @@ export type DropdownContextValue = {
   setToggle: (ref: HTMLElement | null) => void;
 
   show: boolean;
-  alignEnd?: boolean;
-  drop?: DropDirection;
+  placement?: Placement;
 };
 
 const DropdownContext = React.createContext<DropdownContextValue | null>(null);

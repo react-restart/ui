@@ -1,9 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
+import { useEventCallback } from '@restart/hooks';
 import { DynamicRefForwardingComponent } from './types';
 import { useButtonProps } from './Button';
-import { useEventCallback } from '@restart/hooks';
 
 export interface AnchorProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;

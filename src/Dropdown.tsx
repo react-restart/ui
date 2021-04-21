@@ -15,13 +15,15 @@ import useForceUpdate from '@restart/hooks/useForceUpdate';
 import useGlobalListener from '@restart/hooks/useGlobalListener';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
-import DropdownContext, { DropDirection } from './DropdownContext';
+import DropdownContext from './DropdownContext';
 import DropdownMenu from './DropdownMenu';
 import DropdownToggle from './DropdownToggle';
 import SelectableContext from './SelectableContext';
 import { SelectCallback } from './types';
 import DropdownItem from './DropdownItem';
 import { dataAttr } from './DataKey';
+import { Placement } from './usePopper';
+import { placements } from './popper';
 
 const propTypes = {
   /**
@@ -38,9 +40,11 @@ const propTypes = {
   children: PropTypes.node,
 
   /**
-   * Determines the direction and location of the Menu in relation to it's Toggle.
+   * The PopperJS placement for positioning the Dropdown menu in relation to it's Toggle.
+   *
+   * @default 'bottom-start'
    */
-  drop: PropTypes.oneOf(['up', 'left', 'right', 'down']),
+  placement: PropTypes.oneOf(placements),
 
   /**
    * Controls the focus behavior for when the Dropdown is opened. Set to
@@ -58,11 +62,6 @@ const propTypes = {
    * e.g. ` > li:not('.disabled')`
    */
   itemSelector: PropTypes.string,
-
-  /**
-   * Align the menu to the 'end' side of the placement side of the Dropdown toggle. The default placement is `top-start` or `bottom-start`.
-   */
-  alignEnd: PropTypes.bool,
 
   /**
    * Whether or not the Dropdown is visible.
@@ -102,8 +101,7 @@ export interface ToggleMetadata {
 }
 
 export interface DropdownProps {
-  drop?: DropDirection;
-  alignEnd?: boolean;
+  placement?: Placement;
   defaultShow?: boolean;
   show?: boolean;
   onSelect?: SelectCallback;
@@ -132,14 +130,13 @@ function useRefWithUpdate() {
  * @public
  */
 function Dropdown({
-  drop,
-  alignEnd,
   defaultShow,
   show: rawShow,
   onSelect,
   onToggle: rawOnToggle,
   itemSelector = `* [${dataAttr('dropdown-item')}]`,
   focusFirstItemOnShow,
+  placement = 'bottom-start',
   children,
 }: DropdownProps) {
   const [show, onToggle] = useUncontrolledProp(
@@ -190,24 +187,14 @@ function Dropdown({
   const context = useMemo(
     () => ({
       toggle,
-      drop,
+      placement,
       show,
-      alignEnd,
       menuElement,
       toggleElement,
       setMenu,
       setToggle,
     }),
-    [
-      toggle,
-      drop,
-      show,
-      alignEnd,
-      menuElement,
-      toggleElement,
-      setMenu,
-      setToggle,
-    ],
+    [toggle, placement, show, menuElement, toggleElement, setMenu, setToggle],
   );
 
   if (menuElement && lastShow && !show) {
@@ -285,7 +272,7 @@ function Dropdown({
     }
 
     lastSourceEvent.current = event.type;
-    let meta = { originalEvent: event, source: event.type };
+    const meta = { originalEvent: event, source: event.type };
     switch (key) {
       case 'ArrowUp': {
         const next = getNextFocusedChild(target, -1);

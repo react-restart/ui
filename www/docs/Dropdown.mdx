@@ -1,6 +1,5 @@
----
-title: Introduction
----
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 `Dropdown` is set of structural components for building, accessible dropdown menus with close-on-click,
 keyboard navigation, and correct focus handling. As with all the react-overlay's
@@ -22,10 +21,16 @@ import {
 } from "@restart/ui";
 
 const DropdownMenu = ({ role }) => {
-  const [props, { toggle, show }] = useDropdownMenu({
-    flip: true,
-    offset: [0, 8],
-  });
+  const [props, { toggle, show, popper }] = useDropdownMenu(
+    {
+      flip: true,
+      offset: [0, 8],
+    }
+  );
+
+  useLayoutEffect(() => {
+    if (show) popper.update();
+  }, [show]);
 
   return (
     <div
@@ -83,11 +88,206 @@ function DropdownExample() {
         onToggle={(nextShow) => setShow(nextShow)}
         title={`${show ? "Close" : "Open"} Dropdown`}
       />
-      <DropdownButton alignEnd title="Align right" />
-
-      <DropdownButton drop="up" title="Drop up" />
-      <DropdownButton role="menu" title="Role 'menu'" />
     </div>
+  );
+}
+```
+
+## Components
+
+Dropdowns are made up of a wrapping `Dropdown` components, a `Toggle` that
+triggers that menu visibility, a `Menu` and the `Item`s in that menu. With the exception
+of the outer `Dropdown` component each sub component can be constructed with a component
+render prop API or hook depending on preference.
+
+### Dropdown
+
+The `Dropdown` component is the non presentational orchestrator of the dropdown state.
+It handles menu visibility, keyboard navigation and focus management. As a convenience a
+few `Menu` specific props can be provided to `Dropdown` directly, such as `placement`. It
+is sometimes helpful to also render a wrapping DOM element around your Toggle and Menu, but not
+required.
+
+```jsx
+import { Dropdown } from '@restart/ui';
+
+
+<Dropdown placement='top-start'>
+  <span>
+  {/* Toggle */}
+  </span>
+<Dropdown>
+```
+
+### Toggle
+
+The `Toggle` is an interactive element, usually a button, that opens the Dropdown Menu.
+The toggle props contain a `ref` that must be passed to a valid DOM element, you
+can pass `disabled` and `onClick` props as well and they will be composed into the returned
+props automatically.
+
+<Tabs
+  defaultValue="hook"
+  values={[
+    {label: 'useDropdownToggle', value: 'hook'},
+    {label: 'DropdownToggle', value: 'component'},
+  ]}>
+<TabItem value="hook">
+
+```jsx
+import { useDropdownToggle } from "@restart/ui";
+import { Button } from "@restart/ui";
+
+const DropdownToggle = (props) => {
+  const [toggleProps] = useDropdownToggle(props);
+
+  return <Button {...props} {...itemProps} />;
+};
+```
+
+</TabItem>
+<TabItem value="component">
+
+```jsx
+import { DropdownToggle } from "@restart/ui";
+import { Button } from "@restart/ui";
+
+const MyDropdownToggle = (props) => (
+  <DropdownToggle {...props}>
+    {(toggleProps, meta) => (
+      <Button {...props} {...toggleProps} />
+    )}
+  </DropdownToggle>
+);
+```
+
+</TabItem>
+</Tabs>
+
+### Menu
+
+The dropdown `Menu` provides an overlay that is positioned next to the dropdown toggle.
+Menu's are positioned with PopperJS by default, and accept all configuration options
+available to Popper.
+
+<Tabs
+  defaultValue="hook"
+  values={[
+    {label: 'useDropdownMenu', value: 'hook'},
+    {label: 'DropdownMenu', value: 'component'},
+  ]}>
+<TabItem value="hook">
+
+```jsx
+import { useDropdownMenu } from "@restart/ui";
+import { Button } from "@restart/ui";
+
+const DropdownToggle = (props) => {
+  const [menuProps, meta] = useDropdownMenu({
+    flip: true,
+    offset: [0, 8],
+  });
+
+  return (
+    <ul
+      {...props}
+      {...menuProps}
+      style={{
+        visibility: meta.show ? "visible" : "hidden ",
+      }}
+    />
+  );
+};
+```
+
+</TabItem>
+<TabItem value="component">
+
+```jsx
+import { DropdownMenu } from "@restart/ui";
+import { Button } from "@restart/ui";
+
+const MyDropdownToggle = (props) => (
+  <DropdownMenu flip offset={[0, 8]}>
+    {(menuProps, meta) => (
+      <ul
+        {...props}
+        {...menuProps}
+        style={{
+          visibility: meta.show ? "visible" : "hidden ",
+        }}
+      />
+    )}
+  </DropdownMenu>
+);
+```
+
+</TabItem>
+</Tabs>
+
+## Implementing show/hide
+
+Because PopperJs must measure the Menu element it's recommended that you style
+the Menu with `opacity: 0` and `visibility: hidden` when not shown.
+This allows popper to calculate the correct offset for the Menu even when it's not visble.
+this also makes it a bit simpler to animate if you desire.
+
+When transitioning it's best to use **both** `visibility` and `opacity`. Setting
+`visibility` to `hidden` will remove the menu from keyboard Tab order, but it doesn't transition
+nicely, so adding opacity (or some other visual property) to indicate fade out and in.
+
+```jsx live
+import { Dropdown } from "@restart/ui";
+
+<Dropdown>
+  <Dropdown.Toggle>
+    {(props) => (
+      <button {...props} className="border p-3">
+        Open
+      </button>
+    )}
+  </Dropdown.Toggle>
+  <Dropdown.Menu flip offset={[0, 8]}>
+    {(menuProps, meta) => (
+      <ul
+        {...menuProps}
+        className="p-4 border shadow-md bg-white absolute z-10"
+        style={{
+          transition: "visibility 500ms, opacity 500ms",
+          visibility: meta.show ? "visible" : "hidden",
+          opacity: meta.show ? "1" : "0",
+        }}
+      >
+        <p>Hey there</p>
+      </ul>
+    )}
+  </Dropdown.Menu>
+</Dropdown>;
+```
+
+If the above isn't feasible and you must use `display: none` to hide the menu, you
+may need to manually trigger a position recalculation on show, when popper is able to
+measure the element.
+
+```jsx
+import { useDropdownMenu } from "@restart/ui";
+
+function Menu() {
+  const [menuProps, meta] = useDropdownMenu();
+
+  useLayoutEffect(() => {
+    meta.update()
+  }, [meta.show])
+
+  return (
+    <ul
+      {...menuProps}
+      style={{
+        display: meta.show ? "block" : "none",
+      }}
+    >
+      {...}
+    </ul>
   );
 }
 ```

@@ -76,6 +76,82 @@ function Example() {
 }
 ```
 
+## Dropdowns
+
+Dropdown components can be used in `Nav`'s as well:
+
+```jsx live
+import clsx from "clsx";
+import {
+  Nav,
+  useNavItem,
+  useDropdownToggle,
+} from "@restart/ui";
+
+import Dropdown from "../src/Dropdown";
+
+const NavLink = React.forwardRef(
+  ({ href, disabled, children, onClick }, ref) => {
+    const [navItemProps, meta] = useNavItem({
+      key: href,
+      onClick,
+      disabled,
+    });
+
+    return (
+      <a
+        ref={ref}
+        href={href}
+        {...navItemProps}
+        className={clsx(
+          "py-3 px-4 rounded",
+          disabled && "opacity-50 cursor-not-allowed",
+          meta.isActive
+            ? "bg-primary !text-white"
+            : "hover:text-primary hover:bg-gray-200"
+        )}
+      >
+        {children}
+      </a>
+    );
+  }
+);
+
+function Example() {
+  const [activeKey, setActiveKey] = useState("/home");
+
+  return (
+    <Nav
+      className="flex"
+      activeKey={activeKey}
+      onSelect={setActiveKey}
+    >
+      <NavLink href="/home">Home</NavLink>
+
+      <NavLink href="/about">About</NavLink>
+
+      <NavLink href="orderd" disabled>
+        Orders
+      </NavLink>
+      <Dropdown>
+        <Dropdown.Toggle as={NavLink}>More</Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item eventKey="4.1">
+            Action
+          </Dropdown.Item>
+          <Dropdown.Item eventKey="4.2">
+            Another action
+          </Dropdown.Item>
+          <Dropdown.Item eventKey="4.3">
+            Something else here
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </Nav>
+  );
+}
+```
+
 ## Tabs
 
 Create dynamic tabbed interfaces from a `Nav`, as described in the WAI ARIA Authoring Practices.

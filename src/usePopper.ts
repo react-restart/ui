@@ -3,16 +3,6 @@ import useSafeState from '@restart/hooks/useSafeState';
 import * as Popper from '@popperjs/core';
 import { createPopper } from './popper';
 
-const initialPopperStyles = (
-  position: string,
-): Partial<CSSStyleDeclaration> => ({
-  position,
-  top: '0',
-  left: '0',
-  opacity: '0',
-  pointerEvents: 'none',
-});
-
 const disabledApplyStylesModifier = { name: 'applyStyles', enabled: false };
 
 // until docjs supports type exports...
@@ -63,18 +53,16 @@ const ariaDescribedByModifier: Modifier<'ariaDescribedBy', undefined> = {
   name: 'ariaDescribedBy',
   enabled: true,
   phase: 'afterWrite',
-  effect: ({ state }) => {
-    return () => {
-      const { reference, popper } = state.elements;
-      if ('removeAttribute' in reference) {
-        const ids = (reference.getAttribute('aria-describedby') || '')
-          .split(',')
-          .filter((id) => id.trim() !== popper.id);
+  effect: ({ state }) => () => {
+    const { reference, popper } = state.elements;
+    if ('removeAttribute' in reference) {
+      const ids = (reference.getAttribute('aria-describedby') || '')
+        .split(',')
+        .filter((id) => id.trim() !== popper.id);
 
-        if (!ids.length) reference.removeAttribute('aria-describedby');
-        else reference.setAttribute('aria-describedby', ids.join(','));
-      }
-    };
+      if (!ids.length) reference.removeAttribute('aria-describedby');
+      else reference.setAttribute('aria-describedby', ids.join(','));
+    }
   },
   fn: ({ state }) => {
     const { popper, reference } = state.elements;
@@ -140,7 +128,7 @@ function usePopper(
       forceUpdate,
       attributes: {},
       styles: {
-        popper: initialPopperStyles(strategy),
+        popper: {},
         arrow: {},
       },
     }),
@@ -206,7 +194,7 @@ function usePopper(
         setState((s) => ({
           ...s,
           attributes: {},
-          styles: { popper: initialPopperStyles(strategy) },
+          styles: { popper: {} },
         }));
       }
     };
