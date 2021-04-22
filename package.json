@@ -1,6 +1,6 @@
 {
   "name": "@restart/ui",
-  "version": "5.0.0",
+  "version": "0.0.0",
   "description": "Utilities for creating robust overlay components",
   "author": {
     "name": "Jason Quense",
@@ -53,6 +53,7 @@
     "trailingComma": "all"
   },
   "publishConfig": {
+    "access": "public",
     "directory": "lib"
   },
   "release": {
