@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import PropTypes, { Validator } from 'prop-types';
+import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
 import { useSSRSafeId } from '@react-aria/ssr';
 
 import TabContext, { TabContextType } from './TabContext';
 import SelectableContext from './SelectableContext';
 import { EventKey, SelectCallback, TransitionType } from './types';
+import TabPanel, { TabPanelProps } from './TabPanel';
 
-export interface TabContainerProps extends React.PropsWithChildren<unknown> {
+export type { TabPanelProps };
+export interface TabsProps extends React.PropsWithChildren<unknown> {
   id?: string;
   transition?: TransitionType;
   mountOnEnter?: boolean;
@@ -70,7 +72,7 @@ const propTypes = {
   activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-const TabContainer = (props: TabContainerProps) => {
+const Tabs = (props: TabsProps) => {
   const {
     id: userId,
     generateChildId: generateCustomChildId,
@@ -127,6 +129,6 @@ const TabContainer = (props: TabContainerProps) => {
   );
 };
 
-TabContainer.propTypes = propTypes;
-
-export default TabContainer;
+Tabs.propTypes = propTypes;
+Tabs.Panel = TabPanel;
+export default Tabs;

@@ -28,3 +28,18 @@ export {
   Tabs,
   TabPanel,
 };
+
+export type { ButtonProps } from './Button';
+export type {
+  DropdownMenuProps,
+  UseDropdownMenuMetadata,
+  UseDropdownMenuOptions,
+  DropdownToggleProps,
+  UseDropdownToggleMetadata,
+  DropdownItemProps,
+} from './Dropdown';
+export type { NavItemProps, UseNavItemOptions, NavProps } from './Nav';
+export type { ModalProps } from './Modal';
+export type { OverlayProps } from './Overlay';
+export type { PortalProps } from './Portal';
+export type { TabsProps, TabPanelProps } from './Tabs';

@@ -94,6 +94,7 @@ const Button: DynamicRefForwardingComponent<
 > = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ type, as: Component, ...props }, ref) => {
     const tagName =
+      // eslint-disable-next-line no-nested-ternary
       typeof Component === 'string' ? Component : props.href ? 'a' : 'button';
 
     const buttonProps = useButtonProps({ tagName, ...props });

@@ -407,7 +407,6 @@ describe('<Modal>', () => {
 
       wrapper.setProps({ show: false });
       expect(document.activeElement).to.equal(focusableContainer);
-      done();
     });
 
     it('should not focus on the Modal when autoFocus is false', () => {

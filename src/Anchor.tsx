@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import { useEventCallback } from '@restart/hooks';
-import { DynamicRefForwardingComponent } from './types';
 import { useButtonProps } from './Button';
 
 export interface AnchorProps extends React.HTMLAttributes<HTMLElement> {
@@ -31,7 +30,7 @@ function isTrivialHref(href?: string) {
  * cases where the `href` is missing or trivial are treated like buttons
  */
 const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
-  ({ disabled, onKeyDown, ...props }: AnchorProps, ref) => {
+  ({ onKeyDown, ...props }: AnchorProps, ref) => {
     const buttonProps = useButtonProps({ tagName: 'a', ...props });
 
     const handleKeyDown = useEventCallback(
@@ -43,10 +42,12 @@ const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
 
     if ((isTrivialHref(props.href) && !props.role) || props.role === 'button') {
       return (
+        // eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/no-static-element-interactions
         <a ref={ref} {...props} {...buttonProps} onKeyDown={handleKeyDown} />
       );
     }
 
+    // eslint-disable-next-line jsx-a11y/anchor-has-content
     return <a ref={ref} {...props} />;
   },
 );

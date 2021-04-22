@@ -13,6 +13,9 @@ import {
   SelectCallback,
 } from './types';
 import { dataAttr, dataProp } from './DataKey';
+import NavItem, { UseNavItemOptions, NavItemProps } from './NavItem';
+
+export type { UseNavItemOptions, NavItemProps };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -32,7 +35,8 @@ const propTypes = {
   activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-interface NavProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
+export interface NavProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
   activeKey?: EventKey;
   as?: React.ElementType;
   onSelect?: SelectCallback;
@@ -178,4 +182,4 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
 Nav.displayName = 'Nav';
 Nav.propTypes = propTypes;
 
-export default Nav;
+export default Object.assign(Nav, { Item: NavItem });

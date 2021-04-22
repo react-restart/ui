@@ -11,14 +11,30 @@ import useGlobalListener from '@restart/hooks/useGlobalListener';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
 import DropdownContext from './DropdownContext';
-import DropdownMenu from './DropdownMenu';
-import DropdownToggle from './DropdownToggle';
+import DropdownMenu, {
+  DropdownMenuProps,
+  UseDropdownMenuMetadata,
+  UseDropdownMenuOptions,
+} from './DropdownMenu';
+import DropdownToggle, {
+  DropdownToggleProps,
+  UseDropdownToggleMetadata,
+} from './DropdownToggle';
+import DropdownItem, { DropdownItemProps } from './DropdownItem';
 import SelectableContext from './SelectableContext';
 import { SelectCallback } from './types';
-import DropdownItem from './DropdownItem';
 import { dataAttr } from './DataKey';
 import { Placement } from './usePopper';
 import { placements } from './popper';
+
+export type {
+  DropdownMenuProps,
+  UseDropdownMenuMetadata,
+  UseDropdownMenuOptions,
+  DropdownToggleProps,
+  UseDropdownToggleMetadata,
+  DropdownItemProps,
+};
 
 const propTypes = {
   /**
