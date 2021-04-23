@@ -1,3 +1,14 @@
+## [0.0.2](https://github.com/react-restart/ui/compare/v0.0.1...v0.0.2) (2021-04-23)
+
+
+### Features
+
+* process new popper modifiers ([b0747d8](https://github.com/react-restart/ui/commit/b0747d8b9dbc5c6aeceebbaca525a7bc59cbb1f4))
+
+
+
+
+
 ## [0.0.1](https://github.com/react-restart/ui/compare/v5.0.0...v0.0.1) (2021-04-22)
 
 
