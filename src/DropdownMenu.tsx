@@ -19,6 +19,7 @@ export interface UseDropdownMenuOptions {
   fixed?: boolean;
   placement?: Placement;
   usePopper?: boolean;
+  enableEventListeners?: boolean;
   offset?: Offset;
   rootCloseEvent?: RootCloseOptions['clickTrigger'];
   popperConfig?: Omit<UsePopperOptions, 'enabled' | 'placement'>;
@@ -70,6 +71,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     fixed = false,
     placement: placementOverride,
     popperConfig = {},
+    enableEventListeners = true,
     usePopper: shouldUsePopper = !!context,
   } = options;
 
@@ -91,7 +93,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
     mergeOptionsWithPopperConfig({
       placement: placementOverride || placement || 'bottom-start',
       enabled: shouldUsePopper,
-      enableEvents: show,
+      enableEvents: enableEventListeners == null ? show : enableEventListeners,
       offset,
       flip,
       fixed,

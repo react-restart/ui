@@ -116,7 +116,7 @@ export interface DropdownProps {
   defaultShow?: boolean;
   show?: boolean;
   onSelect?: SelectCallback;
-  onToggle: (nextShow: boolean, meta: ToggleMetadata) => void;
+  onToggle?: (nextShow: boolean, meta: ToggleMetadata) => void;
   itemSelector?: string;
   focusFirstItemOnShow?: false | true | 'keyboard';
   children: React.ReactNode;

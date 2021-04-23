@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useSafeState from '@restart/hooks/useSafeState';
 import * as Popper from '@popperjs/core';
+import { dequal } from 'dequal';
 import { createPopper } from './popper';
 
 const disabledApplyStylesModifier = { name: 'applyStyles', enabled: false };
@@ -94,7 +95,6 @@ const EMPTY_MODIFIERS = [] as any;
  * @param {boolean=}    options.enabled toggle the popper functionality on/off
  * @param {string=}     options.placement The popper element placement relative to the reference element
  * @param {string=}     options.strategy the positioning strategy
- * @param {boolean=}    options.eventsEnabled have Popper listen on window resize events to reposition the element
  * @param {function=}   options.onCreate called when the popper is created
  * @param {function=}   options.onUpdate called when the popper is updated
  *
@@ -111,6 +111,7 @@ function usePopper(
     ...config
   }: UsePopperOptions = {},
 ): UsePopperState {
+  const prevModifiers = useRef<UsePopperOptions['modifiers']>(modifiers);
   const popperInstanceRef = useRef<Instance>();
 
   const update = useCallback(() => {
@@ -162,17 +163,26 @@ function usePopper(
     [update, forceUpdate, setState],
   );
 
+  const nextModifiers = useMemo(() => {
+    if (!dequal(prevModifiers.current, modifiers)) {
+      prevModifiers.current = modifiers;
+    }
+    return prevModifiers.current!;
+  }, [modifiers]);
+
   useEffect(() => {
     if (!popperInstanceRef.current || !enabled) return;
 
     popperInstanceRef.current.setOptions({
       placement,
       strategy,
-      modifiers: [...modifiers, updateModifier, disabledApplyStylesModifier],
+      modifiers: [
+        ...nextModifiers,
+        updateModifier,
+        disabledApplyStylesModifier,
+      ],
     });
-    // intentionally NOT re-running on new modifiers
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategy, placement, updateModifier, enabled]);
+  }, [strategy, placement, updateModifier, enabled, nextModifiers]);
 
   useEffect(() => {
     if (!enabled || referenceElement == null || popperElement == null) {
@@ -183,7 +193,7 @@ function usePopper(
       ...config,
       placement,
       strategy,
-      modifiers: [...modifiers, ariaDescribedByModifier, updateModifier],
+      modifiers: [...nextModifiers, ariaDescribedByModifier, updateModifier],
     });
 
     return () => {

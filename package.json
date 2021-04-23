@@ -66,6 +66,7 @@
     "@react-aria/ssr": "^3.0.1",
     "@restart/hooks": "^0.3.26",
     "@types/warning": "^3.0.0",
+    "dequal": "^2.0.2",
     "dom-helpers": "^5.2.0",
     "prop-types": "^15.7.2",
     "uncontrollable": "^7.2.1",

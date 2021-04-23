@@ -31,6 +31,7 @@ export {
 
 export type { ButtonProps } from './Button';
 export type {
+  DropdownProps,
   DropdownMenuProps,
   UseDropdownMenuMetadata,
   UseDropdownMenuOptions,
