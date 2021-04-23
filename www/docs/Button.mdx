@@ -6,8 +6,8 @@ import { Button } from "@restart/ui";
 <Button>I'm a Button</Button>;
 ```
 
-Not very impressive on it's own, Button comes with a few conveniences over the
-plain HTML element.
+Not very impressive on it's own, but `Button` does comes with a few conveniences 
+over the plain HTML element.
 
 - `type` defaults to `button`
 - Ensures that non `button` `as` options remain accessible
@@ -20,5 +20,34 @@ import { Button } from "@restart/ui";
   <Button>I'm a Button</Button>
   <Button href="/home">I'm a link</Button>
   <Button as="span">I'm a span but also a button</Button>
+</div>;
+```
+
+## Styling
+
+```jsx live
+import { Button } from "@restart/ui";
+import clsx from "clsx";
+
+function StyledButton(props) {
+  return (
+    <Button
+      {...props}
+      className={clsx(
+        props.className,
+        "transition text-md",
+        "h-10 bg-white border border-primary text-primary rounded px-8 mt-4 appearance-none text-center whitespace-no-wrap",
+        "focus:outline-none focus:ring-4 ring-brand-200",
+        !props.disabled && "cursor-pointer hover:bg-primary hover:text-white",
+        "active:bg-brand-600 active:text-white",
+        props.disabled && "cursor-not-allowed opacity-60"
+      )}
+    />
+  );
+}
+
+<div className="space-x-4">
+  <StyledButton>Button</StyledButton>
+  <StyledButton disabled>Disabled</StyledButton>
 </div>;
 ```

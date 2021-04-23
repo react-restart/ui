@@ -7,6 +7,7 @@ h3 { font-size: var(--ifm-h3-font-size); }
 h4 { font-size: var(--ifm-h4-font-size); }
 h5 { font-size: var(--ifm-h5-font-size); }
 h6 { font-size: var(--ifm-h6-font-size); }
+ul { @apply list-disc list-inside }
 
 :root {
   --ifm-color-primary: theme('colors.brand.500');
