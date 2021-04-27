@@ -1,14 +1,14 @@
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-`Dropdown` is set of structural components for building, accessible dropdown menus with close-on-click,
-keyboard navigation, and correct focus handling. As with all the react-overlay's
-components it's BYOS (Bring Your Own Styles). Dropdown is primarily
-built from three base components, you should compose to build your Dropdowns.
+`Dropdown` is a set of structural components for building accessible dropdown menus with close-on-click,
+keyboard navigation, and correct focus handling. Like all of `@restart/ui`
+components, it's BYOS (Bring Your Own Styles). `Dropdown` is primarily
+built from three base components that you should compose to build your dropdowns.
 
 - `Dropdown`: wraps the menu and toggle, and handles keyboard navigation
-- `Dropdown.Toggle`: generally a button that triggers the menu opening
-- `Dropdown.Menu`: the overlaid, menu, positioned to the toggle with PopperJS
+- `Dropdown.Toggle`: generally a button that triggers the opening of the menu
+- `Dropdown.Menu`: the overlaid menu, positioned to the toggle with `PopperJS`
 
 ```jsx live
 import clsx from "clsx";
@@ -95,18 +95,18 @@ function DropdownExample() {
 
 ## Components
 
-Dropdowns are made up of a wrapping `Dropdown` components, a `Toggle` that
-triggers that menu visibility, a `Menu` and the `Item`s in that menu. With the exception
-of the outer `Dropdown` component each sub component can be constructed with a component
-render prop API or hook depending on preference.
+Dropdowns are made up of a wrapping `Dropdown` component, a `Toggle` that
+triggers that menu visibility, a `Menu` and the `Item`s within that menu. With the exception
+of the outer `Dropdown` component, each sub component can be constructed with a component
+render prop API or a hook depending on preference.
 
 ### Dropdown
 
-The `Dropdown` component is the non presentational orchestrator of the dropdown state.
-It handles menu visibility, keyboard navigation and focus management. As a convenience a
+The `Dropdown` component is the non-presentational orchestrator of the dropdown state.
+It handles menu visibility, keyboard navigation and focus management. As a convenience, a
 few `Menu` specific props can be provided to `Dropdown` directly, such as `placement`. It
-is sometimes helpful to also render a wrapping DOM element around your Toggle and Menu, but not
-required.
+is sometimes helpful to also render a wrapping DOM element around your `Toggle` and `Menu`, 
+but not it's required.
 
 ```jsx
 import { Dropdown } from '@restart/ui';
@@ -121,8 +121,8 @@ import { Dropdown } from '@restart/ui';
 
 ### Toggle
 
-The `Toggle` is an interactive element, usually a button, that opens the Dropdown Menu.
-The toggle props contain a `ref` that must be passed to a valid DOM element, you
+The `Toggle` is an interactive element (usually a button) that opens the dropdown menu.
+The toggle props contain a `ref` that must be passed to a valid DOM element. You
 can pass `disabled` and `onClick` props as well and they will be composed into the returned
 props automatically.
 
@@ -167,8 +167,8 @@ const MyDropdownToggle = (props) => (
 ### Menu
 
 The dropdown `Menu` provides an overlay that is positioned next to the dropdown toggle.
-Menu's are positioned with PopperJS by default, and accept all configuration options
-available to Popper.
+Menu's are positioned with `PopperJS` by default, and accept all configuration options
+available to `Popper`.
 
 <Tabs
   defaultValue="hook"
@@ -227,14 +227,15 @@ const MyDropdownToggle = (props) => (
 
 ## Implementing show/hide
 
-Because PopperJs must measure the Menu element it's recommended that you style
+Because `PopperJS` must measure the `Menu` element, it's recommended that you style
 the Menu with `opacity: 0` and `visibility: hidden` when not shown.
-This allows popper to calculate the correct offset for the Menu even when it's not visble.
-this also makes it a bit simpler to animate if you desire.
+This allows `Popper` to calculate the correct offset for the `Menu` even when it's not 
+visible. This also makes it a bit simpler to animate if you desire.
 
-When transitioning it's best to use **both** `visibility` and `opacity`. Setting
-`visibility` to `hidden` will remove the menu from keyboard Tab order, but it doesn't transition
-nicely, so adding opacity (or some other visual property) to indicate fade out and in.
+When transitioning, it's best to use **both** `visibility` and `opacity`. Setting
+`visibility` to `hidden` will remove the menu from the keyboard tab order, but it 
+doesn't transition nicely, so add `opacity` (or some other visual property) to 
+indicate fade out and in.
 
 ```jsx live
 import { Dropdown } from "@restart/ui";
@@ -266,7 +267,7 @@ import { Dropdown } from "@restart/ui";
 ```
 
 If the above isn't feasible and you must use `display: none` to hide the menu, you
-may need to manually trigger a position recalculation on show, when popper is able to
+may need to manually trigger a position re-calculation on show when `Popper` is able to
 measure the element.
 
 ```jsx
@@ -294,11 +295,11 @@ function Menu() {
 
 ## Different containers
 
-Dropdowns use `PopperJS` by default to position Menu's to Toggles. PopperJS is a
-powerful positioning library that lets you easily construct Dropdown markup to suit
+Dropdowns use `Popper` by default to position `Menu`s to `Toggle`s. `Popper` is a
+powerful positioning library that lets you easily construct `Dropdown` markup to suit
 your app's needs.
 
-The example here positions the Menu to the `document` body via a Portal.
+The example here positions the `Menu` to the `document` body via a `Portal`.
 
 ```js live
 import { Dropdown } from "@restart/ui";

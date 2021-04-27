@@ -22,11 +22,11 @@ import { Nav, NavItem } from "@restart/ui";
 
 ## Styling
 
-A `NavItem`s implement a few bits of state that likely need visual styling to use.
+`NavItem`s implement a few bits of state that likely need visual styling to use.
 
-- `disabled` whether the navitem is actionable or not
+- `disabled` whether the `NavItem` is actionable or not.
 - `active` whether the nav item is "selected", this may be because the `activeKey`
-  on Nav matches the `NavItem`'s key, or because the `active` prop was passed to it
+  on `Nav` matches the `NavItem`'s key, or because the `active` prop was passed to it.
 
 ```jsx live
 import clsx from "clsx";
@@ -78,7 +78,7 @@ function Example() {
 
 ## Dropdowns
 
-Dropdown components can be used in `Nav`'s as well:
+Dropdown components can be used in `Nav`s as well:
 
 ```jsx live
 import clsx from "clsx";
@@ -154,7 +154,7 @@ function Example() {
 
 ## Tabs
 
-Create dynamic tabbed interfaces from a `Nav`, as described in the WAI ARIA Authoring Practices.
+Create dynamic tabbed interfaces from a `Nav`, as described in the WAI-ARIA Authoring Practices.
 Note that tabbed UIs have specific behavior that sets them apart from a navigation menu, even
 when styled similarly.
 
