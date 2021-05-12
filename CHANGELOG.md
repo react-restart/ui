@@ -1,3 +1,14 @@
+## [0.0.3](https://github.com/react-restart/ui/compare/v0.0.2...v0.0.3) (2021-05-12)
+
+
+### Bug Fixes
+
+* move dev dep to right place ([5245a1d](https://github.com/react-restart/ui/commit/5245a1df45558d633052a58f46ccf19baa1e730e))
+
+
+
+
+
 ## [0.0.2](https://github.com/react-restart/ui/compare/v0.0.1...v0.0.2) (2021-04-23)
 
 
