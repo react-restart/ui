@@ -60,7 +60,6 @@
     "conventionalCommits": true
   },
   "dependencies": {
-    "@4c/docusaurus-preset": "^0.2.4",
     "@babel/runtime": "^7.13.16",
     "@popperjs/core": "^2.9.2",
     "@react-aria/ssr": "^3.0.1",
@@ -84,6 +83,7 @@
     "@babel/core": "^7.13.16",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
+    "@4c/docusaurus-preset": "^0.2.4",
     "@react-bootstrap/eslint-config": "^2.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@types/classnames": "^2.3.1",
