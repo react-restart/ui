@@ -18,7 +18,7 @@ const propTypes = {
   onKeyDown: PropTypes.func,
   disabled: PropTypes.bool,
   role: PropTypes.string,
-  tabIndex: PropTypes.oneOfType([PropTypes.number]),
+  tabIndex: PropTypes.number,
 };
 
 function isTrivialHref(href?: string) {
