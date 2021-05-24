@@ -30,8 +30,6 @@ const propTypes = {
   /** @private */
   onKeyDown: PropTypes.func,
   /** @private */
-  parentOnSelect: PropTypes.func,
-  /** @private */
   activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
@@ -40,7 +38,6 @@ export interface NavProps
   activeKey?: EventKey;
   as?: React.ElementType;
   onSelect?: SelectCallback;
-  parentOnSelect?: SelectCallback;
 }
 
 const EVENT_KEY_ATTR = dataAttr('event-key');

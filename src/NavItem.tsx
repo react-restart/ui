@@ -5,19 +5,23 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 
 import NavContext from './NavContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
-import { EventKey, DynamicRefForwardingComponent } from './types';
+import {
+  EventKey,
+  DynamicRefForwardingComponent,
+  SelectCallback,
+} from './types';
 import Button from './Button';
 import { dataAttr } from './DataKey';
 
 export interface NavItemProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
   active?: boolean;
-  as: React.ElementType;
+  as?: React.ElementType;
   disabled?: boolean;
   eventKey?: EventKey;
   href?: string;
   tabIndex?: number;
-  onSelect?: (navKey: string, e: any) => void;
+  onSelect?: SelectCallback;
 }
 
 const propTypes = {
@@ -26,9 +30,8 @@ const propTypes = {
   role: PropTypes.string,
 
   href: PropTypes.string,
-  tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  tabIndex: PropTypes.number,
   eventKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  onclick: PropTypes.func,
 
   as: PropTypes.any,
   onClick: PropTypes.func,

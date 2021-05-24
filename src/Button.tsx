@@ -9,7 +9,7 @@ interface UseButtonPropsOptions {
   type?: ButtonType;
   href?: string;
   disabled?: boolean;
-  target?: any;
+  target?: string;
   rel?: string;
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
