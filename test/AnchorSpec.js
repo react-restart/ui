@@ -42,6 +42,16 @@ describe('Anchor', () => {
     handleClick.should.have.been.calledOnce;
   });
 
+  it('should call onKeyDown handler when href is non-trivial', () => {
+    const onKeyDownSpy = sinon.spy();
+
+    shallow(<Anchor href="http://google.com" onKeyDown={onKeyDownSpy} />)
+      .find('a')
+      .simulate('keyDown', { key: ' ', preventDefault() {} });
+
+    onKeyDownSpy.should.have.been.calledOnce;
+  });
+
   it('prevents default when no href is provided', () => {
     const handleClick = sinon.spy();
 
