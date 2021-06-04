@@ -30,7 +30,7 @@ function isTrivialHref(href?: string) {
  * cases where the `href` is missing or trivial are treated like buttons
  */
 const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
-  ({ onKeyDown, ...props }: AnchorProps, ref) => {
+  ({ onKeyDown, ...props }, ref) => {
     const buttonProps = useButtonProps({ tagName: 'a', ...props });
 
     const handleKeyDown = useEventCallback(
@@ -47,8 +47,8 @@ const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
       );
     }
 
-    // eslint-disable-next-line jsx-a11y/anchor-has-content
-    return <a ref={ref} {...props} />;
+    // eslint-disable-next-line jsx-a11y/anchor-has-content, jsx-a11y/no-static-element-interactions
+    return <a ref={ref} {...props} onKeyDown={onKeyDown} />;
   },
 );
 
