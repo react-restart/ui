@@ -1,33 +1,31 @@
-import { mount, shallow } from 'enzyme';
-
+import { render, fireEvent } from '@testing-library/react';
 import Anchor from '../src/Anchor';
 
 describe('Anchor', () => {
   it('renders an anchor tag', () => {
-    mount(<Anchor />)
-      .getDOMNode()
-      .tagName.should.equal('A');
+    const { container } = render(<Anchor data-testid="anchor" />);
+
+    container.firstChild.tagName.should.equal('A');
   });
 
   it('forwards provided href', () => {
-    shallow(<Anchor href="http://google.com" />)
-      .find('a')
-      .prop('href')
-      .should.equal('http://google.com');
+    const { container } = render(<Anchor href="http://google.com" />);
+
+    container.firstChild.getAttribute('href').should.equal('http://google.com');
   });
 
-  xit('ensures that an href is provided', () => {
-    mount(<Anchor />)
-      .getDOMNode()
-      .hasAttribute('href').should.be.true;
-  });
+  // xit('ensures that an href is provided', () => {
+  //   mount(<Anchor />)
+  //     .getDOMNode()
+  //     .hasAttribute('href').should.be.true;
+  // });
 
   it('forwards onClick handler', () => {
     const handleClick = sinon.spy();
 
-    shallow(<Anchor onClick={handleClick} />)
-      .find('a')
-      .simulate('click', { preventDefault() {} });
+    const { container } = render(<Anchor onClick={handleClick} />);
+
+    fireEvent.click(container.firstChild);
 
     handleClick.should.have.been.calledOnce;
   });
@@ -35,9 +33,9 @@ describe('Anchor', () => {
   it('provides onClick handler as onKeyDown handler for "space"', () => {
     const handleClick = sinon.spy();
 
-    shallow(<Anchor onClick={handleClick} />)
-      .find('a')
-      .simulate('keyDown', { key: ' ', preventDefault() {} });
+    const { container } = render(<Anchor onClick={handleClick} />);
+
+    fireEvent.keyDown(container.firstChild, { key: ' ' });
 
     handleClick.should.have.been.calledOnce;
   });
@@ -45,9 +43,11 @@ describe('Anchor', () => {
   it('should call onKeyDown handler when href is non-trivial', () => {
     const onKeyDownSpy = sinon.spy();
 
-    shallow(<Anchor href="http://google.com" onKeyDown={onKeyDownSpy} />)
-      .find('a')
-      .simulate('keyDown', { key: ' ', preventDefault() {} });
+    const { container } = render(
+      <Anchor href="http://google.com" onKeyDown={onKeyDownSpy} />,
+    );
+
+    fireEvent.keyDown(container.firstChild, { key: ' ' });
 
     onKeyDownSpy.should.have.been.calledOnce;
   });
@@ -55,10 +55,13 @@ describe('Anchor', () => {
   it('prevents default when no href is provided', () => {
     const handleClick = sinon.spy();
 
-    const wrapper = mount(<Anchor onClick={handleClick} />);
-    wrapper.find('a').simulate('click');
+    const { container, rerender } = render(<Anchor onClick={handleClick} />);
 
-    wrapper.setProps({ href: '#' }).find('a').simulate('click');
+    fireEvent.click(container.firstChild);
+
+    rerender(<Anchor onClick={handleClick} href="#" />);
+
+    fireEvent.click(container.firstChild);
 
     expect(handleClick).to.have.been.calledTwice;
     expect(handleClick.getCall(0).args[0].isDefaultPrevented()).to.be.true;
@@ -68,49 +71,37 @@ describe('Anchor', () => {
   it('does not prevent default when href is provided', () => {
     const handleClick = sinon.spy();
 
-    mount(<Anchor href="#foo" onClick={handleClick} />)
-      .find('a')
-      .simulate('click');
+    fireEvent.click(
+      render(<Anchor href="#foo" onClick={handleClick} />).container.firstChild,
+    );
 
     expect(handleClick).to.have.been.calledOnce;
     expect(handleClick.getCall(0).args[0].isDefaultPrevented()).to.be.false;
   });
 
   it('forwards provided role', () => {
-    shallow(<Anchor role="test" />)
-      .find('a')
-      .prop('role')
-      .should.equal('test');
+    render(<Anchor role="test" />).getByRole('test');
   });
 
   it('forwards provided role with href', () => {
-    shallow(<Anchor role="test" href="http://google.com" />)
-      .find('a')
-      .prop('role')
-      .should.equal('test');
+    render(<Anchor role="test" href="http://google.com" />).getByRole('test');
   });
 
   it('set role=button with no provided href', () => {
-    shallow(<Anchor />)
-      .find('a')
-      .prop('role')
-      .should.equal('button');
+    const wrapper = render(<Anchor />);
 
-    shallow(<Anchor href="#" />)
-      .find('a')
-      .prop('role')
-      .should.equal('button');
+    wrapper.getByRole('button');
+
+    wrapper.rerender(<Anchor href="#" />);
+
+    wrapper.getByRole('button');
   });
 
   it('sets no role with provided href', () => {
     expect(
-      shallow(<Anchor href="http://google.com" />)
-        .find('a')
-        .prop('role'),
-    ).to.not.exist;
-  });
-
-  it('Should have a as default component', () => {
-    mount(<Anchor />).assertSingle('a');
+      render(
+        <Anchor href="http://google.com" />,
+      ).container.firstChild.hasAttribute('role'),
+    ).to.be.false;
   });
 });
