@@ -1,7 +1,7 @@
-import { useCallbackRef } from '@restart/hooks';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useIntersectionObserver from '@restart/hooks/useIntersectionObserver';
-import { useEffect, useRef } from 'react';
+import { useMemo, useRef } from 'react';
+import getScrollParent from 'dom-helpers/scrollParent';
 
 export interface WaypointEvent {
   position: Position;
@@ -15,9 +15,19 @@ export interface Rect {
   right?: number;
 }
 
+export type WaypointCallback = (
+  details: WaypointEvent,
+  entry: IntersectionObserverEntry,
+  observer: IntersectionObserver,
+) => void;
+
+export type RootElement = Element | Document | null | undefined;
+
 /** Accepts all options an IntersectionOverserver accepts */
 export interface WaypointOptions
-  extends Omit<IntersectionObserverInit, 'rootMargin'> {
+  extends Omit<IntersectionObserverInit, 'rootMargin' | 'root'> {
+  root?: RootElement | 'scrollParent';
+
   /**
    * A valid CSS `margin` property or object containing the specific "top", "left", etc properties.
    * The root margin functionally adjusts the "size" of the viewport when considering the waypoint's
@@ -30,16 +40,6 @@ export interface WaypointOptions
    * Set the direction of the scroll to consider when tracking the waypoint's position
    */
   scrollDirection?: 'vertical' | 'horizontal';
-
-  /**
-   * The callback fired when a waypoint's position is updated. This generally
-   * fires as a waypoint enters or exits the viewport but will also be called
-   * on mount,
-   */
-  onPositionChange: (
-    details: WaypointEvent,
-    entry: IntersectionObserverEntry,
-  ) => void;
 }
 
 export enum Position {
@@ -56,57 +56,70 @@ function toCss(margin?: string | Rect) {
   return `${top}px ${right}px ${bottom}px ${left}px`;
 }
 
-export default function useWaypoint({
-  root,
-  rootMargin,
-  threshold,
-  onPositionChange,
-  scrollDirection = 'vertical',
-}: WaypointOptions) {
-  const handlePositionChange = useEventCallback(onPositionChange);
-  const prevYRef = useRef<number | null>(null);
+function useWaypoint(
+  element: Element | null,
+  callback: WaypointCallback,
+  options: WaypointOptions = {},
+): void {
+  const { root, rootMargin, threshold, scrollDirection = 'vertical' } = options;
+  const handler = useEventCallback(callback);
+
   const prevPositionRef = useRef<Position | null>(null);
 
-  const [element, attachRef] = useCallbackRef<HTMLElement>();
-  const [entry] = useIntersectionObserver(element, {
-    root,
-    threshold,
-    rootMargin: toCss(rootMargin),
-  });
+  const findScrollParent = root === 'scrollParent';
+  const scrollParent = useMemo(
+    () =>
+      (element && findScrollParent && getScrollParent(element as any, true)) ||
+      null,
+    [element, findScrollParent],
+  );
 
-  useEffect(() => {
-    if (!entry) return;
+  const realRoot = root === 'scrollParent' ? scrollParent : root;
 
-    const [start, end, point] =
-      scrollDirection === 'vertical'
-        ? (['top', 'bottom', 'y'] as const)
-        : (['left', 'right', 'x'] as const);
+  useIntersectionObserver(
+    // We change the meaning of explicit null to "not provided yet"
+    // this is to allow easier synchronizing between element and roots derived
+    // from it. Otherwise if the root updates later an observer will be created
+    // for the document and then for the root
+    element,
+    ([entry], observer) => {
+      if (!entry) return;
 
-    const { [point]: p } = entry.boundingClientRect;
+      const [start, end, point] =
+        scrollDirection === 'vertical'
+          ? (['top', 'bottom', 'y'] as const)
+          : (['left', 'right', 'x'] as const);
 
-    const rootStart = entry.rootBounds?.[start] || 0;
-    const rootEnd = entry.rootBounds?.[end] || 0;
+      const { [point]: coord } = entry.boundingClientRect;
 
-    let position: Position;
-    if (p > rootEnd) {
-      position = Position.BELOW;
-    } else if (p < rootStart) {
-      position = Position.ABOVE;
-    } else {
-      position = Position.INSIDE;
-    }
+      const rootStart = entry.rootBounds?.[start] || 0;
+      const rootEnd = entry.rootBounds?.[end] || 0;
 
-    const previousPosition = prevPositionRef.current;
-    prevYRef.current = p;
+      let position: Position = Position.INSIDE;
+      if (entry.isIntersecting) {
+        position = Position.INSIDE;
+      } else if (coord > rootEnd) {
+        position = Position.BELOW;
+      } else if (coord < rootStart) {
+        position = Position.ABOVE;
+      }
 
-    if (previousPosition === position) {
-      return;
-    }
+      const previousPosition = prevPositionRef.current;
 
-    handlePositionChange({ position, previousPosition }, entry);
+      if (previousPosition === position) {
+        return;
+      }
 
-    prevPositionRef.current = position;
-  }, [entry, handlePositionChange, scrollDirection]);
+      handler({ position, previousPosition }, entry, observer);
 
-  return [attachRef, entry] as const;
+      prevPositionRef.current = position;
+    },
+    {
+      threshold,
+      root: realRoot,
+      rootMargin: toCss(rootMargin),
+    },
+  );
 }
+
+export default useWaypoint;

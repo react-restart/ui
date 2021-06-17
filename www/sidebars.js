@@ -7,7 +7,15 @@ module.exports = {
       type: 'category',
       label: 'API',
       collapsed: false,
-      items: ['Button', 'Dropdown', 'Modal', 'Nav', 'Overlay', 'Portal'],
+      items: [
+        'Button',
+        'Dropdown',
+        'Modal',
+        'Nav',
+        'Overlay',
+        'Portal',
+        'Waypoint',
+      ],
     },
     {
       type: 'category',
