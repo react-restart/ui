@@ -38,6 +38,8 @@ class ModalManager {
 
   readonly handleContainerOverflow: boolean;
 
+  readonly isRTL: boolean;
+
   readonly modals: ModalInstance[];
 
   readonly containers: HTMLElement[];
@@ -49,9 +51,11 @@ class ModalManager {
   constructor({
     hideSiblingNodes = true,
     handleContainerOverflow = true,
+    isRTL = false,
   } = {}) {
     this.hideSiblingNodes = hideSiblingNodes;
     this.handleContainerOverflow = handleContainerOverflow;
+    this.isRTL = isRTL;
     this.modals = [];
     this.containers = [];
     this.data = [];
@@ -60,7 +64,7 @@ class ModalManager {
 
   isContainerOverflowing(modal: ModalInstance) {
     const data = this.data[this.containerIndexFromModal(modal)];
-    return data && data.overflowing;
+    return data ? data.overflowing : false;
   }
 
   containerIndexFromModal(modal: ModalInstance) {
@@ -72,16 +76,18 @@ class ModalManager {
 
     // we are only interested in the actual `style` here
     // because we will override it
+    const paddingProp = this.isRTL ? 'paddingLeft' : 'paddingRight';
+
     containerState.style = {
       overflow: container.style.overflow,
-      paddingRight: container.style.paddingRight,
+      [paddingProp]: container.style[paddingProp],
     };
 
     if (containerState.overflowing) {
       // use computed style, here to get the real padding
       // to add our scrollbar width
-      style.paddingRight = `${
-        parseInt(css(container, 'paddingRight') || '0', 10) + this.scrollbarSize
+      style[paddingProp] = `${
+        parseInt(css(container, paddingProp) || '0', 10) + this.scrollbarSize
       }px`;
     }
 
