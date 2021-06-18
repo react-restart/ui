@@ -43,10 +43,15 @@ module.exports = (config) => {
       devtool: 'inline-cheap-module-source-map',
     },
 
-    reporters: ['mocha'],
+    reporters: ['mocha', 'coverage'],
 
     mochaReporter: {
       output: 'autowatch',
+    },
+
+    coverageReporter: {
+      type: 'lcov',
+      dir: 'coverage',
     },
 
     customLaunchers: {

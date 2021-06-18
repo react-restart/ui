@@ -92,6 +92,7 @@
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
+    "babel-plugin-istanbul": "^6.0.0",
     "babel-preset-env-modules": "^1.0.1",
     "chai": "^4.3.4",
     "cherry-pick": "^0.5.0",
