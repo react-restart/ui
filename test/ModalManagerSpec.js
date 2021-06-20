@@ -96,6 +96,23 @@ describe('ModalManager', () => {
     expect(manager.data.length).to.equal(0);
   });
 
+  it('should find a modal if it was added', () => {
+    const modal = createModal();
+
+    manager.add(modal, container);
+
+    expect(manager.containerIndexFromModal(modal)).to.not.equal(-1);
+  });
+
+  it('should not find a modal if it was not added', () => {
+    const modalA = createModal();
+    const modalB = createModal();
+
+    manager.add(modalA, container);
+
+    expect(manager.containerIndexFromModal(modalB)).to.equal(-1);
+  });
+
   describe('container aria-hidden', () => {
     let app;
 
@@ -109,6 +126,18 @@ describe('ModalManager', () => {
       manager.add(createModal(), container);
 
       expect(app.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should not add aria-hidden to container siblings if hideSiblingNodes=false', () => {
+      const modal = createModal();
+      const modalManager = new ModalManager({ hideSiblingNodes: false });
+      modalManager.add(modal, container);
+
+      expect(app.getAttribute('aria-hidden')).to.equal(null);
+
+      modalManager.remove(modal);
+
+      expect(app.getAttribute('aria-hidden')).to.equal(null);
     });
 
     it('should not add aria-hidden to modal', () => {
@@ -154,6 +183,25 @@ describe('ModalManager', () => {
       expect(mount.getAttribute('aria-hidden')).to.equal(null);
     });
 
+    it('should not remove aria-hidden on americas next top modal when hideSiblingNodes=false', () => {
+      let modalA = createModal();
+      let modalB = createModal();
+      let mount = document.createElement('div');
+
+      modalA.dialog = mount;
+      container.appendChild(mount);
+
+      const modalManager = new ModalManager({ hideSiblingNodes: false });
+      modalManager.add(modalA, container);
+      modalManager.add(modalB, container);
+
+      expect(mount.getAttribute('aria-hidden')).to.equal(null);
+
+      modalManager.remove(modalB, container);
+
+      expect(mount.getAttribute('aria-hidden')).to.equal(null);
+    });
+
     it('should remove aria-hidden on siblings', () => {
       let modal = createModal();
 
@@ -173,6 +221,7 @@ describe('ModalManager', () => {
       injectCss(`
         #container {
           padding-right: 20px;
+          padding-left: 20px;
           overflow: scroll;
           height: 300px;
         }
@@ -200,10 +249,12 @@ describe('ModalManager', () => {
 
       expect(container.style.overflow).to.equal('');
 
-      new ModalManager({ handleContainerOverflow: false }).add(
-        modal,
-        container,
-      );
+      const modalManager = new ModalManager({ handleContainerOverflow: false });
+      modalManager.add(modal, container);
+
+      expect(container.style.overflow).to.equal('');
+
+      modalManager.remove(modal);
 
       expect(container.style.overflow).to.equal('');
     });
@@ -213,6 +264,16 @@ describe('ModalManager', () => {
       manager.add(modal, container);
 
       expect(container.style.paddingRight).to.equal(
+        `${getScrollbarSize() + 20}px`,
+      );
+    });
+
+    it('should set padding to left side if RTL', () => {
+      let modal = createModal();
+
+      new ModalManager({ isRTL: true }).add(modal, container);
+
+      expect(container.style.paddingLeft).to.equal(
         `${getScrollbarSize() + 20}px`,
       );
     });
@@ -269,6 +330,19 @@ describe('ModalManager', () => {
 
       expect(container.style.overflow).to.equal('');
       expect(container.style.paddingRight).to.equal('');
+    });
+
+    it('should return false for container overflow if no modal added', () => {
+      const modal = createModal();
+
+      expect(manager.isContainerOverflowing(modal)).to.be.false;
+    });
+
+    it('should return true for container overflow', () => {
+      const modal = createModal();
+      manager.add(modal, container);
+
+      expect(manager.isContainerOverflowing(modal)).to.be.true;
     });
   });
 });
