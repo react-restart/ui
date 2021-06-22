@@ -1,6 +1,6 @@
 import WaypointExample from "../src/WaypointExample";
 
-A component (and related hook) provide a high level interface
+A component (and related hook) to provide a high level interface
 over [`IntersectionObserver`](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 designed to detect when a component enters and exits a viewport.
 
@@ -11,7 +11,7 @@ designed to detect when a component enters and exits a viewport.
 
 Waypoint renders a "sentinel" element that you place in a scrollable
 area. Using an `IntersectionObserver`, the waypoint fires a callback when it
-"intersects" with the visable area of the scroll view. Waypoint will fire callback
+"intersects" with the visible area of the scroll view. Waypoint will fire a callback
 when this happens with details about where the waypoint is in relation to the visible
 area.
 
@@ -33,7 +33,7 @@ By default that direction is "vertical", but can configured to "horizontal".
 
 ## Specifying the scroll parent
 
-By default waypoint observe scrolling on the device viewport, generally the `window`.
+By default waypoint observes scrolling on the device viewport, generally the `window`.
 You can also specify a specific element as the root by providing a DOM element
 to the `root` prop.
 
@@ -58,12 +58,12 @@ function ScrollArea({ items, onPositionChange }) {
 ## Margins
 
 You can adjust the functional shape of the viewport by providing a `rootMargin`
-prop, which is passed to the underlying `IntersectionObserver`. As a covenience
+prop, which is passed to the underlying `IntersectionObserver`. As a convenience,
 Waypoint accepts an object with inset properties as well as a valid CSS margin property
 value.
 
 Positive margins grow the overall size of the viewport causing waypoints to enter
-before the are actually in view. Negative values shrink the viewport, and delays
+before they are actually in view. Negative values shrink the viewport, and delays
 the waypoint from entering by the specified pixel amount. Margins are illustrated
 by the yellow blocks in the example below.
 
@@ -85,7 +85,7 @@ Here is an example of positive margins:
 
 ## `useWaypoint`
 
-The underlying hook powering the Waypoint component. Leaverage `useWaypoint`
+The underlying hook powering the Waypoint component. Leverage `useWaypoint`
 to turn any component into a waypoint. Using the hook directly is helpful
 when you want an individual component to respond
 

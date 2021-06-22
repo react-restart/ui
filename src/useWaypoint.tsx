@@ -23,7 +23,7 @@ export type WaypointCallback = (
 
 export type RootElement = Element | Document | null | undefined;
 
-/** Accepts all options an IntersectionOverserver accepts */
+/** Accepts all options an IntersectionObserver accepts */
 export interface WaypointOptions
   extends Omit<IntersectionObserverInit, 'rootMargin' | 'root'> {
   root?: RootElement | 'scrollParent';

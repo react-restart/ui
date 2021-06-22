@@ -1,5 +1,5 @@
-import { useCallbackRef } from '@restart/hooks';
-import React from 'react';
+import useCallbackRef from '@restart/hooks/useCallbackRef ';
+import * as React from 'react';
 
 import useWaypoint, {
   WaypointOptions,
@@ -10,7 +10,7 @@ import useWaypoint, {
 export { Position };
 export type { WaypointEvent };
 
-const defaultRenderComponent = (ref: any) => (
+const defaultRenderComponent = (ref: React.RefCallback<any>) => (
   <span ref={ref} style={{ fontSize: 0 }} />
 );
 
@@ -20,7 +20,7 @@ export interface WaypointProps extends WaypointOptions {
   /**
    * The callback fired when a waypoint's position is updated. This generally
    * fires as a waypoint enters or exits the viewport but will also be called
-   * on mount,
+   * on mount.
    */
   onPositionChange: (
     details: WaypointEvent,
