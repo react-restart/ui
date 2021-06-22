@@ -143,7 +143,7 @@ function WaypointExample({ horizontal, scrollIntoView, margins }: Props) {
             />
           )}
           onPositionChange={({ position }) => {
-            if (position === Position.BELOW || position === Position.ABOVE) {
+            if (position === Position.BEFORE || position === Position.AFTER) {
               setMessage(`Exited (${Position[position].toLowerCase()})`);
             }
             if (position === Position.INSIDE) {

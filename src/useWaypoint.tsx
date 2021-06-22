@@ -43,9 +43,9 @@ export interface WaypointOptions
 }
 
 export enum Position {
-  ABOVE = 1,
+  BEFORE = 1,
   INSIDE,
-  BELOW,
+  AFTER,
 }
 
 function toCss(margin?: string | Rect) {
@@ -99,9 +99,9 @@ function useWaypoint(
       if (entry.isIntersecting) {
         position = Position.INSIDE;
       } else if (coord > rootEnd) {
-        position = Position.BELOW;
+        position = Position.AFTER;
       } else if (coord < rootStart) {
-        position = Position.ABOVE;
+        position = Position.BEFORE;
       }
 
       const previousPosition = prevPositionRef.current;
