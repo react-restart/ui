@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import useSafeState from '@restart/hooks/useSafeState';
 import * as Popper from '@popperjs/core';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { dequal } from 'dequal';
+import useSafeState from '@restart/hooks/useSafeState';
 import { createPopper } from './popper';
 
-const disabledApplyStylesModifier = { name: 'applyStyles', enabled: false };
+const disabledApplyStylesModifier = {
+  name: 'applyStyles',
+  enabled: false,
+  phase: 'afterWrite',
+};
 
 // until docjs supports type exports...
 export type Modifier<Name, Options> = Popper.Modifier<Name, Options>;

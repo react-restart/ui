@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
-import { placements } from './popper';
+import { useState } from 'react';
 import usePopper, {
-  Placement,
-  UsePopperOptions,
   Offset,
+  Placement,
   State,
+  UsePopperOptions,
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
+import { placements } from './popper';
 
 export interface OverlayProps extends TransitionCallbacks {
   flip?: boolean;
