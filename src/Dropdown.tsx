@@ -282,6 +282,10 @@ function Dropdown({
       return;
     }
 
+    if (key === 'Tab' && (!menuRef.current || !show)) {
+      return;
+    }
+
     lastSourceEvent.current = event.type;
     const meta = { originalEvent: event, source: event.type };
     switch (key) {
@@ -312,7 +316,7 @@ function Dropdown({
           (e) => {
             if (
               (e.key === 'Tab' && !e.target) ||
-              !menuRef.current!.contains(e.target as HTMLElement)
+              !menuRef.current?.contains(e.target as HTMLElement)
             ) {
               onToggle(false, meta);
             }

@@ -11,6 +11,7 @@ describe('<Dropdown>', () => {
     rootCloseEvent,
     renderSpy,
     popperConfig,
+    renderMenuOnMount = true,
     ...props
   }) => (
     <Dropdown.Menu
@@ -20,8 +21,11 @@ describe('<Dropdown>', () => {
       rootCloseEvent={rootCloseEvent}
     >
       {(menuProps, meta) => {
-        const { show } = meta;
+        const { show, hasShown } = meta;
         renderSpy && renderSpy(meta);
+        if (!renderMenuOnMount && !hasShown) {
+          return null;
+        }
 
         return (
           <div
@@ -50,12 +54,23 @@ describe('<Dropdown>', () => {
     </Dropdown.Toggle>
   );
 
-  const SimpleDropdown = ({ children, menuSpy, usePopper, ...outer }) => (
+  const SimpleDropdown = ({
+    children,
+    menuSpy,
+    usePopper,
+    renderMenuOnMount,
+    ...outer
+  }) => (
     <Dropdown {...outer}>
       {children || (
         <>
           <Toggle key="toggle">Child Title</Toggle>,
-          <Menu key="menu" renderSpy={menuSpy} usePopper={usePopper}>
+          <Menu
+            key="menu"
+            renderSpy={menuSpy}
+            usePopper={usePopper}
+            renderMenuOnMount={renderMenuOnMount}
+          >
             <Dropdown.Item>Item 1</Dropdown.Item>
             <Dropdown.Item>Item 2</Dropdown.Item>
             <Dropdown.Item>Item 3</Dropdown.Item>
@@ -352,6 +367,49 @@ describe('<Dropdown>', () => {
       // at least that seems to be the case according to SO.
       // hence no assert on the input having focus.
     });
+  });
+
+  it('should not call onToggle if the menu ref not defined and "tab" is pressed', () => {
+    const onToggleSpy = sinon.spy();
+    const wrapper = mount(
+      <SimpleDropdown onToggle={onToggleSpy} renderMenuOnMount={false} />,
+      {
+        attachTo: focusableContainer,
+      },
+    );
+
+    const toggle = wrapper.find('.toggle').getDOMNode();
+    toggle.focus();
+
+    simulant.fire(toggle, 'keydown', {
+      key: 'Tab',
+    });
+
+    simulant.fire(document, 'keyup', {
+      key: 'Tab',
+    });
+
+    onToggleSpy.should.not.be.called;
+  });
+
+  it('should not call onToggle if the menu is hidden and "tab" is pressed', () => {
+    const onToggleSpy = sinon.spy();
+    const wrapper = mount(<SimpleDropdown onToggle={onToggleSpy} />, {
+      attachTo: focusableContainer,
+    });
+
+    const toggle = wrapper.find('.toggle').getDOMNode();
+    toggle.focus();
+
+    simulant.fire(toggle, 'keydown', {
+      key: 'Tab',
+    });
+
+    simulant.fire(document, 'keyup', {
+      key: 'Tab',
+    });
+
+    onToggleSpy.should.not.be.called;
   });
 
   describe('popper config', () => {

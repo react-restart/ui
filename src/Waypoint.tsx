@@ -1,4 +1,4 @@
-import useCallbackRef from '@restart/hooks/useCallbackRef ';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
 import * as React from 'react';
 
 import useWaypoint, {
