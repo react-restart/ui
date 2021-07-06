@@ -6,22 +6,16 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 import SelectableContext, { makeEventKey } from './SelectableContext';
 import NavContext from './NavContext';
 
-import {
-  EventKey,
-  DynamicRefForwardingComponent,
-  SelectCallback,
-} from './types';
+import { EventKey, DynamicRefForwardingComponent } from './types';
 import Button from './Button';
 import { dataAttr } from './DataKey';
 
-export interface DropdownItemProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
+export interface DropdownItemProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
   active?: boolean;
   disabled?: boolean;
   eventKey?: EventKey;
   href?: string;
-  onSelect?: SelectCallback;
 }
 
 const propTypes = {
@@ -41,18 +35,14 @@ const propTypes = {
   eventKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   /**
+   * HTML `href` attribute corresponding to `a.href`.
+   */
+  href: PropTypes.string,
+
+  /**
    * Callback fired when the menu item is clicked.
    */
   onClick: PropTypes.func,
-
-  /**
-   * Callback fired when the menu item is selected.
-   *
-   * ```js
-   * (eventKey: any, event: Object) => any
-   * ```
-   */
-  onSelect: PropTypes.func,
 
   /** @default Button */
   as: PropTypes.elementType,
@@ -60,6 +50,7 @@ const propTypes = {
 
 interface UseDropdownItemOptions {
   key?: EventKey | null;
+  href?: string;
   active?: boolean;
   disabled?: boolean;
   onClick?: React.MouseEventHandler;
@@ -71,6 +62,7 @@ interface UseDropdownItemOptions {
  */
 export function useDropdownItem({
   key,
+  href,
   active,
   disabled,
   onClick,
@@ -79,10 +71,11 @@ export function useDropdownItem({
   const navContext = useContext(NavContext);
 
   const { activeKey } = navContext || {};
+  const eventKey = makeEventKey(key, href);
 
   active =
     active == null && key != null
-      ? makeEventKey(activeKey) === makeEventKey(key)
+      ? makeEventKey(activeKey) === eventKey
       : active;
 
   const handleClick = useEventCallback((event) => {
@@ -91,7 +84,7 @@ export function useDropdownItem({
     onClick?.(event);
 
     if (onSelectCtx && !event.isPropagationStopped()) {
-      onSelectCtx(makeEventKey(key), event);
+      onSelectCtx(eventKey, event);
     }
   });
 
@@ -122,7 +115,8 @@ const DropdownItem: DynamicRefForwardingComponent<
     ref,
   ) => {
     const [dropdownItemProps] = useDropdownItem({
-      key: makeEventKey(eventKey, props.href),
+      key: eventKey,
+      href: props.href,
       disabled,
       onClick,
       active,
