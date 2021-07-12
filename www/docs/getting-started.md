@@ -3,6 +3,10 @@ title: Getting Started
 slug: /
 ---
 
+Restart UI is a set of full featured, extensible, and accessible UI components, designed to integrate into any styling
+framework or system. Restart components, are "headless", meaning they don't provide any styles. Components encapsulate
+the complicated logic and and state without being prescriptive about their look and feel.
+
 ## Installation
 
 ```sh
@@ -25,7 +29,7 @@ import Dropdown from "react-overlays/Dropdown";
 
 ## Styling
 
-React Overlays is a toolkit for creating functional overlays, tooltips, modals, and dropdowns.
+Restart UI is a toolkit for accessible.
 It is not a UI framework but is meant to be incorporated _into_ frameworks. To make those integrations
 possible, React Overlays is style-agnostic and **does not** come with any CSS.
 You should provide your own styles, and the documentation provides some simple examples

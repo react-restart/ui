@@ -2,17 +2,22 @@ import * as React from 'react';
 
 export type EventKey = string | number;
 
-export type AssignProps<Inner extends React.ElementType, P> = Omit<
-  React.ComponentPropsWithRef<Inner>,
+export type IntrinsicElementTypes = keyof JSX.IntrinsicElements;
+
+export type AssignProps<
+  Inner extends string | React.ComponentType<any>,
+  P
+> = Omit<
+  React.ComponentPropsWithRef<Inner extends React.ElementType ? Inner : never>,
   keyof P
 > &
   P;
 
 export interface DynamicRefForwardingComponent<
-  TInitial extends React.ElementType,
+  TInitial extends string | React.ComponentType<any>,
   P = unknown
 > {
-  <As extends React.ElementType = TInitial>(
+  <As extends string | React.ComponentType<any> = TInitial>(
     props: React.PropsWithChildren<AssignProps<As, { as?: As } & P>>,
     context?: any,
   ): React.ReactElement | null;
@@ -23,13 +28,13 @@ export interface DynamicRefForwardingComponent<
 }
 
 export class DynamicComponent<
-  As extends React.ElementType,
+  As extends string | React.ComponentType<any>,
   P = unknown
 > extends React.Component<AssignProps<As, { as?: As } & P>> {}
 
 // Need to use this instead of typeof Component to get proper type checking.
 export type DynamicComponentClass<
-  As extends React.ElementType,
+  As extends string | React.ComponentType<any>,
   P = unknown
 > = React.ComponentClass<AssignProps<As, { as?: As } & P>>;
 

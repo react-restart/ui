@@ -41,7 +41,7 @@ const DropdownItem = ({ eventKey, ...props }) => {
       {...props}
       {...itemProps}
       className={clsx(
-        'text-left hover:bg-brand-100 px-6 py-2 focus:ring-2 focus:outline-none',
+        'text-left hover:bg-primary-100 px-6 py-2 focus:ring-2 focus:outline-none',
         active && 'bg-primary',
       )}
     />
@@ -51,7 +51,9 @@ const DropdownItem = ({ eventKey, ...props }) => {
 const DropdownToggle = ({ as: Tag = StyledButton, ...props }) => {
   const [itemProps] = useDropdownToggle();
 
-  return <Tag {...props} {...itemProps} />;
+  return (
+    <Tag {...props} {...itemProps} className={clsx(props.className, 'caret')} />
+  );
 };
 
 const Dropdown = (props: DropdownProps) => <BaseDropdown {...props} />;

@@ -1,34 +1,65 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-
-import { DynamicRefForwardingComponent } from './types';
 
 export type ButtonType = 'button' | 'reset' | 'submit' | string;
 
-interface UseButtonPropsOptions {
-  type?: ButtonType;
+interface AnchorProps {
   href?: string;
-  disabled?: boolean;
-  target?: string;
   rel?: string;
+  target?: string;
+}
+interface UseButtonPropsOptions extends AnchorProps {
+  type?: ButtonType;
+  disabled?: boolean;
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
+  tagName?: string;
 }
 
 function isTrivialHref(href?: string) {
   return !href || href.trim() === '#';
 }
 
+export interface DefaultButtonProps {
+  type: 'button' | 'reset' | 'submit' | undefined;
+  disabled: undefined | boolean;
+}
+
+export interface AriaButtonProps {
+  role: 'button';
+  tabIndex: number;
+  href: undefined | string;
+  target: undefined | string;
+  rel: undefined | string;
+  'aria-disabled': undefined | true;
+  onClick: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  onKeyDown: (event: React.KeyboardEvent) => void;
+}
+
 export function useButtonProps({
-  tagName = 'button',
+  tagName,
   disabled,
   href,
   target,
   rel,
   onClick,
   tabIndex = 0,
-}: UseButtonPropsOptions & { tagName: string }) {
-  if (tagName === 'button') return { disabled };
+  type,
+}: UseButtonPropsOptions): [
+  DefaultButtonProps | AriaButtonProps,
+  { tagName: string },
+] {
+  if (!tagName) {
+    if (href != null || target != null || rel != null) {
+      tagName = 'a';
+    } else {
+      tagName = 'button';
+    }
+  }
+
+  const meta = { tagName };
+  if (tagName === 'button') {
+    return [{ type: (type as any) || 'button', disabled }, meta];
+  }
 
   const handleClick = (event: React.MouseEvent | React.KeyboardEvent) => {
     if (disabled || isTrivialHref(href)) {
@@ -50,66 +81,54 @@ export function useButtonProps({
     }
   };
 
-  return {
-    role: 'button',
-    tabIndex: disabled ? undefined : tabIndex,
-    href: tagName === 'a' && disabled ? undefined : href,
-    target: tagName === 'a' ? target : undefined,
-    'aria-disabled': !disabled ? undefined : disabled,
-    rel: tagName === 'a' ? rel : undefined,
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
-  };
+  return [
+    {
+      role: 'button',
+      tabIndex: disabled ? undefined : tabIndex,
+      href: tagName === 'a' && disabled ? undefined : href,
+      target: tagName === 'a' ? target : undefined,
+      'aria-disabled': !disabled ? undefined : disabled,
+      rel: tagName === 'a' ? rel : undefined,
+      onClick: handleClick,
+      onKeyDown: handleKeyDown,
+    },
+    meta,
+  ];
 }
 
-export interface ButtonProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'onClick'>,
-    UseButtonPropsOptions {
-  as?: React.ElementType;
+export interface AnchorButtonProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  disabled?: boolean;
 }
 
-const propTypes = {
-  /**
-   * Disables the Button, preventing mouse events,
-   * even if the underlying component is an `<a>` element
-   */
-  disabled: PropTypes.bool,
+export interface HtmlButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  disabled?: boolean;
+}
 
-  /** Providing a `href` will render an `<a>` element, _styled_ as a button. */
-  href: PropTypes.string,
+export interface OtherButtonProps extends React.HTMLAttributes<HTMLElement> {
+  disabled?: boolean;
+  as: string;
+}
 
-  /**
-   * Defines HTML button type attribute.
-   *
-   * @default 'button'
-   */
-  type: PropTypes.oneOf(['button', 'reset', 'submit', null]),
+export type ButtonProps =
+  | AnchorButtonProps
+  | HtmlButtonProps
+  | OtherButtonProps;
 
-  as: PropTypes.elementType,
-};
+const Button = React.forwardRef<HTMLElement, ButtonProps>(
+  ({ as: asProp, ...props }, ref) => {
+    const [buttonProps, { tagName }] = useButtonProps({
+      tagName: asProp,
+      ...props,
+    });
 
-const Button: DynamicRefForwardingComponent<
-  'button',
-  ButtonProps
-> = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ type, as: Component, ...props }, ref) => {
-    const tagName =
-      // eslint-disable-next-line no-nested-ternary
-      typeof Component === 'string' ? Component : props.href ? 'a' : 'button';
+    const Component = (asProp || tagName) as any;
 
-    const buttonProps = useButtonProps({ tagName, ...props });
-
-    Component = Component || tagName;
-
-    if (tagName === 'button' && !type) {
-      type = 'button';
-    }
-
-    return <Component {...props} {...buttonProps} ref={ref} type={type} />;
+    return <Component {...props} {...buttonProps} ref={ref} />;
   },
 );
 
 Button.displayName = 'Button';
-Button.propTypes = propTypes;
 
 export default Button;

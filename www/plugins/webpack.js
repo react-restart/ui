@@ -2,9 +2,9 @@ const path = require('path');
 
 module.exports = () => ({
   name: 'webpack-plugin',
-  configureWebpack(_, isServer, { getBabelLoader }) {
+  configureWebpack(_, isServer, { getJSLoader }) {
     return {
-      devtool: 'inline-module-source-map',
+      devtool: 'inline-cheap-module-source-map',
 
       module: {
         rules: [
@@ -12,7 +12,7 @@ module.exports = () => ({
             test: /\.(j|t)sx?$/,
             include: [path.resolve(__dirname, '../../src')],
             use: [
-              getBabelLoader(
+              getJSLoader(
                 isServer,
                 path.resolve(__dirname, '../babel.config.js'),
               ),

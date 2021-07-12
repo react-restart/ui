@@ -1,0 +1,10 @@
+{
+  "extends": "..",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "types": ["jest"],
+    "rootDir": "src",
+    "outDir": "lib",
+  },
+  "include": ["../src", "."]
+}

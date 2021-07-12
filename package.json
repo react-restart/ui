@@ -77,7 +77,6 @@
   },
   "devDependencies": {
     "@4c/cli": "^2.2.3",
-    "@4c/docusaurus-preset": "^0.2.4",
     "@4c/rollout": "^2.2.1",
     "@4c/tsconfig": "^0.3.1",
     "@babel/cli": "^7.13.16",
