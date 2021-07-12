@@ -43,7 +43,8 @@ export interface WaypointOptions
 }
 
 export enum Position {
-  BEFORE = 1,
+  UNKNOWN = 0
+  BEFORE,
   INSIDE,
   AFTER,
 }
@@ -95,7 +96,7 @@ function useWaypoint(
       const rootStart = entry.rootBounds?.[start] || 0;
       const rootEnd = entry.rootBounds?.[end] || 0;
 
-      let position: Position = Position.INSIDE;
+      let position: Position = Position.UNKNOWN;
       if (entry.isIntersecting) {
         position = Position.INSIDE;
       } else if (coord > rootEnd) {
