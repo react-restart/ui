@@ -2,9 +2,8 @@
   "extends": "..",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "types": ["jest"],
-    "rootDir": "src",
-    "outDir": "lib",
+    "types": ["mocha", "chai", "sinon", "sinon-chai"],
+    "rootDir": "..",
   },
   "include": ["../src", "."]
 }

@@ -7,4 +7,12 @@
     "import/extensions": "off",
     "@typescript-eslint/no-empty-function": "off"
   }
+  "overrides": [
+    {
+      "files": ["test/**/*"],
+      "rules": {
+        "@typescript-eslint/no-unused-expressions": "off"
+      }
+    }
+  ]
 }

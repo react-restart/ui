@@ -29,9 +29,8 @@ import Dropdown from "react-overlays/Dropdown";
 
 ## Styling
 
-Restart UI is a toolkit for accessible.
-It is not a UI framework but is meant to be incorporated _into_ frameworks. To make those integrations
-possible, React Overlays is style-agnostic and **does not** come with any CSS.
+Restart UI is a "headless" framework, meaning each component encapsulates logic and markup but not styling.
+Restart UI is intended as a basis for building design systems using which styling technology you like.
 You should provide your own styles, and the documentation provides some simple examples
 for how to do that. For more complex integrations, check out [React Bootstrap](https://github.com/react-bootstrap/react-bootstrap).
 

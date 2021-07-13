@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type ButtonType = 'button' | 'reset' | 'submit' | string;
+export type ButtonType = 'button' | 'reset' | 'submit';
 
 interface AnchorProps {
   href?: string;
@@ -21,7 +21,7 @@ function isTrivialHref(href?: string) {
 }
 
 export interface AriaButtonProps {
-  type?: 'button' | 'reset' | 'submit' | undefined;
+  type?: ButtonType | undefined;
   disabled: boolean | undefined;
   role?: 'button';
   tabIndex?: number | undefined;
