@@ -7,6 +7,7 @@ interface AnchorProps {
   rel?: string;
   target?: string;
 }
+
 interface UseButtonPropsOptions extends AnchorProps {
   type?: ButtonType;
   disabled?: boolean;
@@ -19,20 +20,17 @@ function isTrivialHref(href?: string) {
   return !href || href.trim() === '#';
 }
 
-export interface DefaultButtonProps {
-  type: 'button' | 'reset' | 'submit' | undefined;
-  disabled: undefined | boolean;
-}
-
 export interface AriaButtonProps {
-  role: 'button';
-  tabIndex: number;
-  href: undefined | string;
-  target: undefined | string;
-  rel: undefined | string;
-  'aria-disabled': undefined | true;
-  onClick: (event: React.MouseEvent | React.KeyboardEvent) => void;
-  onKeyDown: (event: React.KeyboardEvent) => void;
+  type?: 'button' | 'reset' | 'submit' | undefined;
+  disabled: boolean | undefined;
+  role?: 'button';
+  tabIndex?: number | undefined;
+  href?: string | undefined;
+  target?: string | undefined;
+  rel?: string | undefined;
+  'aria-disabled'?: true | undefined;
+  onClick?: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
 export function useButtonProps({
@@ -44,10 +42,7 @@ export function useButtonProps({
   onClick,
   tabIndex = 0,
   type,
-}: UseButtonPropsOptions): [
-  DefaultButtonProps | AriaButtonProps,
-  { tagName: string },
-] {
+}: UseButtonPropsOptions): [AriaButtonProps, { tagName: string }] {
   if (!tagName) {
     if (href != null || target != null || rel != null) {
       tagName = 'a';
@@ -84,6 +79,9 @@ export function useButtonProps({
   return [
     {
       role: 'button',
+      // explicitly undefined so that it overrides the props disabled in a spread
+      // e.g. <Tag {...props} {...hookProps} />
+      disabled: undefined,
       tabIndex: disabled ? undefined : tabIndex,
       href: tagName === 'a' && disabled ? undefined : href,
       target: tagName === 'a' ? target : undefined,
@@ -96,34 +94,38 @@ export function useButtonProps({
   ];
 }
 
-export interface AnchorButtonProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  disabled?: boolean;
+export interface BaseButtonProps {
+  /**
+   * Control the underlying rendered element directly by passing in a valid
+   * component type
+   */
+  as?: string | undefined;
+
+  /** The disabled state of the button */
+  disabled?: boolean | undefined;
+
+  /** Optionally specify an href to render a `<a>` tag styled as a button */
+  href?: string | undefined;
+
+  /** Anchor target, when rendering an anchor as a button */
+  target?: string | undefined;
+
+  rel?: string | undefined;
 }
 
-export interface HtmlButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  disabled?: boolean;
-}
-
-export interface OtherButtonProps extends React.HTMLAttributes<HTMLElement> {
-  disabled?: boolean;
-  as: string;
-}
-
-export type ButtonProps =
-  | AnchorButtonProps
-  | HtmlButtonProps
-  | OtherButtonProps;
+export interface ButtonProps
+  extends BaseButtonProps,
+    React.ComponentPropsWithoutRef<'button'> {}
 
 const Button = React.forwardRef<HTMLElement, ButtonProps>(
-  ({ as: asProp, ...props }, ref) => {
+  ({ as: asProp, disabled, ...props }, ref) => {
     const [buttonProps, { tagName }] = useButtonProps({
       tagName: asProp,
+      disabled,
       ...props,
     });
 
-    const Component = (asProp || tagName) as any;
+    const Component = tagName as any;
 
     return <Component {...props} {...buttonProps} ref={ref} />;
   },
