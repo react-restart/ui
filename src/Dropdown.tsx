@@ -19,6 +19,7 @@ import DropdownMenu, {
 import DropdownToggle, {
   DropdownToggleProps,
   UseDropdownToggleMetadata,
+  isRoleMenu,
 } from './DropdownToggle';
 import DropdownItem, { DropdownItemProps } from './DropdownItem';
 import SelectableContext from './SelectableContext';
@@ -224,9 +225,7 @@ function Dropdown({
 
     if (focusType == null) {
       focusType =
-        menuRef.current && matches(menuRef.current, '[role=menu]')
-          ? 'keyboard'
-          : false;
+        menuRef.current && isRoleMenu(menuRef.current) ? 'keyboard' : false;
     }
 
     if (
