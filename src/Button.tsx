@@ -2,13 +2,13 @@ import * as React from 'react';
 
 export type ButtonType = 'button' | 'reset' | 'submit';
 
-interface AnchorProps {
+export interface AnchorOptions {
   href?: string;
   rel?: string;
   target?: string;
 }
 
-interface UseButtonPropsOptions extends AnchorProps {
+export interface UseButtonPropsOptions extends AnchorOptions {
   type?: ButtonType;
   disabled?: boolean;
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
@@ -16,7 +16,7 @@ interface UseButtonPropsOptions extends AnchorProps {
   tagName?: string;
 }
 
-function isTrivialHref(href?: string) {
+export function isTrivialHref(href?: string) {
   return !href || href.trim() === '#';
 }
 
