@@ -6,7 +6,7 @@
     "prettier/prettier": "error",
     "import/extensions": "off",
     "@typescript-eslint/no-empty-function": "off"
-  }
+  },
   "overrides": [
     {
       "files": ["test/**/*"],
