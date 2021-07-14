@@ -1,3 +1,28 @@
+## [0.0.4](https://github.com/react-restart/ui/compare/v0.0.3...v0.0.4) (2021-07-14)
+
+
+### Bug Fixes
+
+* clean up and export some more types ([1ff2841](https://github.com/react-restart/ui/commit/1ff2841604ccbd3b95a8eb507c7d364e64f4a643))
+* **Anchor:** fix onKeyDown when href is non-trivial ([#7](https://github.com/react-restart/ui/issues/7)) ([e4733b6](https://github.com/react-restart/ui/commit/e4733b624617e841345c7610b8d8059dee0ea02a))
+* **Dropdown:** avoid calling onToggle if menu hidden ([#14](https://github.com/react-restart/ui/issues/14)) ([84e4934](https://github.com/react-restart/ui/commit/84e4934c6db79a7ab6e2de38623158e1059e330d))
+* **types:** fix various types ([#6](https://github.com/react-restart/ui/issues/6)) ([2bc0639](https://github.com/react-restart/ui/commit/2bc0639719b7ba60707d89b4a677133e59c1736e))
+
+
+### Features
+
+* **DropdownToggle:** only add aria-haspopup, when approriate ([84e5450](https://github.com/react-restart/ui/commit/84e5450f12b09cab6eb5998412834d0efd13d437))
+* clean up Button and simplify type, update docs/tests ([#19](https://github.com/react-restart/ui/issues/19)) ([b2f392b](https://github.com/react-restart/ui/commit/b2f392b8f75f1321117e84d983b1400bd506cc33))
+* **DropdownItem:** add href to useDropdownItem ([#15](https://github.com/react-restart/ui/issues/15)) ([5062b4e](https://github.com/react-restart/ui/commit/5062b4e6d42decd7ac0ad15fa17997cba70b0245))
+* **Modal:** split modal types for ease of export ([#13](https://github.com/react-restart/ui/issues/13)) ([9ea30fa](https://github.com/react-restart/ui/commit/9ea30fa349cbeba4f22596d338e2f5b086f45254))
+* **useWayypoint:** handle zero dimension or invisible root ([#18](https://github.com/react-restart/ui/issues/18)) ([f1e43b8](https://github.com/react-restart/ui/commit/f1e43b8b3d36304397589a961dc5cb7349f3e646))
+* add Waypoint and useWaypoint components ([#10](https://github.com/react-restart/ui/issues/10)) ([831a86f](https://github.com/react-restart/ui/commit/831a86f1ec536116d224c60cec78e7f6c1cd1e2e))
+* **ModalManager:** support left padding adjustment for RTL ([#12](https://github.com/react-restart/ui/issues/12)) ([c7464be](https://github.com/react-restart/ui/commit/c7464becb8ca9f4ba1a9d0f5f0d515efefbecb27))
+
+
+
+
+
 ## [0.0.3](https://github.com/react-restart/ui/compare/v0.0.2...v0.0.3) (2021-05-12)
 
 
