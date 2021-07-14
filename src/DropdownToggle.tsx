@@ -4,13 +4,17 @@ import { useSSRSafeId } from '@react-aria/ssr';
 import { useContext, useCallback } from 'react';
 import * as React from 'react';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
+import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
+
+export const isRoleMenu = (el: HTMLElement) =>
+  el.getAttribute('role')?.toLowerCase() == 'menu';
 
 export interface UseDropdownToggleProps {
   id: string;
   ref: DropdownContextValue['setToggle'];
   onClick: React.MouseEventHandler;
-  'aria-haspopup': boolean;
   'aria-expanded': boolean;
+  'aria-haspopup'?: true;
 }
 
 export interface UseDropdownToggleMetadata {
@@ -31,7 +35,7 @@ export function useDropdownToggle(): [
   UseDropdownToggleMetadata,
 ] {
   const id = useSSRSafeId();
-  const { show = false, toggle = noop, setToggle } =
+  const { show = false, toggle = noop, setToggle, menuElement } =
     useContext(DropdownContext) || {};
   const handleClick = useCallback(
     (e) => {
@@ -40,16 +44,21 @@ export function useDropdownToggle(): [
     [show, toggle],
   );
 
-  return [
-    {
-      id,
-      ref: setToggle || noop,
-      onClick: handleClick,
-      'aria-haspopup': true,
-      'aria-expanded': !!show,
-    },
-    { show, toggle },
-  ];
+  const props: UseDropdownToggleProps = {
+    id,
+    ref: setToggle || noop,
+    onClick: handleClick,
+    'aria-expanded': !!show,
+  };
+
+  // This is maybe better down in an effect, but
+  // the component is going to update anyway when the menu element
+  // is set so might return new props.
+  if (menuElement && isRoleMenu(menuElement)) {
+    props['aria-haspopup'] = true;
+  }
+
+  return [props, { show, toggle }];
 }
 
 const propTypes = {
