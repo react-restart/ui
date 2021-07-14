@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { expect } from 'chai';
+import sinon from 'sinon';
 
 import Button from '../src/Button';
-import sinon from 'sinon';
 
 describe('<Button>', () => {
   it('Should output a button', () => {
@@ -65,7 +65,7 @@ describe('<Button>', () => {
     const href = '/url';
 
     const { container } = render(<Button href={href}>Title</Button>);
-    //.assertSingle(`a[href="${href}"]`);
+    // .assertSingle(`a[href="${href}"]`);
 
     expect(container.querySelector(`a[href="${href}"]`)).to.exist;
   });

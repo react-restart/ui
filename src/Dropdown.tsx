@@ -1,4 +1,3 @@
-import matches from 'dom-helpers/matches';
 import qsa from 'dom-helpers/querySelectorAll';
 import addEventListener from 'dom-helpers/addEventListener';
 import { useCallback, useRef, useEffect, useMemo, useContext } from 'react';

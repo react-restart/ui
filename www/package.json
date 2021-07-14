@@ -20,6 +20,7 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
     "@mdx-js/react": "^1.6.21",
+    "@restart/hooks": "^0.4.0",
     "docusaurus-theme-tailwind": "^1.0.1-rc.0",
     "clsx": "^1.1.1",
     "emotion": "^11.0.0",

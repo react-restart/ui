@@ -1,0 +1,11 @@
+{
+  "extends": "..",
+  "compilerOptions": {
+    "rootDir": "..",
+    "noImplicitAny": false,
+    "paths": {
+      "@restart/ui/*": ["../src/*"]
+    }
+  },
+  "include": ["./src", "../src"]
+}

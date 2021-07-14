@@ -97,7 +97,7 @@ function WaypointExample({ horizontal, scrollIntoView, margins }: Props) {
     if (!scrollIntoView || !root) return;
 
     root
-      .querySelector('.docs-example-waypoint')
+      .querySelector('.docs-example-waypoint')!
       .scrollIntoView({ block: 'center' });
     // root.scrollTop = root.scrollHeight / 2;
   }, [root]);

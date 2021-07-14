@@ -4,10 +4,9 @@ import { useSSRSafeId } from '@react-aria/ssr';
 import { useContext, useCallback } from 'react';
 import * as React from 'react';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
-import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
 
 export const isRoleMenu = (el: HTMLElement) =>
-  el.getAttribute('role')?.toLowerCase() == 'menu';
+  el.getAttribute('role')?.toLowerCase() === 'menu';
 
 export interface UseDropdownToggleProps {
   id: string;
