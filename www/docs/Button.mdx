@@ -1,19 +1,20 @@
-An abstract button component.
+An abstract button component for creating accessible buttons regardless of the HTML
+element used to render it.
 
-```jsx live
+```jsx live className=button-example
 import { Button } from "@restart/ui";
 
 <Button>I'm a Button</Button>;
 ```
 
-Not very impressive on its own, but `Button` does come with a few conveniences 
+Not very impressive on its own, but `Button` does come with a few conveniences
 over the plain HTML element.
 
 - `type` defaults to `button`
 - Ensures that non `button` `as` options remain accessible
 - contextually renders an `<a>` if href or other anchor props are added.
 
-```jsx live
+```jsx live className=button-example
 import { Button } from "@restart/ui";
 
 <div className="space-x-4">
@@ -23,7 +24,38 @@ import { Button } from "@restart/ui";
 </div>;
 ```
 
+### `useButtonProps`
+
+Most of the heavy lifting in Button comes from the `useButtonProps` hook. You
+can use the hook directly to turn any component into an accessible button.
+
+If an explicit `tagName` isn't provided, the hook will pick between 'button' and 'a'
+depending on whether any anchor specific options, like `href`, were provided.
+
+```tsx
+import { useButtonProps } from 'Button'
+
+
+function CompanyButton(props) {
+  const [ariaButtonProps, { tagName: Tag }] = useButtonProps(props);
+
+  return <Tag {...props} {...ariaButtonProps} />
+}
+
+<div className="space-x-4">
+  <CompanyButton>Hey there<CompanyButton>
+  <CompanyButton href="/home">I'm a link</CompanyButton>
+</div>;
+```
+
 ## Styling
+
+Styling options are straightforward for `Button` below is a minimal example using TailwindCSS.
+There is one caveat around styling the button's disabled state. Styling should be based off
+of `disabled` prop directly as opposed to using a `:disabled` CSS selector.
+This is because the button may render an HTML element that does not support
+the `disabled` attribute (such as an `<a>`). Alternatively, you can select for `[aria-disabled='true']`
+in addition to `:disabled`.
 
 ```jsx live
 import { Button } from "@restart/ui";
@@ -37,9 +69,10 @@ function StyledButton(props) {
         props.className,
         "transition text-md",
         "h-10 bg-white border border-primary text-primary rounded px-8 mt-4 appearance-none text-center whitespace-no-wrap",
-        "focus:outline-none focus:ring-4 ring-brand-200",
-        !props.disabled && "cursor-pointer hover:bg-primary hover:text-white",
-        "active:bg-brand-600 active:text-white",
+        "focus:outline-none focus:ring-4 ring-primary-200",
+        !props.disabled &&
+          "cursor-pointer hover:bg-primary hover:text-white",
+        "active:bg-primary-600 active:text-white",
         props.disabled && "cursor-not-allowed opacity-60"
       )}
     />

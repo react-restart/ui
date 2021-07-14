@@ -1,28 +1,70 @@
 @import 'tailwindcss/base';
 
 a {
-  color: theme('colors.brand.500')
+  color: theme('colors.primary.500');
 }
 
-h1, h2, h3, h4, h5, h6 { color: var(--ifm-heading-color); font-weight: var(--ifm-heading-font-weight); line-height: var(--ifm-heading-line-height); margin: var(--ifm-heading-margin-top) 0 var(--ifm-heading-margin-bottom) 0; }
-h1 { font-size: var(--ifm-h1-font-size); }
-h2 { font-size: var(--ifm-h2-font-size); }
-h3 { font-size: var(--ifm-h3-font-size); }
-h4 { font-size: var(--ifm-h4-font-size); }
-h5 { font-size: var(--ifm-h5-font-size); }
-h6 { font-size: var(--ifm-h6-font-size); }
-ul { @apply list-disc list-inside }
+code {
+  font-size: 90%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--ifm-heading-color);
+  font-weight: var(--ifm-heading-font-weight);
+  line-height: var(--ifm-heading-line-height);
+  margin: var(--ifm-heading-margin-top) 0 var(--ifm-heading-margin-bottom) 0;
+}
+h1 {
+  font-size: var(--ifm-h1-font-size);
+}
+h2 {
+  font-size: var(--ifm-h2-font-size);
+}
+h3 {
+  font-size: var(--ifm-h3-font-size);
+}
+h4 {
+  font-size: var(--ifm-h4-font-size);
+}
+h5 {
+  font-size: var(--ifm-h5-font-size);
+}
+h6 {
+  font-size: var(--ifm-h6-font-size);
+}
+ul {
+  @apply list-disc list-inside;
+}
 
 :root {
-  --ifm-color-primary: theme('colors.brand.500');
-  --ifm-color-primary-dark: theme('colors.brand.600');
-  --ifm-color-primary-darker: theme('colors.brand.700');
-  --ifm-color-primary-darkest: theme('colors.brand.800');
-  --ifm-color-primary-light: theme('colors.brand.400');
-  --ifm-color-primary-lighter: theme('colors.brand.300')
-  --ifm-color-primary-lightest: theme('colors.brand.200');
+  --ifm-color-primary: theme('colors.primary.500');
+  --ifm-color-primary-dark: theme('colors.primary.600');
+  --ifm-color-primary-darker: theme('colors.primary.700');
+  --ifm-color-primary-darkest: theme('colors.primary.800');
+  --ifm-color-primary-light: theme('colors.primary.400');
+  --ifm-color-primary-lighter: theme('colors.primary.300');
+  --ifm-color-primary-lightest: theme('colors.primary.200');
   --ifm-code-font-size: 95%;
 }
 
 @import 'tailwindcss/utilities';
 
+.button-example button {
+  all: revert;
+}
+
+.caret::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: '';
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}

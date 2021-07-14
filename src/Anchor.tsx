@@ -31,7 +31,7 @@ function isTrivialHref(href?: string) {
  */
 const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
   ({ onKeyDown, ...props }, ref) => {
-    const buttonProps = useButtonProps({ tagName: 'a', ...props });
+    const [buttonProps] = useButtonProps({ tagName: 'a', ...props });
 
     const handleKeyDown = useEventCallback(
       (e: React.KeyboardEvent<HTMLElement>) => {

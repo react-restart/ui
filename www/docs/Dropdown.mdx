@@ -41,10 +41,10 @@ const DropdownMenu = ({ role }) => {
         "w-48 py-2 flex-col shadow-lg border-gray-200 border bg-white z-10 rounded"
       )}
     >
-      <Dropdown.Item className="text-left hover:bg-brand-100 px-6 py-2 focus:ring-2 focus:outline-none">
+      <Dropdown.Item className="text-left hover:bg-primary-100 px-6 py-2 focus:ring-2 focus:outline-none">
         Item 1
       </Dropdown.Item>
-      <Dropdown.Item className="text-left hover:bg-brand-100 px-6 py-2 focus:ring-2 focus:outline-none">
+      <Dropdown.Item className="text-left hover:bg-primary-100 px-6 py-2 focus:ring-2 focus:outline-none">
         Item 2
       </Dropdown.Item>
     </div>
@@ -54,7 +54,11 @@ const DropdownMenu = ({ role }) => {
 const DropdownToggle = ({ children }) => {
   const [props, { show, toggle }] = useDropdownToggle();
 
-  return <Button {...props}>{children}</Button>;
+  return (
+    <Button {...props} className="caret">
+      {children}
+    </Button>
+  );
 };
 
 const DropdownButton = ({
@@ -105,7 +109,7 @@ render prop API or a hook depending on preference.
 The `Dropdown` component is the non-presentational orchestrator of the dropdown state.
 It handles menu visibility, keyboard navigation and focus management. As a convenience, a
 few `Menu` specific props can be provided to `Dropdown` directly, such as `placement`. It
-is sometimes helpful to also render a wrapping DOM element around your `Toggle` and `Menu`, 
+is sometimes helpful to also render a wrapping DOM element around your `Toggle` and `Menu`,
 but not it's required.
 
 ```jsx
@@ -229,23 +233,24 @@ const MyDropdownToggle = (props) => (
 
 Because `PopperJS` must measure the `Menu` element, it's recommended that you style
 the Menu with `opacity: 0` and `visibility: hidden` when not shown.
-This allows `Popper` to calculate the correct offset for the `Menu` even when it's not 
+This allows `Popper` to calculate the correct offset for the `Menu` even when it's not
 visible. This also makes it a bit simpler to animate if you desire.
 
 When transitioning, it's best to use **both** `visibility` and `opacity`. Setting
-`visibility` to `hidden` will remove the menu from the keyboard tab order, but it 
-doesn't transition nicely, so add `opacity` (or some other visual property) to 
+`visibility` to `hidden` will remove the menu from the keyboard tab order, but it
+doesn't transition nicely, so add `opacity` (or some other visual property) to
 indicate fade out and in.
 
 ```jsx live
 import { Dropdown } from "@restart/ui";
+import Button from "../src/Button";
 
 <Dropdown>
   <Dropdown.Toggle>
     {(props) => (
-      <button {...props} className="border p-3">
+      <Button {...props} className="caret">
         Open
-      </button>
+      </Button>
     )}
   </Dropdown.Toggle>
   <Dropdown.Menu flip offset={[0, 8]}>
@@ -301,15 +306,16 @@ your app's needs.
 
 The example here positions the `Menu` to the `document` body via a `Portal`.
 
-```js live
+```jsx live
 import { Dropdown } from "@restart/ui";
+import Button from "../src/Button";
 
 <Dropdown drop="down">
   <Dropdown.Toggle id="example-toggle">
     {(props) => (
-      <button type="button" className="btn" {...props}>
+      <Button type="button" {...props}>
         Click to open
-      </button>
+      </Button>
     )}
   </Dropdown.Toggle>
   <Dropdown.Menu offset={[0, 12]}>

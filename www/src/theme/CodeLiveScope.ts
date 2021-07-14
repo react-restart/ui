@@ -8,4 +8,6 @@ const ReactLiveScope = {
   ReactDOM,
 };
 
+delete (ReactLiveScope as any).default;
+
 export default ReactLiveScope;

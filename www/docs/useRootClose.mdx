@@ -1,5 +1,6 @@
-```js live renderAsComponent
+```jsx live renderAsComponent
 import { useRootClose } from "@restart/ui";
+import Button from "../src/Button";
 
 const ref = useRef();
 const [show, setShow] = useState(false);
@@ -10,14 +11,10 @@ useRootClose(ref, handleRootClose, {
 });
 
 return (
-  <div className="flex flex-col items-center">
-    <button
-      type="button"
-      className="btn"
-      onClick={() => setShow(true)}
-    >
+  <div className="flex flex-col items-center space-y-4">
+    <Button type="button" onClick={() => setShow(true)}>
       Render RootCloseWrapper
-    </button>
+    </Button>
 
     {show && (
       <div

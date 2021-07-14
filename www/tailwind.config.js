@@ -1,4 +1,4 @@
-const brand = {
+const primary = {
   100: '#EEDBF5',
   200: '#DBB2EB',
   300: '#C88AE0',
@@ -16,10 +16,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand,
-        primary: brand['500'],
-        accent: brand['800'],
-        subtle: brand['100'],
+        primary: {
+          ...primary,
+          DEFAULT: primary[500],
+        },
+        accent: primary['800'],
+        subtle: primary['100'],
       },
     },
   },

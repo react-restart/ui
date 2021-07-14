@@ -14,19 +14,21 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.72",
-    "@docusaurus/preset-classic": "2.0.0-alpha.72",
+    "@4c/docusaurus-preset": "^0.2.7",
+    "@docusaurus/core": "2.0.0-beta.3",
+    "@docusaurus/preset-classic": "2.0.0-beta.3",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
     "@mdx-js/react": "^1.6.21",
+    "docusaurus-theme-tailwind": "^1.0.1-rc.0",
     "clsx": "^1.1.1",
     "emotion": "^11.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "tailwindcss": "^2.1.1"
+    "tailwindcss": "^2.2.4"
   },
   "devDependencies": {
-    "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.10"
+    "autoprefixer": "^10.2.6",
+    "postcss": "^8.3.5"
   }
 }
