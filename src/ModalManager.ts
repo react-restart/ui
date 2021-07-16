@@ -1,5 +1,6 @@
 import css from 'dom-helpers/css';
 import { dataAttr } from './DataKey';
+import getBodyScrollbarWidth from './getScrollbarWidth';
 
 export interface ModalInstance {
   dialog: Element;
@@ -34,7 +35,7 @@ class ModalManager {
   }
 
   getScrollbarWidth() {
-    return Math.abs(window.innerWidth - document.documentElement.clientWidth);
+    return getBodyScrollbarWidth();
   }
 
   getElement() {
