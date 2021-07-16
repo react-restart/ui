@@ -44,12 +44,30 @@ export type SelectCallback = (
 ) => void;
 
 export interface TransitionCallbacks {
+  /**
+   * Callback fired before the component transitions in
+   */
   onEnter?(node: HTMLElement, isAppearing: boolean): any;
-  onEntered?(node: HTMLElement, isAppearing: boolean): any;
+  /**
+   * Callback fired as the component begins to transition in
+   */
   onEntering?(node: HTMLElement, isAppearing: boolean): any;
+  /**
+   * Callback fired after the component finishes transitioning in
+   */
+  onEntered?(node: HTMLElement, isAppearing: boolean): any;
+  /**
+   * Callback fired right before the component transitions out
+   */
   onExit?(node: HTMLElement): any;
-  onExited?(node: HTMLElement): any;
+  /**
+   * Callback fired as the component begins to transition out
+   */
   onExiting?(node: HTMLElement): any;
+  /**
+   * Callback fired after the component finishes transitioning out
+   */
+  onExited?(node: HTMLElement): any;
 }
 
 export interface TransitionProps extends TransitionCallbacks {
@@ -57,6 +75,7 @@ export interface TransitionProps extends TransitionCallbacks {
   appear?: boolean;
   children: React.ReactElement;
   mountOnEnter?: boolean;
+
   unmountOnExit: boolean;
 }
 

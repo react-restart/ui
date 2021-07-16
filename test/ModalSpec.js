@@ -1,16 +1,16 @@
 /* eslint-disable react/display-name */
-import jQuery from 'jquery';
+
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import Transition from 'react-transition-group/Transition';
 import simulant from 'simulant';
 
+import { render } from '@testing-library/react';
 import { mount } from 'enzyme';
 
 import Modal from '../src/Modal';
-
-const $ = (componentOrNode) => jQuery(ReactDOM.findDOMNode(componentOrNode));
+import { OPEN_DATA_ATTRIBUTE } from '../src/ModalManager';
 
 describe('<Modal>', () => {
   let attachTo;
@@ -68,6 +68,7 @@ describe('<Modal>', () => {
               ref={modal}
               show={this.state.modalOpen}
               onHide={this.handleCloseModal}
+              renderBackdrop={(p) => <div data-backdrop {...p} />}
               container={this.ref}
             >
               <strong>Message</strong>
@@ -77,63 +78,21 @@ describe('<Modal>', () => {
       }
     }
 
-    wrapper = mount(<Container />, { attachTo });
+    render(<Container />, { container: attachTo });
 
     setTimeout(() => {
-      const container = wrapper.instance().ref.current;
+      const container = document.body;
 
       let backdrop = modal.current.backdrop;
 
-      expect($(container).css('overflow')).to.equal('hidden');
+      expect(container.style.overflow).to.equal('hidden');
 
       backdrop.click();
 
-      expect($(container).css('overflow')).to.not.equal('hidden');
+      expect(container.style.overflow).to.not.equal('hidden');
 
       done();
     });
-  });
-
-  it('should add and remove container classes', () => {
-    const modal = React.createRef();
-
-    class Container extends React.Component {
-      state = { modalOpen: true };
-
-      ref = React.createRef();
-
-      handleCloseModal = () => {
-        this.setState({ modalOpen: false });
-      };
-
-      render() {
-        return (
-          <div ref={this.ref}>
-            <Modal
-              ref={modal}
-              show={this.state.modalOpen}
-              onHide={this.handleCloseModal}
-              containerClassName="test test2"
-              container={this.ref}
-            >
-              <strong>Message</strong>
-            </Modal>
-          </div>
-        );
-      }
-    }
-
-    wrapper = mount(<Container />, { attachTo });
-
-    const container = wrapper.instance().ref.current;
-
-    let backdrop = modal.current.backdrop;
-
-    expect($(container).hasClass('test test2')).to.be.true;
-
-    backdrop.click();
-
-    expect($(container).hasClass('test test2')).to.be.false;
   });
 
   it('should fire backdrop click callback', () => {
@@ -263,20 +222,20 @@ describe('<Modal>', () => {
   });
 
   it('should unbind listeners when unmounted', () => {
-    wrapper = mount(
+    const { rerender } = render(
       <div>
-        <Modal show containerClassName="modal-open">
+        <Modal show>
           <strong>Foo bar</strong>
         </Modal>
       </div>,
       { attachTo },
     );
 
-    assert.ok(document.body.classList.contains('modal-open'));
+    expect(document.body.hasAttribute(OPEN_DATA_ATTRIBUTE)).to.equal(true);
 
-    mount(<div />, { attachTo });
+    rerender(null);
 
-    assert.ok(!document.body.classList.contains('modal-open'));
+    expect(document.body.hasAttribute(OPEN_DATA_ATTRIBUTE)).to.equal(false);
   });
 
   it('should pass transition callbacks to Transition', (done) => {
