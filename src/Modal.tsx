@@ -4,7 +4,6 @@ import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
-import PropTypes from 'prop-types';
 import {
   useState,
   useRef,
@@ -58,25 +57,110 @@ export interface BaseModalProps extends TransitionCallbacks {
   style?: React.CSSProperties;
   className?: string;
 
+  /**
+   * Set the visibility of the Modal
+   */
   show?: boolean;
+  /**
+   * A DOM element, a `ref` to an element, or function that returns either. The Modal is appended to it's `container` element.
+   *
+   */
   container?: DOMContainer;
+  /**
+   * A callback fired when the Modal is opening.
+   */
   onShow?: () => void;
+  /**
+   * A callback fired when either the backdrop is clicked, or the escape key is pressed.
+   *
+   * The `onHide` callback only signals intent from the Modal,
+   * you must actually set the `show` prop to `false` for the Modal to close.
+   */
   onHide?: () => void;
+
+  /**
+   * A ModalManager instance used to track and manage the state of open
+   * Modals. Useful when customizing how modals interact within a container
+   */
   manager?: ModalManager;
+  /**
+   * Include a backdrop component.
+   */
   backdrop?: true | false | 'static';
 
+  /**
+   * A function that returns the dialog component. Useful for custom
+   * rendering. **Note:** the component should make sure to apply the provided ref.
+   *
+   * ```js static
+   * renderDialog={props => <MyDialog {...props} />}
+   * ```
+   */
   renderDialog?: (props: RenderModalDialogProps) => React.ReactNode;
+  /**
+   * A function that returns a backdrop component. Useful for custom
+   * backdrop rendering.
+   *
+   * ```js
+   *  renderBackdrop={props => <MyBackdrop {...props} />}
+   * ```
+   */
   renderBackdrop?: (props: RenderModalBackdropProps) => React.ReactNode;
-
+  /**
+   * A callback fired when the escape key, if specified in `keyboard`, is pressed.
+   *
+   * If preventDefault() is called on the keyboard event, closing the modal will be cancelled.
+   */
   onEscapeKeyDown?: (e: KeyboardEvent) => void;
+  /**
+   * A callback fired when the backdrop, if specified, is clicked.
+   */
   onBackdropClick?: (e: React.SyntheticEvent) => void;
-  containerClassName?: string;
+
+  /**
+   * Close the modal when escape key is pressed
+   */
   keyboard?: boolean;
+
+  /**
+   * A `react-transition-group` `<Transition/>` component used
+   * to control animations for the dialog component.
+   */
   transition?: ModalTransitionComponent;
+
+  /**
+   * A `react-transition-group` `<Transition/>` component used
+   * to control animations for the backdrop components.
+   */
   backdropTransition?: ModalTransitionComponent;
+  /**
+   * When `true` The modal will automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes. This also
+   * works correctly with any Modal children that have the `autoFocus` prop.
+   *
+   * Generally this should never be set to `false` as it makes the Modal less
+   * accessible to assistive technologies, like screen readers.
+   */
   autoFocus?: boolean;
+  /**
+   * When `true` The modal will prevent focus from leaving the Modal while open.
+   *
+   * Generally this should never be set to `false` as it makes the Modal less
+   * accessible to assistive technologies, like screen readers.
+   */
   enforceFocus?: boolean;
+
+  /**
+   * When `true` The modal will restore focus to previously focused element once
+   * modal is hidden
+   */
   restoreFocus?: boolean;
+
+  /**
+   * Options passed to focus function when `restoreFocus` is set to `true`
+   *
+   * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
+   */
   restoreFocusOptions?: {
     preventScroll: boolean;
   };
@@ -100,8 +184,7 @@ function useModalManager(provided?: ModalManager) {
   });
 
   return Object.assign(modal.current, {
-    add: (container: HTMLElement, className?: string) =>
-      modalManager.add(modal.current, container, className),
+    add: () => modalManager.add(modal.current),
 
     remove: () => modalManager.remove(modal.current),
 
@@ -146,7 +229,6 @@ const Modal: React.ForwardRefExoticComponent<
       renderBackdrop = (props: RenderModalBackdropProps) => <div {...props} />,
       manager: providedManager,
       container: containerRef,
-      containerClassName,
       onShow,
       onHide = () => {},
 
@@ -182,7 +264,7 @@ const Modal: React.ForwardRefExoticComponent<
     }
 
     const handleShow = useEventCallback(() => {
-      modal.add(container!, containerClassName);
+      modal.add();
 
       removeKeydownListenerRef.current = listen(
         document as any,
@@ -377,165 +459,7 @@ const Modal: React.ForwardRefExoticComponent<
   },
 );
 
-const propTypes = {
-  /**
-   * Set the visibility of the Modal
-   */
-  show: PropTypes.bool,
-
-  /**
-   * A DOM element, a `ref` to an element, or function that returns either. The Modal is appended to it's `container` element.
-   *
-   * For the sake of assistive technologies, the container should usually be the document body, so that the rest of the
-   * page content can be placed behind a virtual backdrop as well as a visual one.
-   */
-  container: PropTypes.any,
-
-  /**
-   * A callback fired when the Modal is opening.
-   */
-  onShow: PropTypes.func,
-
-  /**
-   * A callback fired when either the backdrop is clicked, or the escape key is pressed.
-   *
-   * The `onHide` callback only signals intent from the Modal,
-   * you must actually set the `show` prop to `false` for the Modal to close.
-   */
-  onHide: PropTypes.func,
-
-  /**
-   * Include a backdrop component.
-   */
-  backdrop: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(['static'])]),
-
-  /**
-   * A function that returns the dialog component. Useful for custom
-   * rendering. **Note:** the component should make sure to apply the provided ref.
-   *
-   * ```js static
-   * renderDialog={props => <MyDialog {...props} />}
-   * ```
-   */
-  renderDialog: PropTypes.func,
-
-  /**
-   * A function that returns a backdrop component. Useful for custom
-   * backdrop rendering.
-   *
-   * ```js
-   *  renderBackdrop={props => <MyBackdrop {...props} />}
-   * ```
-   */
-  renderBackdrop: PropTypes.func,
-
-  /**
-   * A callback fired when the escape key, if specified in `keyboard`, is pressed.
-   *
-   * If preventDefault() is called on the keyboard event, closing the modal will be cancelled.
-   */
-  onEscapeKeyDown: PropTypes.func,
-
-  /**
-   * A callback fired when the backdrop, if specified, is clicked.
-   */
-  onBackdropClick: PropTypes.func,
-
-  /**
-   * A css class or set of classes applied to the modal container when the modal is open,
-   * and removed when it is closed.
-   */
-  containerClassName: PropTypes.string,
-
-  /**
-   * Close the modal when escape key is pressed
-   */
-  keyboard: PropTypes.bool,
-
-  /**
-   * A `react-transition-group@2.0.0` `<Transition/>` component used
-   * to control animations for the dialog component.
-   */
-  transition: PropTypes.elementType,
-
-  /**
-   * A `react-transition-group@2.0.0` `<Transition/>` component used
-   * to control animations for the backdrop components.
-   */
-  backdropTransition: PropTypes.elementType,
-
-  /**
-   * When `true` The modal will automatically shift focus to itself when it opens, and
-   * replace it to the last focused element when it closes. This also
-   * works correctly with any Modal children that have the `autoFocus` prop.
-   *
-   * Generally this should never be set to `false` as it makes the Modal less
-   * accessible to assistive technologies, like screen readers.
-   */
-  autoFocus: PropTypes.bool,
-
-  /**
-   * When `true` The modal will prevent focus from leaving the Modal while open.
-   *
-   * Generally this should never be set to `false` as it makes the Modal less
-   * accessible to assistive technologies, like screen readers.
-   */
-  enforceFocus: PropTypes.bool,
-
-  /**
-   * When `true` The modal will restore focus to previously focused element once
-   * modal is hidden
-   */
-  restoreFocus: PropTypes.bool,
-
-  /**
-   * Options passed to focus function when `restoreFocus` is set to `true`
-   *
-   * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
-   */
-  restoreFocusOptions: PropTypes.shape({
-    preventScroll: PropTypes.bool,
-  }),
-
-  /**
-   * Callback fired before the Modal transitions in
-   */
-  onEnter: PropTypes.func,
-
-  /**
-   * Callback fired as the Modal begins to transition in
-   */
-  onEntering: PropTypes.func,
-
-  /**
-   * Callback fired after the Modal finishes transitioning in
-   */
-  onEntered: PropTypes.func,
-
-  /**
-   * Callback fired right before the Modal transitions out
-   */
-  onExit: PropTypes.func,
-
-  /**
-   * Callback fired as the Modal begins to transition out
-   */
-  onExiting: PropTypes.func,
-
-  /**
-   * Callback fired after the Modal finishes transitioning out
-   */
-  onExited: PropTypes.func,
-
-  /**
-   * A ModalManager instance used to track and manage the state of open
-   * Modals. Useful when customizing how modals interact within a container
-   */
-  manager: PropTypes.instanceOf(ModalManager),
-};
-
 Modal.displayName = 'Modal';
-Modal.propTypes = propTypes as any;
 
 export default Object.assign(Modal, {
   Manager: ModalManager,
