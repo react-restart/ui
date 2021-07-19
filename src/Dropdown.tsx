@@ -106,9 +106,11 @@ export interface DropdownInjectedProps {
   onKeyDown: React.KeyboardEventHandler;
 }
 
+export type ToggleEvent = React.SyntheticEvent | KeyboardEvent | MouseEvent;
+
 export interface ToggleMetadata {
   source: string | undefined;
-  originalEvent: React.SyntheticEvent | Event | undefined;
+  originalEvent: ToggleEvent | undefined;
 }
 
 export interface DropdownProps {
@@ -173,8 +175,8 @@ function Dropdown({
   const toggle = useCallback(
     (
       nextShow: boolean,
-      event?: Event | React.SyntheticEvent,
-      source = event?.type,
+      event: ToggleEvent | undefined,
+      source: string | undefined = event?.type,
     ) => {
       onToggle(nextShow, { originalEvent: event, source });
     },
