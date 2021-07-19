@@ -13,7 +13,7 @@ export interface UseButtonPropsOptions extends AnchorOptions {
   disabled?: boolean;
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
-  tagName?: string;
+  tagName?: keyof JSX.IntrinsicElements;
 }
 
 export function isTrivialHref(href?: string) {
@@ -33,6 +33,10 @@ export interface AriaButtonProps {
   onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
+export interface UseButtonPropsMetadata {
+  tagName: React.ElementType;
+}
+
 export function useButtonProps({
   tagName,
   disabled,
@@ -42,7 +46,7 @@ export function useButtonProps({
   onClick,
   tabIndex = 0,
   type,
-}: UseButtonPropsOptions): [AriaButtonProps, { tagName: string }] {
+}: UseButtonPropsOptions): [AriaButtonProps, UseButtonPropsMetadata] {
   if (!tagName) {
     if (href != null || target != null || rel != null) {
       tagName = 'a';
@@ -51,7 +55,7 @@ export function useButtonProps({
     }
   }
 
-  const meta = { tagName };
+  const meta: UseButtonPropsMetadata = { tagName };
   if (tagName === 'button') {
     return [{ type: (type as any) || 'button', disabled }, meta];
   }
@@ -99,7 +103,7 @@ export interface BaseButtonProps {
    * Control the underlying rendered element directly by passing in a valid
    * component type
    */
-  as?: string | undefined;
+  as?: keyof JSX.IntrinsicElements | undefined;
 
   /** The disabled state of the button */
   disabled?: boolean | undefined;
@@ -119,13 +123,11 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLElement, ButtonProps>(
   ({ as: asProp, disabled, ...props }, ref) => {
-    const [buttonProps, { tagName }] = useButtonProps({
+    const [buttonProps, { tagName: Component }] = useButtonProps({
       tagName: asProp,
       disabled,
       ...props,
     });
-
-    const Component = tagName as any;
 
     return <Component {...props} {...buttonProps} ref={ref} />;
   },
