@@ -1,3 +1,20 @@
+## [0.0.5](https://github.com/react-restart/ui/compare/v0.0.4...v0.0.5) (2021-07-20)
+
+
+### Bug Fixes
+
+* **Button:** use stricter tagName type ([1fafb35](https://github.com/react-restart/ui/commit/1fafb35fa1b2f572e4b894bcb166cc01c89381be))
+* **Dropdown:** allow KeyboardEvent in toggle's originalEvent type ([56cd1f4](https://github.com/react-restart/ui/commit/56cd1f4de8fb886c73ef8d43e4d23be1b08f8e7d))
+
+
+### Features
+
+* clean up old Modal code ([#21](https://github.com/react-restart/ui/issues/21)) ([c8fc284](https://github.com/react-restart/ui/commit/c8fc28462801c761915e3408c2c635dd767fff55))
+
+
+
+
+
 ## [0.0.4](https://github.com/react-restart/ui/compare/v0.0.3...v0.0.4) (2021-07-14)
 
 
