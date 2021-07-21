@@ -52,4 +52,4 @@ for how to do that. For more complex integrations, check out [React Bootstrap](h
 There are a few places where inline `style`s are applied, however. They are functionally
 required and very minimal. Specifically `PopperJs` injects it's own styles in order
 to position overlays and dropdowns, and `Modal` applies `overflow: hidden` to the
-document body. These can technically be overridden but you probably won't need too.
+document body. These can technically be overridden but you probably won't need to.
