@@ -19,14 +19,7 @@ module.exports = {
         alt: 'My Site Logo',
         src: 'refresh-dot.svg',
       },
-      items: [
-        {
-          to: 'docs/',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
-        },
-      ],
+      items: [],
     },
     footer: {
       style: 'dark',

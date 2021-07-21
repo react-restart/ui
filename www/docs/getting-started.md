@@ -3,28 +3,43 @@ title: Getting Started
 slug: /
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 Restart UI is a set of full featured, extensible, and accessible UI components, designed to integrate into any styling
 framework or system. Restart components, are "headless", meaning they don't provide any styles. Components encapsulate
 the complicated logic and and state without being prescriptive about their look and feel.
 
 ## Installation
 
-```sh
-npm install react-overlays
+<Tabs
+defaultValue="npm"
+values={[
+{label: 'npm', value: 'npm'},
+{label: 'Yarn', value: 'yarn'},
+]}>
+<TabItem value="npm">
+
+```bash
+npm install @restart/ui
 ```
 
-Or with yarn
+</TabItem>
+<TabItem value="yarn">
 
-```sh
-yarn add react-overlays
+```bash
+yarn add @restart/ui
 ```
+
+</TabItem>
+</Tabs>
 
 ## Usage
 
 Components can be imported from the main package or directly like:
 
 ```js
-import Dropdown from "react-overlays/Dropdown";
+import Dropdown from "@restart/ui/Dropdown";
 ```
 
 ## Styling
@@ -37,5 +52,4 @@ for how to do that. For more complex integrations, check out [React Bootstrap](h
 There are a few places where inline `style`s are applied, however. They are functionally
 required and very minimal. Specifically `PopperJs` injects it's own styles in order
 to position overlays and dropdowns, and `Modal` applies `overflow: hidden` to the
-document body. These can technically be overridden but it's very unlikely to be
-required.
+document body. These can technically be overridden but you probably won't need too.

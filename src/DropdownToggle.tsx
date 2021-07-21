@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-import { useSSRSafeId } from '@react-aria/ssr';
 import { useContext, useCallback } from 'react';
 import * as React from 'react';
+import { useSSRSafeId } from './ssr';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export const isRoleMenu = (el: HTMLElement) =>
