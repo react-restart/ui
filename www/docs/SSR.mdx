@@ -9,10 +9,10 @@ on the server, in a compatible NodeJs environment.
 
 HTML created on the server by React must be "rehydrated" on the client
 in order for components to become interactive. When there are differences
-between the server HTML and the client react component tree React may not
+between the server HTML and the client react component tree, React may not
 be able to fully hydrate the app and you lose the performance benefits of
-doing it in the first place. To ensure, that `@restart/ui` components
-are correctly rehydrated wrap your application in a `SSRProvider`
+doing it in the first place. To ensure that `@restart/ui` components
+are correctly rehydrated, wrap your application in a `SSRProvider`
 on the server.
 
 ```jsx
