@@ -26,7 +26,13 @@ export type RootElement = Element | Document | null | undefined;
 /** Accepts all options an IntersectionObserver accepts */
 export interface WaypointOptions
   extends Omit<IntersectionObserverInit, 'rootMargin' | 'root'> {
-  root?: RootElement | 'scrollParent';
+  /**
+   * The "root" element to observe. This should be the scrollable view your waypoint
+   * is rendered into. Accepts a DOM element, a function that returns a DOM element, `null`
+   * indicating that the root is not ready yet, or the string "scrollParent" to
+   * have the waypoint calculate the scroll parent itself.
+   */
+  root?: RootElement | 'scrollParent' | ((element: Element) => RootElement);
 
   /**
    * A valid CSS `margin` property or object containing the specific "top", "left", etc properties.
@@ -57,25 +63,38 @@ function toCss(margin?: string | Rect) {
   return `${top}px ${right}px ${bottom}px ${left}px`;
 }
 
+const findRoot = (el: Element) => getScrollParent(el as HTMLElement, true);
+
 function useWaypoint(
   element: Element | null,
   callback: WaypointCallback,
   options: WaypointOptions = {},
 ): void {
-  const { root, rootMargin, threshold, scrollDirection = 'vertical' } = options;
+  const { rootMargin, threshold, scrollDirection = 'vertical' } = options;
+  let { root } = options;
   const handler = useEventCallback(callback);
 
   const prevPositionRef = useRef<Position | null>(null);
 
-  const findScrollParent = root === 'scrollParent';
+  if (root === 'scrollParent') {
+    root = findRoot;
+  }
+
   const scrollParent = useMemo(
-    () =>
-      (element && findScrollParent && getScrollParent(element as any, true)) ||
-      null,
-    [element, findScrollParent],
+    () => (element && typeof root === 'function' ? root(element) : null),
+
+    [element, root],
   );
 
-  const realRoot = root === 'scrollParent' ? scrollParent : root;
+  let realRoot = typeof root === 'function' ? scrollParent : root;
+
+  if (realRoot && realRoot.nodeType === document.DOCUMENT_NODE) {
+    // explicit undefined means "use the viewport", instead of `null`
+    // which means "no root yet". This works around a bug in safari
+    // where document is not accepted in older versions,
+    // or is accepted but doesn't work (as of v14)
+    realRoot = undefined;
+  }
 
   useIntersectionObserver(
     // We change the meaning of explicit null to "not provided yet"
