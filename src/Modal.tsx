@@ -83,8 +83,10 @@ export interface BaseModalProps extends TransitionCallbacks {
    * Modals. Useful when customizing how modals interact within a container
    */
   manager?: ModalManager;
+
   /**
-   * Include a backdrop component.
+   * Include a backdrop component. A `static`backdrop
+   * will not trigger a Modal onHide when clicked.
    */
   backdrop?: true | false | 'static';
 
