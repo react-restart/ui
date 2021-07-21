@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
-import { useSSRSafeId } from '@react-aria/ssr';
+import { useSSRSafeId } from './ssr';
 
 import TabContext, { TabContextType } from './TabContext';
 import SelectableContext from './SelectableContext';

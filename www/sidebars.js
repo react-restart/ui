@@ -1,7 +1,6 @@
 module.exports = {
   docs: [
     'getting-started',
-    'transitions',
 
     {
       type: 'category',
@@ -23,5 +22,8 @@ module.exports = {
       collapsed: false,
       items: ['usePopper', 'useRootClose'],
     },
+
+    'transitions',
+    'SSR',
   ],
 };
