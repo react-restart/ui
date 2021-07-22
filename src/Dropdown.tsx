@@ -186,10 +186,7 @@ function Dropdown({
   const handleSelect = useEventCallback(
     (key: string | null, event: React.SyntheticEvent) => {
       onSelect?.(key, event);
-
-      if (!event.isDefaultPrevented()) {
-        toggle(false, event, 'select');
-      }
+      toggle(false, event, 'select');
 
       if (!event.isPropagationStopped()) {
         onSelectCtx?.(key, event);
