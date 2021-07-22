@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { useContext, useCallback } from 'react';
 import * as React from 'react';
 import { useSSRSafeId } from './ssr';
@@ -60,26 +58,24 @@ export function useDropdownToggle(): [
   return [props, { show, toggle }];
 }
 
-const propTypes = {
+export interface DropdownToggleProps {
   /**
    * A render prop that returns a Toggle element. The `props`
    * argument should spread through to **a component that can accept a ref**. Use
    * the `onToggle` argument to toggle the menu open or closed
    *
    * @type {Function ({
-   *   show: boolean,
-   *   toggle: (show: boolean) => void,
    *   props: {
    *     ref: (?HTMLElement) => void,
    *     aria-haspopup: true
    *     aria-expanded: boolean
    *   },
+   *   meta: {
+   *     show: boolean,
+   *     toggle: (show: boolean) => void,
+   *   }
    * }) => React.Element}
    */
-  children: PropTypes.func.isRequired,
-};
-
-export interface DropdownToggleProps {
   children: (
     props: UseDropdownToggleProps,
     meta: UseDropdownToggleMetadata,
@@ -99,7 +95,6 @@ function DropdownToggle({ children }: DropdownToggleProps) {
 }
 
 DropdownToggle.displayName = 'DropdownToggle';
-DropdownToggle.propTypes = propTypes;
 
 /** @component */
 export default DropdownToggle;

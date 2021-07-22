@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useContext, useRef } from 'react';
 import * as React from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
@@ -11,17 +10,62 @@ import usePopper, {
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
-import { placements } from './popper';
 
 export interface UseDropdownMenuOptions {
+  /**
+   * Enables the Popper.js `flip` modifier, allowing the Dropdown to
+   * automatically adjust it's placement in case of overlap with the viewport or
+   * toggle. See the [flip docs](https://popper.js.org/docs/v2/modifiers/flip/)
+   * for more info.
+   */
   flip?: boolean;
+
+  /**
+   * Controls the visible state of the menu, generally this is provided by the
+   * parent `Dropdown` component, but may also be specified as a prop directly.
+   */
   show?: boolean;
+
+  /**
+   * Use the `fixed` positioning strategy in Popper. This is used if the
+   * dropdown toggle is in a fixed container.
+   */
   fixed?: boolean;
+
+  /**
+   * The PopperJS placement for positioning the Dropdown menu in relation to it's Toggle.
+   * Generally this is provided by the parent `Dropdown` component,
+   * but may also be specified as a prop directly.
+   */
   placement?: Placement;
+
+  /**
+   * Whether or not to use Popper for positioning the menu.
+   */
   usePopper?: boolean;
+
+  /**
+   * Whether or not to add scroll and resize listeners to update menu position.
+   *
+   * See the [event listeners docs](https://popper.js.org/docs/v2/modifiers/event-listeners/)
+   * for more info.
+   */
   enableEventListeners?: boolean;
+
+  /**
+   * Offset of the dropdown menu from the dropdown toggle. See the
+   * [offset docs](https://popper.js.org/docs/v2/modifiers/offset/) for more info.
+   */
   offset?: Offset;
+
+  /**
+   * Override the default event used by RootCloseWrapper.
+   */
   rootCloseEvent?: RootCloseOptions['clickTrigger'];
+
+  /**
+   * A set of popper options and props passed directly to react-popper's Popper component.
+   */
   popperConfig?: Omit<UsePopperOptions, 'enabled' | 'placement'>;
 }
 
@@ -132,10 +176,14 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
   return [menuProps, metadata] as const;
 }
 
-const propTypes = {
+const defaultProps = {
+  usePopper: true,
+};
+
+export interface DropdownMenuProps extends UseDropdownMenuOptions {
   /**
    * A render prop that returns a Menu element. The `props`
-   * argument should spread through to **a component that can accept a ref**.
+   * argument should be spread through to **a component that can accept a ref**.
    *
    * @type {Function ({
    *   show: boolean,
@@ -154,47 +202,6 @@ const propTypes = {
    *   },
    * }) => React.Element}
    */
-  children: PropTypes.func.isRequired,
-
-  /**
-   * Controls the visible state of the menu, generally this is
-   * provided by the parent `Dropdown` component,
-   * but may also be specified as a prop directly.
-   */
-  show: PropTypes.bool,
-
-  /**
-   * The PopperJS placement for positioning the Dropdown menu in relation to it's Toggle.
-   * Generally this is provided by the parent `Dropdown` component,
-   * but may also be specified as a prop directly.
-   */
-  placement: PropTypes.oneOf(placements),
-
-  /**
-   * Enables the Popper.js `flip` modifier, allowing the Dropdown to
-   * automatically adjust it's placement in case of overlap with the viewport or toggle.
-   * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
-   */
-  flip: PropTypes.bool,
-
-  usePopper: PropTypes.oneOf([true, false]),
-
-  /**
-   * A set of popper options and props passed directly to react-popper's Popper component.
-   */
-  popperConfig: PropTypes.object,
-
-  /**
-   * Override the default event used by RootCloseWrapper.
-   */
-  rootCloseEvent: PropTypes.string,
-};
-
-const defaultProps = {
-  usePopper: true,
-};
-
-export interface DropdownMenuProps extends UseDropdownMenuOptions {
   children: (
     props: UserDropdownMenuProps,
     meta: UseDropdownMenuMetadata,
@@ -215,7 +222,6 @@ function DropdownMenu({ children, ...options }: DropdownMenuProps) {
 
 DropdownMenu.displayName = 'DropdownMenu';
 
-DropdownMenu.propTypes = propTypes;
 DropdownMenu.defaultProps = defaultProps;
 
 /** @component */
