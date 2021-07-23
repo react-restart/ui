@@ -1,3 +1,27 @@
+# [0.1.0](https://github.com/react-restart/ui/compare/v0.0.6...v0.1.0) (2021-07-23)
+
+
+### Bug Fixes
+
+* **Dropdown:** fix onToggle callback for Anchor ([e0a993b](https://github.com/react-restart/ui/commit/e0a993b53691cebaf63415d57c30d7af8e7af6bd))
+
+
+* feat!: make Overlay render prop consistent with Dropdown (#26) ([b3b2eac](https://github.com/react-restart/ui/commit/b3b2eace52eabfeb90a8c1fbe7ba7555723d9cad)), closes [#26](https://github.com/react-restart/ui/issues/26)
+
+
+### Features
+
+* clean up dropdown props ([5b4cf8a](https://github.com/react-restart/ui/commit/5b4cf8a7edc272ce7c1953f96878074d732168ab))
+
+
+### BREAKING CHANGES
+
+* Overlay now passes two arguments like DropdownMenu, `props` and `metadata`
+
+
+
+
+
 ## [0.0.6](https://github.com/react-restart/ui/compare/v0.0.5...v0.0.6) (2021-07-21)
 
 
