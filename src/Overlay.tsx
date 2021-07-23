@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
@@ -7,47 +6,116 @@ import { useState } from 'react';
 import usePopper, {
   Offset,
   Placement,
-  State,
   UsePopperOptions,
+  UsePopperState,
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
-import { placements } from './popper';
+
+export interface OverlayArrowProps extends Record<string, any> {
+  ref: React.RefCallback<HTMLElement>;
+  style: React.CSSProperties;
+}
+
+export interface OverlayMetadata {
+  show: boolean;
+  placement: Placement | undefined;
+  popper: UsePopperState | null;
+  arrowProps: Partial<OverlayArrowProps>;
+}
+
+export interface OverlayInjectedProps extends Record<string, any> {
+  ref: React.RefCallback<HTMLElement>;
+  style: React.CSSProperties;
+  'aria-labelledby'?: string;
+}
 
 export interface OverlayProps extends TransitionCallbacks {
+  /**
+   * Enables the Popper.js `flip` modifier, allowing the Overlay to
+   * automatically adjust it's placement in case of overlap with the viewport or toggle.
+   * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
+   */
   flip?: boolean;
+
+  /** Specify where the overlay element is positioned in relation to the target element */
   placement?: Placement;
+
+  /**
+   * Control offset of the overlay to the reference element.
+   * A convenience shortcut to setting `popperConfig.modfiers.offset`
+   */
   offset?: Offset;
+
+  /**
+   * Control how much space there is between the edge of the boundary element and overlay.
+   * A convenience shortcut to setting `popperConfig.modfiers.preventOverflow.padding`
+   */
   containerPadding?: number;
+
+  /**
+   * A set of popper options and props passed directly to react-popper's Popper component.
+   */
   popperConfig?: Omit<UsePopperOptions, 'placement'>;
+
+  /**
+   * A DOM Element, Ref to an element, or function that returns either. The `container` will have the Portal children
+   * appended to it.
+   */
   container?: DOMContainer;
+
+  /**
+   * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
+   * the overlay is positioned relative to.
+   */
   target: DOMContainer;
+
+  /**
+   * Set the visibility of the Overlay
+   */
   show?: boolean;
+
+  /**
+   * A `react-transition-group` `<Transition/>` component
+   * used to animate the overlay as it changes visibility.
+   */
   transition?: React.ComponentType<
     { in?: boolean; appear?: boolean } & TransitionCallbacks
   >;
+
+  /**
+   * A Callback fired by the Overlay when it wishes to be hidden.
+   *
+   * __required__ when `rootClose` is `true`.
+   *
+   * @type func
+   */
   onHide?: (e: Event) => void;
+
+  /**
+   * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
+   */
   rootClose?: boolean;
+
+  /**
+   * Specify disabled for disable RootCloseWrapper
+   */
   rootCloseDisabled?: boolean;
+
+  /**
+   * Specify event for toggling overlay
+   */
   rootCloseEvent?: RootCloseOptions['clickTrigger'];
-  children: (value: {
-    show: boolean;
-    placement: Placement;
-    update: () => void;
-    forceUpdate: () => void;
-    state?: State;
-    props: Record<string, any> & {
-      ref: React.RefCallback<HTMLElement>;
-      style: React.CSSProperties;
-      'aria-labelledby'?: string;
-    };
-    arrowProps: Record<string, any> & {
-      ref: React.RefCallback<HTMLElement>;
-      style: React.CSSProperties;
-    };
-  }) => React.ReactNode;
+
+  /**
+   * A render prop that returns an overlay element.
+   */
+  children: (
+    props: OverlayInjectedProps,
+    meta: OverlayMetadata,
+  ) => React.ReactNode;
 }
 
 /**
@@ -60,7 +128,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       flip,
       offset,
       placement,
-      containerPadding = 5,
+      containerPadding,
       popperConfig = {},
       transition: Transition,
     } = props;
@@ -74,7 +142,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
 
     const [exited, setExited] = useState(!props.show);
 
-    const { styles, attributes, ...popper } = usePopper(
+    const popper = usePopper(
       target,
       rootElement,
       mergeOptionsWithPopperConfig({
@@ -115,20 +183,23 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       return null;
     }
 
-    let child = props.children({
-      ...popper,
-      show: !!props.show,
-      props: {
-        ...attributes.popper,
-        style: styles.popper as any,
+    let child = props.children(
+      {
+        ...popper.attributes.popper,
+        style: popper.styles.popper as any,
         ref: mergedRef,
       },
-      arrowProps: {
-        ...attributes.arrow,
-        style: styles.arrow as any,
-        ref: attachArrowRef,
+      {
+        popper,
+        placement,
+        show: !!props.show,
+        arrowProps: {
+          ...popper.attributes.arrow,
+          style: popper.styles.arrow as any,
+          ref: attachArrowRef,
+        },
       },
-    });
+    );
 
     if (Transition) {
       const { onExit, onExiting, onEnter, onEntering, onEntered } = props;
@@ -154,135 +225,5 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
 );
 
 Overlay.displayName = 'Overlay';
-
-Overlay.propTypes = {
-  /**
-   * Set the visibility of the Overlay
-   */
-  show: PropTypes.bool,
-
-  /** Specify where the overlay element is positioned in relation to the target element */
-  placement: PropTypes.oneOf(placements),
-
-  /**
-   * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
-   * the overlay is positioned relative to.
-   */
-  target: PropTypes.any,
-
-  /**
-   * A DOM Element, Ref to an element, or function that returns either. The `container` will have the Portal children
-   * appended to it.
-   */
-  container: PropTypes.any,
-
-  /**
-   * Enables the Popper.js `flip` modifier, allowing the Overlay to
-   * automatically adjust it's placement in case of overlap with the viewport or toggle.
-   * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
-   */
-  flip: PropTypes.bool,
-
-  /**
-   * A render prop that returns an element to overlay and position. See
-   * the [react-popper documentation](https://github.com/FezVrasta/react-popper#children) for more info.
-   *
-   * @type {Function ({
-   *   show: boolean,
-   *   placement: Placement,
-   *   update: () => void,
-   *   forceUpdate: () => void,
-   *   props: {
-   *     ref: (?HTMLElement) => void,
-   *     style: { [string]: string | number },
-   *     aria-labelledby: ?string
-   *     [string]: string | number,
-   *   },
-   *   arrowProps: {
-   *     ref: (?HTMLElement) => void,
-   *     style: { [string]: string | number },
-   *     [string]: string | number,
-   *   },
-   * }) => React.Element}
-   */
-  children: PropTypes.func.isRequired,
-
-  /**
-   * Control how much space there is between the edge of the boundary element and overlay.
-   * A convenience shortcut to setting `popperConfig.modfiers.preventOverflow.padding`
-   */
-  containerPadding: PropTypes.number,
-
-  /**
-   * A set of popper options and props passed directly to react-popper's Popper component.
-   */
-  popperConfig: PropTypes.object,
-
-  /**
-   * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
-   */
-  rootClose: PropTypes.bool,
-
-  /**
-   * Specify event for toggling overlay
-   */
-  rootCloseEvent: PropTypes.oneOf(['click', 'mousedown']),
-
-  /**
-   * Specify disabled for disable RootCloseWrapper
-   */
-  rootCloseDisabled: PropTypes.bool,
-  /**
-   * A Callback fired by the Overlay when it wishes to be hidden.
-   *
-   * __required__ when `rootClose` is `true`.
-   *
-   * @type func
-   */
-  onHide(props, ...args) {
-    if (props.rootClose) {
-      return PropTypes.func.isRequired(props, ...args);
-    }
-
-    return PropTypes.func(props, ...args);
-  },
-
-  /**
-   * A `react-transition-group@2.0.0` `<Transition/>` component
-   * used to animate the overlay as it changes visibility.
-   */
-  // @ts-ignore
-  transition: PropTypes.elementType,
-
-  /**
-   * Callback fired before the Overlay transitions in
-   */
-  onEnter: PropTypes.func,
-
-  /**
-   * Callback fired as the Overlay begins to transition in
-   */
-  onEntering: PropTypes.func,
-
-  /**
-   * Callback fired after the Overlay finishes transitioning in
-   */
-  onEntered: PropTypes.func,
-
-  /**
-   * Callback fired right before the Overlay transitions out
-   */
-  onExit: PropTypes.func,
-
-  /**
-   * Callback fired as the Overlay begins to transition out
-   */
-  onExiting: PropTypes.func,
-
-  /**
-   * Callback fired after the Overlay finishes transitioning out
-   */
-  onExited: PropTypes.func,
-};
 
 export default Overlay;

@@ -1,47 +1,19 @@
-A powerful and flexible overlay component for showing things over, and next to, other things.
+A flexible base component for building tooltips, popups, and any other floating UI components.
+`Overlay` combines [Popper](https://popper.js.org/), click-to-dismiss, and optional transitions for
+rendering floating UI relative to another element.
 
-```jsx live
-import styled from "@emotion/styled";
+## Creating an Overlay
+
+Overlays consist of at least two elements, the "overlay", the element to be positioned,
+as well as a "target", the element the overlay is positioned in relation to. Popper
+also provides functionality for optional tooltip "arrows" like in the example below.
+Be sure to check out the Popper documentation for more details about the underlying
+positioning engine.
+
+```jsx live editor=collapse
+import clsx from "clsx";
 import { Overlay } from "@restart/ui";
 import Button from "../src/Button";
-
-const Tooltip = styled("div")`
-  position: absolute;
-`;
-
-const Arrow = styled("div")`
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  z-index: -1;
-
-  &::before {
-    content: "";
-    position: absolute;
-    transform: rotate(45deg);
-    background: #000;
-    width: 10px;
-    height: 10px;
-    top: 0;
-    left: 0;
-  }
-
-  ${(p) =>
-    ({
-      left: "right: -4px;",
-      right: "left: -4px;",
-      top: "bottom: -4px;",
-      bottom: "top: -4px;",
-    }[p.placement])}
-`;
-
-const Body = styled("div")`
-  padding: 3px 8px;
-  color: #fff;
-  text-align: center;
-  border-radius: 3px;
-  background-color: #000;
-`;
 
 const PLACEMENTS = ["left", "top", "right", "bottom"];
 
@@ -54,8 +26,6 @@ function reducer(state, [type, payload]) {
   switch (type) {
     case "placement":
       return { show: !!payload, placement: payload };
-    case "hide":
-      return { ...state, show: false, placement: null };
     default:
       return state;
   }
@@ -95,23 +65,29 @@ function OverlayExample() {
         show={show}
         rootClose
         offset={[0, 10]}
-        onHide={() => dispatch("hide")}
         placement={placement}
         container={containerRef}
         target={triggerRef}
       >
-        {({ props, arrowProps, placement }) => (
-          <Tooltip {...props} placement={placement}>
-            <Arrow
+        {(props, { arrowProps, popper, show }) => (
+          <div {...props} className="absolute">
+            <div
               {...arrowProps}
-              placement={placement}
               style={arrowProps.style}
+              className={clsx(
+                "absolute w-3 h-3 z-[-1]",
+                "before:absolute before:rotate-45 before:bg-black before:top-0 before:left-0 before:w-3 before:h-3",
+                popper.placement === "left" && "-right-1",
+                popper.placement === "right" && "-left-1",
+                popper.placement === "bottom" && "-top-1",
+                popper.placement === "top" && "-bottom-1"
+              )}
             />
-            <Body>
+            <div className="py-1 px-2 text-center rounded bg-black text-white ">
               I&rsquo;m placed to the{" "}
-              <strong>{placement}</strong>
-            </Body>
-          </Tooltip>
+              <strong>{popper.placement}</strong>
+            </div>
+          </div>
         )}
       </Overlay>
     </div>
@@ -119,4 +95,74 @@ function OverlayExample() {
 }
 
 <OverlayExample />;
+```
+
+## Animations
+
+Overlays support `react-transition-group` compliant Transition components (though you are welcome to use something else).
+
+```jsx live
+import Transition from "react-transition-group/Transition";
+import clsx from "clsx";
+import { Overlay } from "@restart/ui";
+import Tooltip from "../src/Tooltip";
+
+function Fade({ children, ...props }) {
+  return (
+    <Transition
+      {...props}
+      timeout={300}
+      onEnter={(node) => {
+        // trigger a reflow
+        node.offsetWidth;
+      }}
+    >
+      {(status, innerProps) =>
+        React.cloneElement(children, {
+          ...innerProps,
+          className: clsx(
+            "transition-opacity duration-300",
+            status === "entering" || status === "entered"
+              ? "opacity-1"
+              : "opacity-0"
+          ),
+        })
+      }
+    </Transition>
+  );
+}
+
+function Example() {
+  const ref = useRef(null);
+  const [show, setShow] = useState(false);
+  return (
+    <>
+      <a
+        ref={ref}
+        href="#home"
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+      >
+        A link with a tooltip
+      </a>
+      <Overlay
+        show={show}
+        target={ref}
+        offset={[0, 8]}
+        transition={Fade}
+        placement="top"
+      >
+        {(props, { arrowProps, popper }) => (
+          <Tooltip
+            {...props}
+            arrowProps={arrowProps}
+            popper={popper}
+          >
+            I am a tooltip
+          </Tooltip>
+        )}
+      </Overlay>
+    </>
+  );
+}
 ```
