@@ -1,0 +1,2 @@
+(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[514],{535:(e,t,s)=>{"use strict";var a;s.r(t),s.d(t,{default:()=>l});var c=s(7294),u=s(3935);const b=Object.assign({React:a||(a=s.t(c,2))},a||(a=s.t(c,2)),{ReactDOM:u});delete b.default;const l=b}}]);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXNzZXRzL2pzLzFiZTc4NTA1LmU1OWQzNmJlLmpzIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbXktd2Vic2l0ZS9hc3NldHMvanMvMWJlNzg1MDUuZTU5ZDM2YmUuanMiXSwibWFwcGluZ3MiOiJBQUFBIiwic291cmNlUm9vdCI6IiJ9
