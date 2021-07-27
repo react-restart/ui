@@ -102,9 +102,7 @@ describe('<Tabs>', () => {
       <Tabs>
         <div>
           <Nav role="navigation">
-            <NavItem href="#foo" eventKey="1">
-              One
-            </NavItem>
+            <NavItem eventKey="1">One</NavItem>
           </Nav>
         </div>
       </Tabs>,

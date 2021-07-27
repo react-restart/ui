@@ -1,44 +1,39 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useContext } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
 import NavContext from './NavContext';
 import SelectableContext, { makeEventKey } from './SelectableContext';
-import {
-  EventKey,
-  DynamicRefForwardingComponent,
-  SelectCallback,
-} from './types';
+import { EventKey, DynamicRefForwardingComponent } from './types';
 import Button from './Button';
 import { dataAttr } from './DataKey';
 
-export interface NavItemProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
+export interface NavItemProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * Highlight the NavItem as active.
+   */
   active?: boolean;
+
+  /**
+   * Element used to render the component.
+   */
   as?: React.ElementType;
+
+  /**
+   * Disable the NavItem, making it unselectable.
+   */
   disabled?: boolean;
+
+  /**
+   * Value passed to the `onSelect` handler, useful for identifying the selected NavItem.
+   */
   eventKey?: EventKey;
+
+  /**
+   * HTML `href` attribute corresponding to `a.href`.
+   */
   href?: string;
-  tabIndex?: number;
-  onSelect?: SelectCallback;
 }
-
-const propTypes = {
-  id: PropTypes.string,
-  active: PropTypes.bool,
-  role: PropTypes.string,
-
-  href: PropTypes.string,
-  tabIndex: PropTypes.number,
-  eventKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
-  as: PropTypes.any,
-  onClick: PropTypes.func,
-  onSelect: PropTypes.func,
-
-  'aria-controls': PropTypes.string,
-};
 
 export interface UseNavItemOptions {
   key?: string | null;
@@ -101,7 +96,7 @@ export function useNavItem({
     }
 
     if (parentOnSelect && !e.isPropagationStopped()) {
-      parentOnSelect?.(key, e);
+      parentOnSelect(key, e);
     }
   });
 
@@ -112,9 +107,9 @@ const NavItem: DynamicRefForwardingComponent<
   typeof Button,
   NavItemProps
 > = React.forwardRef<HTMLElement, NavItemProps>(
-  ({ as: Component = Button, eventKey, href, ...options }, ref) => {
+  ({ as: Component = Button, eventKey, ...options }, ref) => {
     const [props, meta] = useNavItem({
-      key: makeEventKey(eventKey, href),
+      key: makeEventKey(eventKey, options.href),
       ...options,
     });
 
@@ -126,6 +121,5 @@ const NavItem: DynamicRefForwardingComponent<
 );
 
 NavItem.displayName = 'NavItem';
-NavItem.propTypes = propTypes;
 
 export default NavItem;

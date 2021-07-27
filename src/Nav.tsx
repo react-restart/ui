@@ -1,5 +1,4 @@
 import qsa from 'dom-helpers/querySelectorAll';
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useContext, useEffect, useRef } from 'react';
 import useForceUpdate from '@restart/hooks/useForceUpdate';
@@ -20,23 +19,21 @@ export type { UseNavItemOptions, NavItemProps };
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-const propTypes = {
-  onSelect: PropTypes.func,
-
-  as: PropTypes.elementType,
-
-  role: PropTypes.string,
-
-  /** @private */
-  onKeyDown: PropTypes.func,
-  /** @private */
-  activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
 export interface NavProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
+  /**
+   * Key for the currently active NavItem.
+   */
   activeKey?: EventKey;
+
+  /**
+   * Element used to render the component.
+   */
   as?: React.ElementType;
+
+  /**
+   * A callback fired when a NavItem has been selected.
+   */
   onSelect?: SelectCallback;
 }
 
@@ -177,6 +174,5 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
 );
 
 Nav.displayName = 'Nav';
-Nav.propTypes = propTypes;
 
 export default Object.assign(Nav, { Item: NavItem });
