@@ -1,3 +1,14 @@
+## [0.1.1](https://github.com/react-restart/ui/compare/v0.1.0...v0.1.1) (2021-07-29)
+
+
+### Bug Fixes
+
+* **NavItem:** pass href to component ([#27](https://github.com/react-restart/ui/issues/27)) ([93a0c0f](https://github.com/react-restart/ui/commit/93a0c0f6dc4077d30a0354f0fe707cbcb9d1b2ee))
+
+
+
+
+
 # [0.1.0](https://github.com/react-restart/ui/compare/v0.0.6...v0.1.0) (2021-07-23)
 
 
