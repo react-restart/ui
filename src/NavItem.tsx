@@ -107,9 +107,10 @@ const NavItem: DynamicRefForwardingComponent<
   typeof Button,
   NavItemProps
 > = React.forwardRef<HTMLElement, NavItemProps>(
-  ({ as: Component = Button, eventKey, ...options }, ref) => {
+  ({ as: Component = Button, active, eventKey, ...options }, ref) => {
     const [props, meta] = useNavItem({
       key: makeEventKey(eventKey, options.href),
+      active,
       ...options,
     });
 
