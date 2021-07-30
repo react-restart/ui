@@ -56,7 +56,7 @@ export function useNavItem({
   const navContext = useContext(NavContext);
 
   let isActive = active;
-  const props = {} as any;
+  const props = { role } as any;
 
   if (navContext) {
     if (!role && navContext.role === 'tablist') props.role = 'tab';
