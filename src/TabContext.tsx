@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { EventKey } from './types';
+import { EventKey, SelectCallback, TransitionComponent } from './types';
 
 export interface TabContextType {
-  onSelect: any;
-  activeKey: any;
-  transition: any;
+  onSelect: SelectCallback;
+  activeKey?: EventKey;
+  transition?: TransitionComponent;
   mountOnEnter: boolean;
   unmountOnExit: boolean;
   getControlledId: (key: EventKey) => any;

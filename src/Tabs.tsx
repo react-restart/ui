@@ -1,48 +1,32 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { useUncontrolledProp } from 'uncontrollable';
 import { useSSRSafeId } from './ssr';
 
 import TabContext, { TabContextType } from './TabContext';
 import SelectableContext from './SelectableContext';
-import { EventKey, SelectCallback, TransitionType } from './types';
+import { EventKey, SelectCallback, TransitionComponent } from './types';
 import TabPanel, { TabPanelProps } from './TabPanel';
 
 export type { TabPanelProps };
 export interface TabsProps extends React.PropsWithChildren<unknown> {
   id?: string;
-  transition?: TransitionType;
-  mountOnEnter?: boolean;
-  unmountOnExit?: boolean;
-  generateChildId?: (eventKey: EventKey, type: 'tab' | 'pane') => string;
-  onSelect?: SelectCallback;
-  activeKey?: EventKey;
-  defaultActiveKey?: EventKey;
-}
 
-/* eslint-disable react/no-unused-prop-types */
-const propTypes = {
   /**
-   * Sets a default animation strategy for all children `<TabPane>`s.
+   * Sets a default animation strategy for all children `<TabPanel>`s.
    * Use a react-transition-group `<Transition/>` component.
-   *
-   * @type {{Transition | false}}
-   * @default {Fade}
    */
-  transition: PropTypes.oneOfType([
-    PropTypes.oneOf([false]),
-    PropTypes.elementType,
-  ]),
+  transition?: TransitionComponent;
+
   /**
    * Wait until the first "enter" transition to mount tabs (add them to the DOM)
    */
-  mountOnEnter: PropTypes.bool,
+  mountOnEnter?: boolean;
 
   /**
    * Unmount tabs (remove it from the DOM) when they are no longer visible
    */
-  unmountOnExit: PropTypes.bool,
+  unmountOnExit?: boolean;
 
   /**
    * A function that takes an `eventKey` and `type` and returns a unique id for
@@ -55,22 +39,27 @@ const propTypes = {
    *
    * @defaultValue (eventKey, type) => `${props.id}-${type}-${eventKey}`
    */
-  generateChildId: PropTypes.func,
+  generateChildId?: (eventKey: EventKey, type: 'tab' | 'pane') => string;
 
   /**
    * A callback fired when a tab is selected.
    *
    * @controllable activeKey
    */
-  onSelect: PropTypes.func,
+  onSelect?: SelectCallback;
 
   /**
    * The `eventKey` of the currently active tab.
    *
    * @controllable onSelect
    */
-  activeKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
+  activeKey?: EventKey;
+
+  /**
+   * Default value for `eventKey`.
+   */
+  defaultActiveKey?: EventKey;
+}
 
 const Tabs = (props: TabsProps) => {
   const {
@@ -129,6 +118,5 @@ const Tabs = (props: TabsProps) => {
   );
 };
 
-Tabs.propTypes = propTypes;
 Tabs.Panel = TabPanel;
 export default Tabs;

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { SelectCallback } from './types';
+import { EventKey, SelectCallback } from './types';
 
 const SelectableContext = React.createContext<SelectCallback | null>(null);
 
 export const makeEventKey = (
-  eventKey?: string | number | null,
+  eventKey?: EventKey | null,
   href: string | null = null,
 ): string | null => {
   if (eventKey != null) return String(eventKey);
