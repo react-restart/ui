@@ -118,7 +118,7 @@ describe('<Tabs>', () => {
 
   it('Should show the correct tab when selected', () => {
     const wrapper = mount(
-      <Tabs defaultActiveKey={1} transition={false}>
+      <Tabs defaultActiveKey={1}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
 
@@ -148,7 +148,7 @@ describe('<Tabs>', () => {
 
   it('Should mount and unmount tabs when set', () => {
     const wrapper = mount(
-      <Tabs mountOnEnter unmountOnExit defaultActiveKey={1} transition={false}>
+      <Tabs mountOnEnter unmountOnExit defaultActiveKey={1}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
 

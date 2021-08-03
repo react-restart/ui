@@ -6,7 +6,7 @@ export type IntrinsicElementTypes = keyof JSX.IntrinsicElements;
 
 export type AssignProps<
   Inner extends string | React.ComponentType<any>,
-  P
+  P,
 > = Omit<
   React.ComponentPropsWithRef<Inner extends React.ElementType ? Inner : never>,
   keyof P
@@ -15,7 +15,7 @@ export type AssignProps<
 
 export interface DynamicRefForwardingComponent<
   TInitial extends string | React.ComponentType<any>,
-  P = unknown
+  P = unknown,
 > {
   <As extends string | React.ComponentType<any> = TInitial>(
     props: React.PropsWithChildren<AssignProps<As, { as?: As } & P>>,
@@ -29,13 +29,13 @@ export interface DynamicRefForwardingComponent<
 
 export class DynamicComponent<
   As extends string | React.ComponentType<any>,
-  P = unknown
+  P = unknown,
 > extends React.Component<AssignProps<As, { as?: As } & P>> {}
 
 // Need to use this instead of typeof Component to get proper type checking.
 export type DynamicComponentClass<
   As extends string | React.ComponentType<any>,
-  P = unknown
+  P = unknown,
 > = React.ComponentClass<AssignProps<As, { as?: As } & P>>;
 
 export type SelectCallback = (
@@ -75,10 +75,7 @@ export interface TransitionProps extends TransitionCallbacks {
   appear?: boolean;
   children: React.ReactElement;
   mountOnEnter?: boolean;
-
-  unmountOnExit: boolean;
+  unmountOnExit?: boolean;
 }
 
 export type TransitionComponent = React.ComponentType<TransitionProps>;
-
-export type TransitionType = boolean | TransitionComponent;
