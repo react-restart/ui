@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useContext } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
@@ -11,42 +10,31 @@ import Button from './Button';
 import { dataAttr } from './DataKey';
 
 export interface DropdownItemProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * Element used to render the component.
+   */
   as?: React.ElementType;
-  active?: boolean;
-  disabled?: boolean;
-  eventKey?: EventKey;
-  href?: string;
-}
 
-const propTypes = {
   /**
    * Highlight the menu item as active.
    */
-  active: PropTypes.bool,
+  active?: boolean;
 
   /**
    * Disable the menu item, making it unselectable.
    */
-  disabled: PropTypes.bool,
+  disabled?: boolean;
 
   /**
    * Value passed to the `onSelect` handler, useful for identifying the selected menu item.
    */
-  eventKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  eventKey?: EventKey;
 
   /**
    * HTML `href` attribute corresponding to `a.href`.
    */
-  href: PropTypes.string,
-
-  /**
-   * Callback fired when the menu item is clicked.
-   */
-  onClick: PropTypes.func,
-
-  /** @default Button */
-  as: PropTypes.elementType,
-};
+  href?: string;
+}
 
 interface UseDropdownItemOptions {
   key?: EventKey | null;
@@ -73,7 +61,7 @@ export function useDropdownItem({
   const { activeKey } = navContext || {};
   const eventKey = makeEventKey(key, href);
 
-  active =
+  const isActive =
     active == null && key != null
       ? makeEventKey(activeKey) === eventKey
       : active;
@@ -92,10 +80,10 @@ export function useDropdownItem({
     {
       onClick: handleClick,
       'aria-disabled': disabled || undefined,
-      'aria-selected': active,
+      'aria-selected': isActive,
       [dataAttr('dropdown-item')]: '',
     },
-    { active },
+    { isActive },
   ] as const;
 }
 
@@ -122,15 +110,10 @@ const DropdownItem: DynamicRefForwardingComponent<
       active,
     });
 
-    return (
-      // "TS2604: JSX element type 'Component' does not have any construct or call signatures."
-      // @ts-ignore
-      <Component {...props} ref={ref} {...dropdownItemProps} />
-    );
+    return <Component {...props} ref={ref} {...dropdownItemProps} />;
   },
 );
 
 DropdownItem.displayName = 'DropdownItem';
-DropdownItem.propTypes = propTypes;
 
 export default DropdownItem;
