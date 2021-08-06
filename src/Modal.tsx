@@ -181,8 +181,8 @@ function useModalManager(provided?: ModalManager) {
   const modalManager = provided || getManager();
 
   const modal = useRef({
-    dialog: (null as any) as HTMLElement,
-    backdrop: (null as any) as HTMLElement,
+    dialog: null as any as HTMLElement,
+    backdrop: null as any as HTMLElement,
   });
 
   return Object.assign(modal.current, {
