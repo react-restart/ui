@@ -1,3 +1,25 @@
+# [0.2.0](https://github.com/react-restart/ui/compare/v0.1.1...v0.2.0) (2021-08-06)
+
+
+### Bug Fixes
+
+* **NavItem:** prevent active from appearing in DOM ([c010a7e](https://github.com/react-restart/ui/commit/c010a7e0ab88a4d3899ec9985867f6c276ac66f7))
+* **NavItem:** render user-specified role ([ac922a4](https://github.com/react-restart/ui/commit/ac922a4ccca0d10fca0141dbff7dbb6acd96b3c0))
+
+
+* refactor(DropdownItem)!: rename active to isActive in metadata (#30) ([7dc472a](https://github.com/react-restart/ui/commit/7dc472a2a9740523fd08e522177003d467ed55f6)), closes [#30](https://github.com/react-restart/ui/issues/30)
+* feat(TabPanel)!: expose useTabPanel hook and simplify code (#29) ([8e7cdbd](https://github.com/react-restart/ui/commit/8e7cdbd3e80d2d35ea6c5c57b2107476c00d71fc)), closes [#29](https://github.com/react-restart/ui/issues/29)
+
+
+### BREAKING CHANGES
+
+* rename active to isActive in metadata
+* rename useTabContext to useTabPanel and return `props` and `metadata`
+
+
+
+
+
 ## [0.1.1](https://github.com/react-restart/ui/compare/v0.1.0...v0.1.1) (2021-07-29)
 
 
