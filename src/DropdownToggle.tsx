@@ -32,8 +32,12 @@ export function useDropdownToggle(): [
   UseDropdownToggleMetadata,
 ] {
   const id = useSSRSafeId();
-  const { show = false, toggle = noop, setToggle, menuElement } =
-    useContext(DropdownContext) || {};
+  const {
+    show = false,
+    toggle = noop,
+    setToggle,
+    menuElement,
+  } = useContext(DropdownContext) || {};
   const handleClick = useCallback(
     (e) => {
       toggle(!show, e);

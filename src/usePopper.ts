@@ -58,17 +58,19 @@ const ariaDescribedByModifier: Modifier<'ariaDescribedBy', undefined> = {
   name: 'ariaDescribedBy',
   enabled: true,
   phase: 'afterWrite',
-  effect: ({ state }) => () => {
-    const { reference, popper } = state.elements;
-    if ('removeAttribute' in reference) {
-      const ids = (reference.getAttribute('aria-describedby') || '')
-        .split(',')
-        .filter((id) => id.trim() !== popper.id);
+  effect:
+    ({ state }) =>
+    () => {
+      const { reference, popper } = state.elements;
+      if ('removeAttribute' in reference) {
+        const ids = (reference.getAttribute('aria-describedby') || '')
+          .split(',')
+          .filter((id) => id.trim() !== popper.id);
 
-      if (!ids.length) reference.removeAttribute('aria-describedby');
-      else reference.setAttribute('aria-describedby', ids.join(','));
-    }
-  },
+        if (!ids.length) reference.removeAttribute('aria-describedby');
+        else reference.setAttribute('aria-describedby', ids.join(','));
+      }
+    },
   fn: ({ state }) => {
     const { popper, reference } = state.elements;
 
