@@ -7,6 +7,11 @@ export interface ModalInstance {
   backdrop: Element;
 }
 
+export interface ModalManagerOptions {
+  handleContainerOverflow?: boolean;
+  isRTL?: boolean;
+}
+
 export type ContainerState = {
   scrollBarWidth: number;
   style: Record<string, any>;
@@ -28,7 +33,10 @@ class ModalManager {
 
   private state!: ContainerState;
 
-  constructor({ handleContainerOverflow = true, isRTL = false } = {}) {
+  constructor({
+    handleContainerOverflow = true,
+    isRTL = false,
+  }: ModalManagerOptions = {}) {
     this.handleContainerOverflow = handleContainerOverflow;
     this.isRTL = isRTL;
     this.modals = [];
