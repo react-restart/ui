@@ -1,3 +1,14 @@
+## [0.2.1](https://github.com/react-restart/ui/compare/v0.2.0...v0.2.1) (2021-08-09)
+
+
+### Features
+
+* **ModalManager:** export ModalManagerOptions type ([#32](https://github.com/react-restart/ui/issues/32)) ([a0defd1](https://github.com/react-restart/ui/commit/a0defd151e1e986e361f615f88bf2253c58b86d2))
+
+
+
+
+
 # [0.2.0](https://github.com/react-restart/ui/compare/v0.1.1...v0.2.0) (2021-08-06)
 
 
