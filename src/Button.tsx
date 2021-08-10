@@ -61,7 +61,7 @@ export function useButtonProps({
   }
 
   const handleClick = (event: React.MouseEvent | React.KeyboardEvent) => {
-    if (disabled || isTrivialHref(href)) {
+    if (disabled || (tagName === 'a' && isTrivialHref(href))) {
       event.preventDefault();
     }
 

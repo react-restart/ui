@@ -101,6 +101,51 @@ describe('<Button>', () => {
     expect(clickSpy).to.have.not.been.called;
   });
 
+  // eslint-disable-next-line mocha/no-setup-in-describe
+  ['#', ''].forEach((href) => {
+    it(`should prevent default on trivial href="${href}" clicks`, () => {
+      const clickSpy = sinon.spy();
+
+      const { getByText } = render(
+        <div onClick={clickSpy}>
+          <Button href={href}>Title</Button>
+        </div>,
+      );
+
+      const button = getByText('Title');
+
+      expect(button).to.exist;
+
+      fireEvent.click(button);
+
+      expect(clickSpy).to.have.been.called;
+      const event = clickSpy.getCall(0).args[0];
+
+      expect(event.defaultPrevented).to.equal(true);
+    });
+  });
+
+  it(`should not prevent default on button clicks`, () => {
+    const clickSpy = sinon.spy();
+
+    const { getByText } = render(
+      <div onClick={clickSpy}>
+        <Button>Title</Button>
+      </div>,
+    );
+
+    const button = getByText('Title');
+
+    expect(button).to.exist;
+
+    fireEvent.click(button);
+
+    expect(clickSpy).to.have.been.called;
+    const event = clickSpy.getCall(0).args[0];
+
+    expect(event.defaultPrevented).to.equal(false);
+  });
+
   it('Should be disabled link', () => {
     const clickSpy = sinon.spy();
 
