@@ -4,7 +4,11 @@
 import * as React from 'react';
 
 import { useEventCallback } from '@restart/hooks';
-import { useButtonProps, isTrivialHref } from './Button';
+import { useButtonProps } from './Button';
+
+export function isTrivialHref(href?: string) {
+  return !href || href.trim() === '#';
+}
 
 export interface AnchorProps extends React.HTMLAttributes<HTMLElement> {
   href?: string;
