@@ -1,3 +1,14 @@
+## [0.2.2](https://github.com/react-restart/ui/compare/v0.2.1...v0.2.2) (2021-08-11)
+
+
+### Bug Fixes
+
+* don't prevent default on button clicks ([#33](https://github.com/react-restart/ui/issues/33)) ([5100ed6](https://github.com/react-restart/ui/commit/5100ed62a60aa2072b124d6217717ca8f4b3858d))
+
+
+
+
+
 ## [0.2.1](https://github.com/react-restart/ui/compare/v0.2.0...v0.2.1) (2021-08-09)
 
 
