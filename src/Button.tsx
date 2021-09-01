@@ -13,7 +13,7 @@ export interface UseButtonPropsOptions extends AnchorOptions {
   disabled?: boolean;
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
-  tagName?: keyof JSX.IntrinsicElements;
+  tagName?: React.ElementType;
 }
 
 export function isTrivialHref(href?: string) {
