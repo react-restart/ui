@@ -8,6 +8,7 @@ const disabledApplyStylesModifier = {
   name: 'applyStyles',
   enabled: false,
   phase: 'afterWrite',
+  fn: () => undefined,
 };
 
 // until docjs supports type exports...
