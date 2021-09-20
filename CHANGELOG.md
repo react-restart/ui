@@ -1,3 +1,14 @@
+## [0.2.3](https://github.com/react-restart/ui/compare/v0.2.2...v0.2.3) (2021-09-20)
+
+
+### Bug Fixes
+
+* fix popper fn warning ([#35](https://github.com/react-restart/ui/issues/35)) ([6748493](https://github.com/react-restart/ui/commit/6748493d3c63617d9846718c8ef56b19603fb97e))
+
+
+
+
+
 ## [0.2.2](https://github.com/react-restart/ui/compare/v0.2.1...v0.2.2) (2021-08-11)
 
 
