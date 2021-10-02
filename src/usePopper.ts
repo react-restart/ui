@@ -4,6 +4,19 @@ import { dequal } from 'dequal';
 import useSafeState from '@restart/hooks/useSafeState';
 import { createPopper } from './popper';
 
+// This is needed in order to render a correct initial position
+// in some cases like top or bottom placement.
+// https://github.com/react-bootstrap/react-bootstrap/issues/6010
+const initialPopperStyles = (
+  position: string,
+): Partial<CSSStyleDeclaration> => ({
+  position,
+  top: '0',
+  left: '0',
+  opacity: '0',
+  pointerEvents: 'none',
+});
+
 const disabledApplyStylesModifier = {
   name: 'applyStyles',
   enabled: false,
@@ -136,7 +149,7 @@ function usePopper(
       forceUpdate,
       attributes: {},
       styles: {
-        popper: {},
+        popper: initialPopperStyles(strategy),
         arrow: {},
       },
     }),
@@ -211,7 +224,7 @@ function usePopper(
         setState((s) => ({
           ...s,
           attributes: {},
-          styles: { popper: {} },
+          styles: { popper: initialPopperStyles(strategy) },
         }));
       }
     };
