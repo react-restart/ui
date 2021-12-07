@@ -22,6 +22,7 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 import ModalManager from './ModalManager';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
+import useWindow from './useWindow';
 
 let manager: ModalManager;
 
@@ -172,13 +173,14 @@ export interface ModalProps extends BaseModalProps {
   [other: string]: any;
 }
 
-function getManager() {
-  if (!manager) manager = new ModalManager();
+function getManager(window?: Window) {
+  if (!manager) manager = new ModalManager({ ownerDocument: window?.document });
   return manager;
 }
 
 function useModalManager(provided?: ModalManager) {
-  const modalManager = provided || getManager();
+  const window = useWindow();
+  const modalManager = provided || getManager(window);
 
   const modal = useRef({
     dialog: null as any as HTMLElement,

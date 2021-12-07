@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useUncontrolledProp } from 'uncontrollable';
 import usePrevious from '@restart/hooks/usePrevious';
 import useForceUpdate from '@restart/hooks/useForceUpdate';
-import useGlobalListener from '@restart/hooks/useGlobalListener';
+import useEventListener from '@restart/hooks/useEventListener';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
 import DropdownContext from './DropdownContext';
@@ -24,6 +24,7 @@ import SelectableContext from './SelectableContext';
 import { SelectCallback } from './types';
 import { dataAttr } from './DataKey';
 import { Placement } from './usePopper';
+import useWindow from './useWindow';
 
 export type {
   DropdownMenuProps,
@@ -147,6 +148,7 @@ function Dropdown({
   placement = 'bottom-start',
   children,
 }: DropdownProps) {
+  const window = useWindow();
   const [show, onToggle] = useUncontrolledProp(
     rawShow,
     defaultShow!,
@@ -203,7 +205,9 @@ function Dropdown({
   );
 
   if (menuElement && lastShow && !show) {
-    focusInDropdown.current = menuElement.contains(document.activeElement);
+    focusInDropdown.current = menuElement.contains(
+      menuElement.ownerDocument.activeElement,
+    );
   }
 
   const focusToggle = useEventCallback(() => {
@@ -256,77 +260,81 @@ function Dropdown({
     return items[index];
   };
 
-  useGlobalListener('keydown', (event: KeyboardEvent) => {
-    const { key } = event;
-    const target = event.target as HTMLElement;
+  useEventListener(
+    useCallback(() => window!.document, [window]),
+    'keydown',
+    (event: KeyboardEvent) => {
+      const { key } = event;
+      const target = event.target as HTMLElement;
 
-    const fromMenu = menuRef.current?.contains(target);
-    const fromToggle = toggleRef.current?.contains(target);
+      const fromMenu = menuRef.current?.contains(target);
+      const fromToggle = toggleRef.current?.contains(target);
 
-    // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400
-    // in inscrutability
-    const isInput = /input|textarea/i.test(target.tagName);
-    if (isInput && (key === ' ' || (key !== 'Escape' && fromMenu))) {
-      return;
-    }
-
-    if (!fromMenu && !fromToggle) {
-      return;
-    }
-
-    if (key === 'Tab' && (!menuRef.current || !show)) {
-      return;
-    }
-
-    lastSourceEvent.current = event.type;
-    const meta = { originalEvent: event, source: event.type };
-    switch (key) {
-      case 'ArrowUp': {
-        const next = getNextFocusedChild(target, -1);
-        if (next && next.focus) next.focus();
-        event.preventDefault();
-
+      // Second only to https://github.com/twbs/bootstrap/blob/8cfbf6933b8a0146ac3fbc369f19e520bd1ebdac/js/src/dropdown.js#L400
+      // in inscrutability
+      const isInput = /input|textarea/i.test(target.tagName);
+      if (isInput && (key === ' ' || (key !== 'Escape' && fromMenu))) {
         return;
       }
-      case 'ArrowDown':
-        event.preventDefault();
-        if (!show) {
-          onToggle(true, meta);
-        } else {
-          const next = getNextFocusedChild(target, 1);
-          if (next && next.focus) next.focus();
-        }
-        return;
-      case 'Tab':
-        // on keydown the target is the element being tabbed FROM, we need that
-        // to know if this event is relevant to this dropdown (e.g. in this menu).
-        // On `keyup` the target is the element being tagged TO which we use to check
-        // if focus has left the menu
-        addEventListener(
-          document as any,
-          'keyup',
-          (e) => {
-            if (
-              (e.key === 'Tab' && !e.target) ||
-              !menuRef.current?.contains(e.target as HTMLElement)
-            ) {
-              onToggle(false, meta);
-            }
-          },
-          { once: true },
-        );
-        break;
-      case 'Escape':
-        if (key === 'Escape') {
-          event.preventDefault();
-          event.stopPropagation();
-        }
 
-        onToggle(false, meta);
-        break;
-      default:
-    }
-  });
+      if (!fromMenu && !fromToggle) {
+        return;
+      }
+
+      if (key === 'Tab' && (!menuRef.current || !show)) {
+        return;
+      }
+
+      lastSourceEvent.current = event.type;
+      const meta = { originalEvent: event, source: event.type };
+      switch (key) {
+        case 'ArrowUp': {
+          const next = getNextFocusedChild(target, -1);
+          if (next && next.focus) next.focus();
+          event.preventDefault();
+
+          return;
+        }
+        case 'ArrowDown':
+          event.preventDefault();
+          if (!show) {
+            onToggle(true, meta);
+          } else {
+            const next = getNextFocusedChild(target, 1);
+            if (next && next.focus) next.focus();
+          }
+          return;
+        case 'Tab':
+          // on keydown the target is the element being tabbed FROM, we need that
+          // to know if this event is relevant to this dropdown (e.g. in this menu).
+          // On `keyup` the target is the element being tagged TO which we use to check
+          // if focus has left the menu
+          addEventListener(
+            target.ownerDocument as any,
+            'keyup',
+            (e) => {
+              if (
+                (e.key === 'Tab' && !e.target) ||
+                !menuRef.current?.contains(e.target as HTMLElement)
+              ) {
+                onToggle(false, meta);
+              }
+            },
+            { once: true },
+          );
+          break;
+        case 'Escape':
+          if (key === 'Escape') {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          onToggle(false, meta);
+          break;
+        default:
+      }
+    },
+  );
 
   return (
     <SelectableContext.Provider value={handleSelect}>

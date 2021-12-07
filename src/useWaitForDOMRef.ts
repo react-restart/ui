@@ -1,5 +1,7 @@
 import ownerDocument from 'dom-helpers/ownerDocument';
+import canUseDOM from 'dom-helpers/canUseDOM';
 import { useState, useEffect } from 'react';
+import useWindow from './useWindow';
 
 export type DOMContainer<T extends HTMLElement = HTMLElement> =
   | T
@@ -9,9 +11,10 @@ export type DOMContainer<T extends HTMLElement = HTMLElement> =
 
 export const resolveContainerRef = <T extends HTMLElement>(
   ref: DOMContainer<T> | undefined,
+  document?: Document,
 ): T | HTMLBodyElement | null => {
-  if (typeof document === 'undefined') return null;
-  if (ref == null) return ownerDocument().body as HTMLBodyElement;
+  if (!canUseDOM) return null;
+  if (ref == null) return (document || ownerDocument()).body as HTMLBodyElement;
   if (typeof ref === 'function') ref = ref();
 
   if (ref && 'current' in ref) ref = ref.current;
@@ -24,7 +27,10 @@ export default function useWaitForDOMRef<T extends HTMLElement = HTMLElement>(
   ref: DOMContainer<T> | undefined,
   onResolved?: (element: T | HTMLBodyElement) => void,
 ) {
-  const [resolvedRef, setRef] = useState(() => resolveContainerRef(ref));
+  const window = useWindow();
+  const [resolvedRef, setRef] = useState(() =>
+    resolveContainerRef(ref, window?.document),
+  );
 
   if (!resolvedRef) {
     const earlyRef = resolveContainerRef(ref);

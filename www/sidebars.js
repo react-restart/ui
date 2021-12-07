@@ -20,7 +20,7 @@ module.exports = {
       type: 'category',
       label: 'Utilities',
       collapsed: false,
-      items: ['usePopper', 'useRootClose'],
+      items: ['usePopper', 'useRootClose', 'useWindow'],
     },
 
     'transitions',
