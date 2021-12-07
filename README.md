@@ -1,4 +1,4 @@
-# react-ui
+# restart/ui
 
 Restart UI is a set of full featured, extensible, and accessible UI components, designed to integrate into any styling
 framework or system. Restart components, are "headless", meaning they don't provide any styles. Components encapsulate
