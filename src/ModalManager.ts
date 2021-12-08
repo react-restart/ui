@@ -34,7 +34,7 @@ class ModalManager {
 
   protected state!: ContainerState;
 
-  protected ownerDocument: any;
+  protected ownerDocument: Document | undefined;
 
   constructor({
     ownerDocument,

@@ -3,7 +3,7 @@ import canUseDOM from 'dom-helpers/canUseDOM';
 
 const Context = createContext(canUseDOM ? window : undefined);
 
-export const Provider = Context.Provider;
+export const WindowProvider = Context.Provider;
 
 /**
  * The document "window" placed in React context. Helpful for determining
