@@ -85,11 +85,11 @@ function useRootClose(
   useEffect(() => {
     if (disabled || ref == null) return undefined;
 
+    const doc = ownerDocument(getRefTarget(ref)!);
+
     // Store the current event to avoid triggering handlers immediately
     // https://github.com/facebook/react/issues/20074
-    let currentEvent = window.event;
-
-    const doc = ownerDocument(getRefTarget(ref)!);
+    let currentEvent = (doc.defaultView || window).event;
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
@@ -139,6 +139,7 @@ function useRootClose(
     handleMouseCapture,
     handleMouse,
     handleKeyUp,
+    window,
   ]);
 }
 

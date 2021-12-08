@@ -1,0 +1,47 @@
+A hook that returns the current DOM window. Generally this is the same as the global
+`window` value, except in an SSR context it will return undefined, saving you a `typeof window === 'undefined'` guard.
+
+```tsx
+import useWindow from "@restart/ui/useWindow";
+
+function Widget() {
+  const window = useWindow();
+
+  return (
+    <>
+      <Button>Click me</Button>
+      {window &&
+        createPortal(<Tooltip />, window.document.body)}
+    </>
+  );
+}
+```
+
+It's also useful for situations where components are rendered into an `iframe` and need a reference
+to target window, not the one they originate from.
+
+```tsx
+import { WindowProvider } from "useWindow";
+
+function Iframe({
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<"iframe">) {
+  const [contentRef, setContentRef] = React.useState(null);
+  const mountNode = contentRef?.contentWindow.document.body;
+
+  return (
+    <>
+      <iframe {...props} ref={setContentRef} />
+
+      {mountNode &&
+        createPortal(
+          <WindowProvider value={contentRef?.contentWindow}>
+            {children}
+          </WindowProvider>,
+          mountNode
+        )}
+    </>
+  );
+}
+```
