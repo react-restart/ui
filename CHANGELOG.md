@@ -1,3 +1,15 @@
+## [0.2.4](https://github.com/react-restart/ui/compare/v0.2.3...v0.2.4) (2021-12-08)
+
+
+### Features
+
+* add support for iframe and differing owner documents ([#38](https://github.com/react-restart/ui/issues/38)) ([e4e7170](https://github.com/react-restart/ui/commit/e4e7170afcebee0451187e8f76b963fdcf797dfc))
+* **types:** Add proper dynamic function component type ([#37](https://github.com/react-restart/ui/issues/37)) ([1ad4213](https://github.com/react-restart/ui/commit/1ad42135ef7b6efdc0e352f346acb951f9a93e28))
+
+
+
+
+
 ## [0.2.3](https://github.com/react-restart/ui/compare/v0.2.2...v0.2.3) (2021-09-20)
 
 
