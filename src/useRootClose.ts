@@ -139,7 +139,6 @@ function useRootClose(
     handleMouseCapture,
     handleMouse,
     handleKeyUp,
-    window,
   ]);
 }
 
