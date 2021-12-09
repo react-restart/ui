@@ -1,3 +1,14 @@
+## [0.2.5](https://github.com/react-restart/ui/compare/v0.2.4...v0.2.5) (2021-12-09)
+
+
+### Bug Fixes
+
+* remove window reference in render breaking SSR ([43738cd](https://github.com/react-restart/ui/commit/43738cd8aae740ea51ee75b9cc3fd6b9738289f3)), closes [#39](https://github.com/react-restart/ui/issues/39)
+
+
+
+
+
 ## [0.2.4](https://github.com/react-restart/ui/compare/v0.2.3...v0.2.4) (2021-12-08)
 
 
