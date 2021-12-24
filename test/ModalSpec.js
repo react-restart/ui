@@ -336,7 +336,7 @@ describe('<Modal>', () => {
     );
   });
 
-  xdescribe('Focused state', () => {
+  describe('Focused state', () => {
     let focusableContainer = null;
 
     beforeEach(() => {
