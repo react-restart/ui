@@ -1,4 +1,6 @@
-import { mount } from 'enzyme';
+import { render, fireEvent } from '@testing-library/react';
+import { expect } from 'chai';
+import sinon from 'sinon';
 import Nav from '../src/Nav';
 import NavItem from '../src/NavItem';
 import TabPanel from '../src/TabPanel';
@@ -8,7 +10,7 @@ describe('<Tabs>', () => {
   it('should not propagate context past TabPanels', () => {
     const onSelect = sinon.spy();
 
-    let instance = mount(
+    const { getByText } = render(
       <Tabs id="custom-id" onSelect={onSelect}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
@@ -16,26 +18,26 @@ describe('<Tabs>', () => {
         <div>
           <TabPanel eventKey="1">
             <Nav>
-              <NavItem eventKey="2">One</NavItem>
+              <NavItem eventKey="2">Two</NavItem>
             </Nav>
           </TabPanel>
         </div>
       </Tabs>,
     );
 
-    instance.find('TabPanel Nav button').simulate('click');
-
+    const nestedNavItem = getByText('Two');
+    fireEvent.click(nestedNavItem);
     onSelect.should.not.have.been.called;
 
-    instance.find('Nav button').first().simulate('click');
-
+    const topNavItem = getByText('One');
+    fireEvent.click(topNavItem);
     onSelect.should.have.been.calledOnce;
   });
 
   it('should let generateChildId function create id', () => {
     const generateChildIdSpy = sinon.spy(() => 'test-id');
 
-    let instance = mount(
+    const { getByRole } = render(
       <Tabs generateChildId={generateChildIdSpy}>
         <div>
           <Nav>
@@ -48,36 +50,40 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    instance.assertSingle(`button[id="test-id"]`);
+    const navItem = getByRole('tab');
+    expect(navItem.getAttribute('id')).to.equal('test-id');
   });
 
   it('should match up ids', () => {
-    let instance = mount(
+    const { getByTestId } = render(
       <Tabs>
         <div>
           <Nav>
-            <NavItem eventKey="1">One</NavItem>
+            <NavItem eventKey="1" data-testid="nav-item">
+              One
+            </NavItem>
           </Nav>
           <div>
-            <TabPanel eventKey="1" />
+            <TabPanel eventKey="1" data-testid="tab-panel" />
           </div>
         </div>
       </Tabs>,
     );
 
-    let tabId = instance.find('NavItem button').first().prop('id');
+    const tabPanel = getByTestId('tab-panel');
+    const tabPanelID = tabPanel.getAttribute('id');
+    const navItem = getByTestId('nav-item');
+    const navItemID = navItem.getAttribute('id');
 
-    let paneId = instance.find('TabPanel div').first().prop('id');
+    expect(navItemID).to.exist;
+    expect(tabPanelID).to.exist;
 
-    expect(tabId).to.exist;
-    expect(paneId).to.exist;
-
-    instance.assertSingle(`button[aria-controls="${paneId}"]`);
-    instance.assertSingle(`div[aria-labelledby="${tabId}"]`);
+    expect(tabPanel.getAttribute('aria-labelledby')).to.equal(navItemID);
+    expect(navItem.getAttribute('aria-controls')).to.equal(tabPanelID);
   });
 
   it('should default Nav role to tablist', () => {
-    let instance = mount(
+    const { getByRole, getByText } = render(
       <Tabs>
         <div>
           <Nav>
@@ -87,18 +93,12 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    instance.assertSingle('div[role="tablist"]');
-
-    instance
-      .find('NavItem button')
-      .first()
-      .getDOMNode()
-      .getAttribute('role')
-      .should.equal('tab');
+    expect(getByRole('tablist')).to.exist;
+    expect(getByText('One').getAttribute('role')).to.equal('tab');
   });
 
   it('should use explicit Nav role', () => {
-    let instance = mount(
+    const { getByRole } = render(
       <Tabs>
         <div>
           <Nav role="navigation">
@@ -108,16 +108,14 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    instance.assertSingle('div[role="navigation"]');
+    expect(getByRole('navigation')).to.exist;
 
-    // make sure its not passed to the NavItem
-    expect(
-      instance.find('NavItem button').first().getDOMNode().getAttribute('role'),
-    ).to.not.exist;
+    // make sure it's not passed to the NavItem
+    expect(getByRole('button').getAttribute('role')).to.not.exist;
   });
 
   it('Should show the correct tab when selected', () => {
-    const wrapper = mount(
+    const { getByText } = render(
       <Tabs defaultActiveKey={1}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
@@ -131,23 +129,17 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    wrapper
-      .find('div[aria-hidden=false]')
-      .tap((p) => p.should.have.lengthOf(1))
-      .text()
-      .should.equal('Tab 1');
+    expect(getByText('Tab 1').getAttribute('aria-hidden')).to.equal('false');
+    expect(getByText('Tab 2').getAttribute('aria-hidden')).to.equal('true');
 
-    wrapper.find('button[role="tab"]').last().simulate('click');
+    fireEvent.click(getByText('Two'));
 
-    wrapper
-      .find('div[aria-hidden=false]')
-      .tap((p) => p.should.have.lengthOf(1))
-      .text()
-      .should.equal('Tab 2');
+    expect(getByText('Tab 1').getAttribute('aria-hidden')).to.equal('true');
+    expect(getByText('Tab 2').getAttribute('aria-hidden')).to.equal('false');
   });
 
   it('Should mount and unmount tabs when set', () => {
-    const wrapper = mount(
+    const { queryByText, getByText } = render(
       <Tabs mountOnEnter unmountOnExit defaultActiveKey={1}>
         <Nav>
           <NavItem eventKey="1">One</NavItem>
@@ -161,18 +153,10 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
 
-    wrapper
-      .find('div[role="tabpanel"]')
-      .tap((p) => p.should.have.lengthOf(1))
-      .text()
-      .should.equal('Tab 1');
-
-    wrapper.find('button[role="tab"]').last().simulate('click');
-
-    wrapper
-      .find('div[role="tabpanel"]')
-      .tap((p) => p.should.have.lengthOf(1))
-      .text()
-      .should.equal('Tab 2');
+    expect(queryByText('Tab 1')).to.exist;
+    expect(queryByText('Tab 2')).to.not.exist;
+    fireEvent.click(getByText('Two'));
+    expect(queryByText('Tab 1')).to.not.exist;
+    expect(queryByText('Tab 2')).to.exist;
   });
 });
