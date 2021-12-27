@@ -11,35 +11,9 @@ specifically, or roll your own like the below example.
 ```js live
 import { Modal, Overlay } from "@restart/ui";
 import Transition from "react-transition-group/Transition";
+import '../src/css/transitions.css';
 
 const FADE_DURATION = 200;
-
-injectCss(`
-  .fade {
-    opacity: 0;
-    transition: opacity ${FADE_DURATION}ms linear;
-  }
-
-  .show {
-    opacity: 1;
-  }
-
-
-  .backdrop.fade.show {
-    opacity: 0.5;
-  }
-
-  .dialog {
-    position: absolute;
-    width: 400;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #e5e5e5;
-    background-color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
-    padding: 20px;
-  }
-`);
 
 const fadeStyles = {
   entering: "show",
@@ -51,6 +25,10 @@ const Fade = ({ children, ...props }) => (
     {(status, innerProps) =>
       React.cloneElement(children, {
         ...innerProps,
+        style: {
+          transition: `opacity ${FADE_DURATION}ms linear`,
+          ...innerProps.style,
+        },
         className: `fade ${fadeStyles[status]} ${children.props.className}`,
       })
     }
@@ -123,7 +101,7 @@ function TransitionExample() {
             {...props}
             className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
           >
-            <div className="dialog bg-white shadow rounded-lg pointer-events-auto">
+            <div className="dialog dialog-transitions-example bg-white shadow rounded-lg pointer-events-auto">
               <h4 id="modal-label">I&apos;m fading in!</h4>
               <p>
                 Anim pariatur cliche reprehenderit, enim
