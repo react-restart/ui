@@ -11,35 +11,11 @@ specifically, or roll your own like the below example.
 ```js live
 import { Modal, Overlay } from "@restart/ui";
 import Transition from "react-transition-group/Transition";
+import Button from "../src/Button";
+import Tooltip from "../src/Tooltip";
+import '../src/css/transitions.css';
 
 const FADE_DURATION = 200;
-
-injectCss(`
-  .fade {
-    opacity: 0;
-    transition: opacity ${FADE_DURATION}ms linear;
-  }
-
-  .show {
-    opacity: 1;
-  }
-
-
-  .backdrop.fade.show {
-    opacity: 0.5;
-  }
-
-  .dialog {
-    position: absolute;
-    width: 400;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #e5e5e5;
-    background-color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
-    padding: 20px;
-  }
-`);
 
 const fadeStyles = {
   entering: "show",
@@ -60,32 +36,33 @@ const Fade = ({ children, ...props }) => (
 function TransitionExample() {
   const [showModal, setShowModal] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipRef, attachRef] = useState(null);
+
+  const triggerRef = useRef(null);
 
   return (
     <div className="flex flex-col items-center">
-      <button
+      <Button
         type="button"
         className="btn btn-primary mr-3"
         onClick={() => setShowModal((prev) => !prev)}
       >
         Show Animated Modal
-      </button>
+      </Button>
 
-      <button
+      <Button
         type="button"
         className="btn btn-primary"
         onClick={() => setShowTooltip((prev) => !prev)}
-        ref={attachRef}
+        ref={triggerRef}
       >
         Show Tooltip
-      </button>
+      </Button>
 
       <Overlay
         placement="top"
         transition={Fade}
         show={showTooltip}
-        target={tooltipRef}
+        target={triggerRef}
         popperConfig={{
           modifiers: [
             {
@@ -96,14 +73,10 @@ function TransitionExample() {
           ],
         }}
       >
-        {({ props: { ref, style } }) => (
-          <div
-            ref={ref}
-            className="bg-primary-200 shadow rounded z-10 px-4"
-            style={style}
-          >
-            Hello there
-          </div>
+        {(props, { arrowProps, popper, show }) => (
+          <Tooltip {...props} arrowProps={arrowProps} popper={popper}>
+            Tooltip content
+          </Tooltip>
         )}
       </Overlay>
 
@@ -123,7 +96,7 @@ function TransitionExample() {
             {...props}
             className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
           >
-            <div className="dialog bg-white shadow rounded-lg pointer-events-auto">
+            <div className="dialog dialog-transitions-example bg-white shadow rounded-lg pointer-events-auto">
               <h4 id="modal-label">I&apos;m fading in!</h4>
               <p>
                 Anim pariatur cliche reprehenderit, enim
