@@ -7,6 +7,7 @@ import SelectableContext, { makeEventKey } from './SelectableContext';
 import { EventKey, DynamicRefForwardingComponent } from './types';
 import Button from './Button';
 import { dataAttr } from './DataKey';
+import TabContext from './TabContext';
 
 export interface NavItemProps extends React.HTMLAttributes<HTMLElement> {
   /**
@@ -54,6 +55,7 @@ export function useNavItem({
 }: UseNavItemOptions) {
   const parentOnSelect = useContext(SelectableContext);
   const navContext = useContext(NavContext);
+  const tabContext = useContext(TabContext);
 
   let isActive = active;
   const props = { role } as any;
@@ -68,10 +70,12 @@ export function useNavItem({
     props[dataAttr('event-key')] = key;
 
     props.id = contextControllerId || id;
-    props['aria-controls'] = contextControlledId;
 
     isActive =
       active == null && key != null ? navContext.activeKey === key : active;
+
+    if (!tabContext?.unmountOnExit || isActive)
+      props['aria-controls'] = contextControlledId;
   }
 
   if (props.role === 'tab') {
