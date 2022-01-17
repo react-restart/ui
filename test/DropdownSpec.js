@@ -350,6 +350,32 @@ describe('<Dropdown>', () => {
       document.activeElement.should.equal(root.getByText('Toggle'));
     });
 
+    it('when open and a search input is focused and the key "Escape" is pressed the menu stays open', () => {
+      const toggleSpy = sinon.spy();
+      const root = render(
+        <Dropdown defaultShow onToggle={toggleSpy}>
+          <Toggle key="toggle">Toggle</Toggle>,
+          <Menu key="menu">
+            <input type="search" data-testid="input" />
+          </Menu>
+        </Dropdown>,
+        {
+          container: focusableContainer,
+        },
+      );
+
+      const input = root.getByTestId('input');
+
+      input.focus();
+      document.activeElement.should.equal(input);
+
+      fireEvent.keyDown(input, { key: 'Escape' });
+
+      document.activeElement.should.equal(input);
+
+      toggleSpy.should.not.be.called;
+    });
+
     it('when open and the key "tab" is pressed the menu is closed and focus is progress to the next focusable element', () => {
       const root = render(
         <div>

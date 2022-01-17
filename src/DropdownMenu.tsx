@@ -8,7 +8,7 @@ import usePopper, {
   Offset,
   UsePopperState,
 } from './usePopper';
-import useRootClose, { RootCloseOptions } from './useRootClose';
+import useClickOutside, { ClickOutsideOptions } from './useClickOutside';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
 
 export interface UseDropdownMenuOptions {
@@ -61,7 +61,7 @@ export interface UseDropdownMenuOptions {
   /**
    * Override the default event used by RootCloseWrapper.
    */
-  rootCloseEvent?: RootCloseOptions['clickTrigger'];
+  rootCloseEvent?: ClickOutsideOptions['clickTrigger'];
 
   /**
    * A set of popper options and props passed directly to react-popper's Popper component.
@@ -168,7 +168,7 @@ export function useDropdownMenu(options: UseDropdownMenuOptions = {}) {
       : {},
   };
 
-  useRootClose(menuElement, handleClose, {
+  useClickOutside(menuElement, handleClose, {
     clickTrigger: rootCloseEvent,
     disabled: !show,
   });
