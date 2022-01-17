@@ -32,23 +32,21 @@ export interface ClickOutsideOptions {
 }
 
 /**
- * The `useRootClose` hook registers your callback on the document
- * when rendered. Powers the `<Overlay/>` component. This is used achieve modal
- * style behavior where your callback is triggered when the user tries to
- * interact with the rest of the document or hits the `esc` key.
+ * The `useClickOutside` hook registers your callback on the document that fires
+ * when a pointer event is registered outside of the provided ref or element.
  *
  * @param {Ref<HTMLElement>| HTMLElement} ref  The element boundary
- * @param {function} onRootClose
+ * @param {function} onClickOutside
  * @param {object=}  options
  * @param {boolean=} options.disabled
  * @param {string=}  options.clickTrigger The DOM event name (click, mousedown, etc) to attach listeners on
  */
-function useRootClose(
+function useClickOutside(
   ref: React.RefObject<Element> | Element | null | undefined,
   onClickOutside: (e: Event) => void = noop,
   { disabled, clickTrigger = 'click' }: ClickOutsideOptions = {},
 ) {
-  const preventMouseRootCloseRef = useRef(false);
+  const preventMouseClickOutsideRef = useRef(false);
 
   const handleMouseCapture = useCallback(
     (e) => {
@@ -60,7 +58,7 @@ function useRootClose(
           'useClickOutside(), should be passed a ref that resolves to a DOM node',
       );
 
-      preventMouseRootCloseRef.current =
+      preventMouseClickOutsideRef.current =
         !currentTarget ||
         isModifiedEvent(e) ||
         !isLeftClickEvent(e) ||
@@ -70,7 +68,7 @@ function useRootClose(
   );
 
   const handleMouse = useEventCallback((e: MouseEvent) => {
-    if (!preventMouseRootCloseRef.current) {
+    if (!preventMouseClickOutsideRef.current) {
       onClickOutside(e);
     }
   });
@@ -118,4 +116,4 @@ function useRootClose(
   }, [ref, disabled, clickTrigger, handleMouseCapture, handleMouse]);
 }
 
-export default useRootClose;
+export default useClickOutside;
