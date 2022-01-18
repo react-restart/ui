@@ -1,6 +1,6 @@
 {
   "name": "@restart/ui",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Utilities for creating robust overlay components",
   "author": {
     "name": "Jason Quense",
