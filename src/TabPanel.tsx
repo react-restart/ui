@@ -60,13 +60,17 @@ export function useTabPanel({
   mountOnEnter,
   transition,
   unmountOnExit,
+  role = 'tabpanel',
   ...props
 }: TabPanelProps): [any, TabPanelMetadata] {
   const context = useContext(TabContext);
 
   if (!context)
     return [
-      props,
+      {
+        ...props,
+        role,
+      },
       {
         eventKey,
         isActive: active,
@@ -82,6 +86,7 @@ export function useTabPanel({
   return [
     {
       ...props,
+      role,
       id: getControlledId(eventKey!),
       'aria-labelledby': getControllerId(eventKey!),
     },
@@ -136,7 +141,6 @@ const TabPanel: DynamicRefForwardingComponent<'div', TabPanelProps> =
               <Component
                 {...tabPanelProps}
                 ref={ref}
-                role="tabpanel"
                 hidden={!isActive}
                 aria-hidden={!isActive}
               />
