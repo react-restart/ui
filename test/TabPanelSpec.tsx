@@ -12,6 +12,12 @@ describe('<TabPanel>', () => {
     getByText('test').should.exist;
   });
 
+  it('should render a TabPanel with role tabpanel', () => {
+    const { getByRole } = render(<TabPanel active>test</TabPanel>);
+
+    getByRole('tabpanel').should.exist;
+  });
+
   it('should not render if not active and mountOnEnter=true', () => {
     const { queryByText } = render(<TabPanel mountOnEnter>test</TabPanel>);
 
@@ -82,6 +88,44 @@ describe('<TabPanel>', () => {
   });
 
   describe('useTabPanel', () => {
+    it('should have role set to tabpanel', () => {
+      let props: any;
+      function Wrapper(wrapperProps: any) {
+        const [_props] = useTabPanel(wrapperProps);
+        props = _props;
+        return null;
+      }
+
+      render(<Wrapper />);
+
+      props.role.should.equal('tabpanel');
+    });
+
+    it('should have role tabpanel also within a context', () => {
+      let props: any;
+      function Wrapper(wrapperProps: any) {
+        const [_props] = useTabPanel(wrapperProps);
+        props = _props;
+        return null;
+      }
+
+      render(
+        <TabContext.Provider
+          value={{
+            onSelect: sinon.spy(),
+            mountOnEnter: true,
+            unmountOnExit: false,
+            getControlledId: sinon.spy(),
+            getControllerId: sinon.spy(),
+          }}
+        >
+          <Wrapper />
+        </TabContext.Provider>,
+      );
+
+      props.role.should.equal('tabpanel');
+    });
+
     it('should use mountOnEnter from props if provided', () => {
       let meta: any;
       function Wrapper(wrapperProps: any) {
