@@ -1,31 +1,36 @@
 import { render, fireEvent } from '@testing-library/react';
+import sinon from 'sinon';
+import { expect } from 'chai';
+
 import Anchor from '../src/Anchor';
 
 describe('Anchor', () => {
   it('renders an anchor tag', () => {
     const { container } = render(<Anchor data-testid="anchor" />);
 
-    container.firstChild.tagName.should.equal('A');
+    container.firstElementChild!.tagName.should.equal('A');
   });
 
   it('forwards provided href', () => {
     const { container } = render(<Anchor href="http://google.com" />);
 
-    container.firstChild.getAttribute('href').should.equal('http://google.com');
+    container
+      .firstElementChild!.getAttribute('href')!
+      .should.equal('http://google.com');
   });
 
-  // xit('ensures that an href is provided', () => {
-  //   mount(<Anchor />)
-  //     .getDOMNode()
-  //     .hasAttribute('href').should.be.true;
-  // });
+  it('ensures that a href is a hash if none provided', () => {
+    const { container } = render(<Anchor />);
+
+    container.firstElementChild!.getAttribute('href')!.should.equal('#');
+  });
 
   it('forwards onClick handler', () => {
     const handleClick = sinon.spy();
 
     const { container } = render(<Anchor onClick={handleClick} />);
 
-    fireEvent.click(container.firstChild);
+    fireEvent.click(container.firstChild!);
 
     handleClick.should.have.been.calledOnce;
   });
@@ -35,7 +40,7 @@ describe('Anchor', () => {
 
     const { container } = render(<Anchor onClick={handleClick} />);
 
-    fireEvent.keyDown(container.firstChild, { key: ' ' });
+    fireEvent.keyDown(container.firstChild!, { key: ' ' });
 
     handleClick.should.have.been.calledOnce;
   });
@@ -47,7 +52,7 @@ describe('Anchor', () => {
       <Anchor href="http://google.com" onKeyDown={onKeyDownSpy} />,
     );
 
-    fireEvent.keyDown(container.firstChild, { key: ' ' });
+    fireEvent.keyDown(container.firstChild!, { key: ' ' });
 
     onKeyDownSpy.should.have.been.calledOnce;
   });
@@ -57,11 +62,11 @@ describe('Anchor', () => {
 
     const { container, rerender } = render(<Anchor onClick={handleClick} />);
 
-    fireEvent.click(container.firstChild);
+    fireEvent.click(container.firstChild!);
 
     rerender(<Anchor onClick={handleClick} href="#" />);
 
-    fireEvent.click(container.firstChild);
+    fireEvent.click(container.firstChild!);
 
     expect(handleClick).to.have.been.calledTwice;
     expect(handleClick.getCall(0).args[0].isDefaultPrevented()).to.be.true;
@@ -72,7 +77,8 @@ describe('Anchor', () => {
     const handleClick = sinon.spy();
 
     fireEvent.click(
-      render(<Anchor href="#foo" onClick={handleClick} />).container.firstChild,
+      render(<Anchor href="#foo" onClick={handleClick} />).container
+        .firstChild!,
     );
 
     expect(handleClick).to.have.been.calledOnce;
@@ -101,7 +107,7 @@ describe('Anchor', () => {
     expect(
       render(
         <Anchor href="http://google.com" />,
-      ).container.firstChild.hasAttribute('role'),
+      ).container.firstElementChild!.hasAttribute('role'),
     ).to.be.false;
   });
 });
