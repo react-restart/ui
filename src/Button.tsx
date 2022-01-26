@@ -80,6 +80,14 @@ export function useButtonProps({
     }
   };
 
+  if (tagName === 'a') {
+    // Ensure there's a href so Enter can trigger anchor button.
+    href ||= '#';
+    if (disabled) {
+      href = undefined;
+    }
+  }
+
   return [
     {
       role: 'button',
@@ -87,7 +95,7 @@ export function useButtonProps({
       // e.g. <Tag {...props} {...hookProps} />
       disabled: undefined,
       tabIndex: disabled ? undefined : tabIndex,
-      href: tagName === 'a' && disabled ? undefined : href,
+      href,
       target: tagName === 'a' ? target : undefined,
       'aria-disabled': !disabled ? undefined : disabled,
       rel: tagName === 'a' ? rel : undefined,

@@ -163,4 +163,10 @@ describe('<Button>', () => {
 
     expect(clickSpy).to.have.not.been.called;
   });
+
+  it('should render an anchor with # if href not provided', () => {
+    const { container } = render(<Button as="a">Title</Button>);
+
+    container.firstElementChild!.getAttribute('href')!.should.equal('#');
+  });
 });
