@@ -1,3 +1,15 @@
+## [1.0.1](https://github.com/react-restart/ui/compare/v0.2.6...v1.0.1) (2022-01-31)
+
+
+### Bug Fixes
+
+* **Button:** add `href="#"` when no `href` provided for anchors ([#46](https://github.com/react-restart/ui/issues/46)) ([fc33f85](https://github.com/react-restart/ui/commit/fc33f8537d809d1415437c9bbbbb557bbee6c622))
+* **TabPanel:** export role from useTabPanel hook ([#45](https://github.com/react-restart/ui/issues/45)) ([32f21c7](https://github.com/react-restart/ui/commit/32f21c7be3ec2b1d98a0c1853f9798297aa0c52b))
+
+
+
+
+
 ## [0.2.6](https://github.com/react-restart/ui/compare/v0.2.4...v0.2.6) (2022-01-18)
 
 
