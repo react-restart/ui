@@ -7,6 +7,7 @@ import SelectableContext, { makeEventKey } from './SelectableContext';
 import { EventKey, DynamicRefForwardingComponent } from './types';
 import Button from './Button';
 import { dataAttr } from './DataKey';
+import TabContext from './TabContext';
 
 export interface NavItemProps extends React.HTMLAttributes<HTMLElement> {
   /**
@@ -54,6 +55,7 @@ export function useNavItem({
 }: UseNavItemOptions) {
   const parentOnSelect = useContext(SelectableContext);
   const navContext = useContext(NavContext);
+  const tabContext = useContext(TabContext);
 
   let isActive = active;
   const props = { role } as any;
@@ -68,10 +70,21 @@ export function useNavItem({
     props[dataAttr('event-key')] = key;
 
     props.id = contextControllerId || id;
-    props['aria-controls'] = contextControlledId;
 
     isActive =
       active == null && key != null ? navContext.activeKey === key : active;
+
+    /**
+     * Simplified scenario for `mountOnEnter`.
+     *
+     * While it would make sense to keep 'aria-controls' for tabs that have been mounted at least
+     * once, it would also complicate the code quite a bit, for very little gain.
+     * The following implementation is probably good enough.
+     *
+     * @see https://github.com/react-restart/ui/pull/40#issuecomment-1009971561
+     */
+    if (isActive || (!tabContext?.unmountOnExit && !tabContext?.mountOnEnter))
+      props['aria-controls'] = contextControlledId;
   }
 
   if (props.role === 'tab') {
