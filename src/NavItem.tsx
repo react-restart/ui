@@ -74,7 +74,16 @@ export function useNavItem({
     isActive =
       active == null && key != null ? navContext.activeKey === key : active;
 
-    if (!tabContext?.unmountOnExit || isActive)
+    /**
+     * Simplified scenario for `mountOnEnter`.
+     *
+     * While it would make sense to keep 'aria-controls' for tabs that have been mounted at least
+     * once, it would also complicate the code quite a bit, for very little gain.
+     * The following implementation is probably good enough.
+     *
+     * @see https://github.com/react-restart/ui/pull/40#issuecomment-1009971561
+     */
+    if (isActive || (!tabContext?.unmountOnExit && !tabContext?.mountOnEnter))
       props['aria-controls'] = contextControlledId;
   }
 

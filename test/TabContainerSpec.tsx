@@ -160,6 +160,27 @@ describe('<Tabs>', () => {
     expect(queryByText('Tab 2')).to.exist;
   });
 
+  it('Should include "aria-controls" matching rendered TabPanel', () => {
+    const { queryByText, getByText } = render(
+      <Tabs defaultActiveKey={1}>
+        <Nav>
+          <NavItem eventKey="1">One</NavItem>
+
+          <NavItem eventKey="2">Two</NavItem>
+        </Nav>
+        <div>
+          <TabPanel eventKey="1">Tab 1</TabPanel>
+          <TabPanel eventKey="2">Tab 2</TabPanel>
+        </div>
+      </Tabs>,
+    );
+
+    expect(queryByText('Tab 1')).to.exist;
+    expect(queryByText('Tab 2')).to.exist;
+    expect(getByText('One').getAttribute('aria-controls')).to.exist;
+    expect(getByText('Two').getAttribute('aria-controls')).to.exist;
+  });
+
   it('Should include "aria-controls" only for rendered tabs when unmountOnExit is true', () => {
     const { queryByText, getByText } = render(
       <Tabs unmountOnExit defaultActiveKey={1}>
@@ -181,6 +202,31 @@ describe('<Tabs>', () => {
     expect(getByText('Two').getAttribute('aria-controls')).to.not.exist;
     fireEvent.click(getByText('Two'));
     expect(queryByText('Tab 1')).to.not.exist;
+    expect(queryByText('Tab 2')).to.exist;
+    expect(getByText('One').getAttribute('aria-controls')).to.not.exist;
+    expect(getByText('Two').getAttribute('aria-controls')).to.exist;
+  });
+
+  it('Should include "aria-controls" only for the active tab, when mountOnEnter is true', () => {
+    const { queryByText, getByText } = render(
+      <Tabs mountOnEnter defaultActiveKey={1}>
+        <Nav>
+          <NavItem eventKey="1">One</NavItem>
+
+          <NavItem eventKey="2">Two</NavItem>
+        </Nav>
+        <div>
+          <TabPanel eventKey="1">Tab 1</TabPanel>
+          <TabPanel eventKey="2">Tab 2</TabPanel>
+        </div>
+      </Tabs>,
+    );
+    expect(queryByText('Tab 1')).to.exist;
+    expect(queryByText('Tab 2')).to.not.exist;
+    expect(getByText('One').getAttribute('aria-controls')).to.exist;
+    expect(getByText('Two').getAttribute('aria-controls')).to.not.exist;
+    fireEvent.click(getByText('Two'));
+    expect(queryByText('Tab 1')).to.exist;
     expect(queryByText('Tab 2')).to.exist;
     expect(getByText('One').getAttribute('aria-controls')).to.not.exist;
     expect(getByText('Two').getAttribute('aria-controls')).to.exist;
