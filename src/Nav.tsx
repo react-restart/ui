@@ -87,7 +87,7 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
       const activeChild = currentListNode.querySelector<HTMLElement>(
         '[aria-selected=true]',
       );
-      if (!activeChild) return null;
+      if (!activeChild || activeChild !== document.activeElement) return null;
 
       const index = items.indexOf(activeChild);
       if (index === -1) return null;
