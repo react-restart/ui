@@ -1,3 +1,15 @@
+## [1.0.2](https://github.com/react-restart/ui/compare/v1.0.1...v1.0.2) (2022-03-04)
+
+
+### Bug Fixes
+
+* issue 5711 from React-Bootstrap ([#53](https://github.com/react-restart/ui/issues/53)) ([a81ec97](https://github.com/react-restart/ui/commit/a81ec97dd32ade77217840a3a0f0d357959fe72f))
+* **NavItem:** do not include aria-controls if the related element is not mounted ([#40](https://github.com/react-restart/ui/issues/40)) ([1aeaaf3](https://github.com/react-restart/ui/commit/1aeaaf378699ce5dd19c0543c21e95a88909b06f))
+
+
+
+
+
 ## [1.0.1](https://github.com/react-restart/ui/compare/v0.2.6...v1.0.1) (2022-01-31)
 
 
