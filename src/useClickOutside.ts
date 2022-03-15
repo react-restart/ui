@@ -31,6 +31,12 @@ export interface ClickOutsideOptions {
   clickTrigger?: MouseEvents;
 }
 
+const InitialTriggerEvents: Partial<Record<MouseEvents, MouseEvents>> = {
+  click: 'mousedown',
+  mouseup: 'mousedown',
+  pointerup: 'pointerdown',
+};
+
 /**
  * The `useClickOutside` hook registers your callback on the document that fires
  * when a pointer event is registered outside of the provided ref or element.
@@ -47,6 +53,7 @@ function useClickOutside(
   { disabled, clickTrigger = 'click' }: ClickOutsideOptions = {},
 ) {
   const preventMouseClickOutsideRef = useRef(false);
+  const waitingForTrigger = useRef(false);
 
   const handleMouseCapture = useCallback(
     (e) => {
@@ -62,10 +69,21 @@ function useClickOutside(
         !currentTarget ||
         isModifiedEvent(e) ||
         !isLeftClickEvent(e) ||
-        !!contains(currentTarget, e.target);
+        !!contains(currentTarget, e.target) ||
+        waitingForTrigger.current;
+
+      waitingForTrigger.current = false;
     },
     [ref],
   );
+
+  const handleInitialMouse = useEventCallback((e: MouseEvent) => {
+    const currentTarget = getRefTarget(ref);
+
+    if (currentTarget && contains(currentTarget, e.target as any)) {
+      waitingForTrigger.current = true;
+    }
+  });
 
   const handleMouse = useEventCallback((e: MouseEvent) => {
     if (!preventMouseClickOutsideRef.current) {
@@ -81,6 +99,16 @@ function useClickOutside(
     // Store the current event to avoid triggering handlers immediately
     // https://github.com/facebook/react/issues/20074
     let currentEvent = (doc.defaultView || window).event;
+
+    let removeInitalTriggerListener: (() => void) | null = null;
+    if (InitialTriggerEvents[clickTrigger]) {
+      removeInitalTriggerListener = listen(
+        doc as any,
+        InitialTriggerEvents[clickTrigger]!,
+        handleInitialMouse,
+        true,
+      );
+    }
 
     // Use capture for this listener so it fires before React's listener, to
     // avoid false positives in the contains() check below if the target DOM
@@ -109,6 +137,7 @@ function useClickOutside(
     }
 
     return () => {
+      removeInitalTriggerListener?.();
       removeMouseCaptureListener();
       removeMouseListener();
       mobileSafariHackListeners.forEach((remove) => remove());
