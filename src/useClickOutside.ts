@@ -100,9 +100,9 @@ function useClickOutside(
     // https://github.com/facebook/react/issues/20074
     let currentEvent = (doc.defaultView || window).event;
 
-    let removeInitalTriggerListener: (() => void) | null = null;
+    let removeInitialTriggerListener: (() => void) | null = null;
     if (InitialTriggerEvents[clickTrigger]) {
-      removeInitalTriggerListener = listen(
+      removeInitialTriggerListener = listen(
         doc as any,
         InitialTriggerEvents[clickTrigger]!,
         handleInitialMouse,
@@ -137,12 +137,19 @@ function useClickOutside(
     }
 
     return () => {
-      removeInitalTriggerListener?.();
+      removeInitialTriggerListener?.();
       removeMouseCaptureListener();
       removeMouseListener();
       mobileSafariHackListeners.forEach((remove) => remove());
     };
-  }, [ref, disabled, clickTrigger, handleMouseCapture, handleMouse]);
+  }, [
+    ref,
+    disabled,
+    clickTrigger,
+    handleMouseCapture,
+    handleInitialMouse,
+    handleMouse,
+  ]);
 }
 
 export default useClickOutside;
