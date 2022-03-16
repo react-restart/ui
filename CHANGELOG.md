@@ -1,3 +1,14 @@
+# [1.1.0](https://github.com/react-restart/ui/compare/v1.0.2...v1.1.0) (2022-03-16)
+
+
+### Features
+
+* **useClickOutside:** ensure clicks are fully outside ([#54](https://github.com/react-restart/ui/issues/54)) ([2e89ca8](https://github.com/react-restart/ui/commit/2e89ca84a17b7d94515b29e2a6c42ca3f85f293c))
+
+
+
+
+
 ## [1.0.2](https://github.com/react-restart/ui/compare/v1.0.1...v1.0.2) (2022-03-04)
 
 
