@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -5,7 +6,6 @@ import Transition from 'react-transition-group/Transition';
 
 import TabContext from '../src/TabContext';
 import TabPanel, { useTabPanel } from '../src/TabPanel';
-import React from 'react';
 import { Button, Nav, Tabs, useNavItem } from '../src';
 
 describe('<TabPanel>', () => {

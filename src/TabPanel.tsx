@@ -61,23 +61,20 @@ export function useTabPanel({
   transition,
   unmountOnExit,
   role = 'tabpanel',
+  onEnter,
+  onEntering,
+  onEntered,
+  onExit,
+  onExiting,
+  onExited,
   ...props
 }: TabPanelProps): [any, TabPanelMetadata] {
   const context = useContext(TabContext);
-  const {
-    onEnter,
-    onEntering,
-    onEntered,
-    onExit,
-    onExiting,
-    onExited,
-    ...remainingProps
-  } = props;
 
   if (!context)
     return [
       {
-        ...remainingProps,
+        ...props,
         role,
       },
       {
@@ -100,7 +97,7 @@ export function useTabPanel({
 
   return [
     {
-      ...remainingProps,
+      ...props,
       role,
       id: getControlledId(eventKey!),
       'aria-labelledby': getControllerId(eventKey!),
