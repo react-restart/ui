@@ -61,6 +61,12 @@ export function useTabPanel({
   transition,
   unmountOnExit,
   role = 'tabpanel',
+  onEnter,
+  onEntering,
+  onEntered,
+  onExit,
+  onExiting,
+  onExited,
   ...props
 }: TabPanelProps): [any, TabPanelMetadata] {
   const context = useContext(TabContext);
@@ -77,6 +83,12 @@ export function useTabPanel({
         mountOnEnter,
         transition,
         unmountOnExit,
+        onEnter,
+        onEntering,
+        onEntered,
+        onExit,
+        onExiting,
+        onExited,
       },
     ];
 
@@ -99,6 +111,12 @@ export function useTabPanel({
       transition: transition || rest.transition,
       mountOnEnter: mountOnEnter != null ? mountOnEnter : rest.mountOnEnter,
       unmountOnExit: unmountOnExit != null ? unmountOnExit : rest.unmountOnExit,
+      onEnter,
+      onEntering,
+      onEntered,
+      onExit,
+      onExiting,
+      onExited,
     },
   ];
 }
