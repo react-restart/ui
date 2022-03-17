@@ -160,6 +160,8 @@ when styled similarly.
 
 ```jsx live
 import clsx from "clsx";
+import Transition from "react-transition-group/Transition";
+import "../src/css/transitions.css";
 
 import {
   Button,
@@ -168,6 +170,24 @@ import {
   Nav,
   useNavItem,
 } from "@restart/ui";
+
+const FADE_DURATION = 200;
+
+const fadeStyles = {
+  entering: "show",
+  entered: "show",
+};
+
+const Fade = ({ children, ...props }) => (
+  <Transition {...props} timeout={FADE_DURATION}>
+    {(status, innerProps) =>
+      React.cloneElement(children, {
+        ...innerProps,
+        className: `fade ${fadeStyles[status]} ${children.props.className}`,
+      })
+    }
+  </Transition>
+);
 
 function Tab({ eventKey, ...props }) {
   const [navItemProps, meta] = useNavItem({
@@ -201,7 +221,11 @@ function Tab({ eventKey, ...props }) {
     <Tab eventKey="3">Three</Tab>
   </Nav>
   <div className="p-6">
-    <TabPanel eventKey="1">
+    <TabPanel
+      eventKey="1"
+      transition={Fade}
+      onEnter={() => console.log("onenee")}
+    >
       <p>one!</p>
     </TabPanel>
     <TabPanel eventKey="2">

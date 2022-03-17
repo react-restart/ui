@@ -1,9 +1,12 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import Transition from 'react-transition-group/Transition';
 
 import TabContext from '../src/TabContext';
 import TabPanel, { useTabPanel } from '../src/TabPanel';
+import React from 'react';
+import { Button, Nav, Tabs, useNavItem } from '../src';
 
 describe('<TabPanel>', () => {
   it('should render a TabPanel', () => {
@@ -64,6 +67,64 @@ describe('<TabPanel>', () => {
     );
 
     getControlledIdSpy.should.be.calledWith('mykey');
+  });
+
+  it('should fire transition events', async () => {
+    const transitionSpy = sinon.spy();
+
+    const FADE_DURATION = 200;
+
+    const fadeStyles = {
+      entering: 'show',
+      entered: 'show',
+    };
+
+    const Fade = ({ children, ...props }: any) => (
+      <Transition {...props} timeout={FADE_DURATION}>
+        {(status: keyof typeof fadeStyles, innerProps: any) =>
+          React.cloneElement(children, {
+            ...innerProps,
+            className: `fade ${fadeStyles[status]} ${children.props.className}`,
+          })
+        }
+      </Transition>
+    );
+    function Tab({ eventKey, ...props }: any) {
+      const [navItemProps, _] = useNavItem({
+        key: eventKey,
+      });
+
+      return <Button {...props} {...navItemProps} />;
+    }
+    const { getByText } = render(
+      <Tabs defaultActiveKey="2">
+        <Nav className="flex border-b">
+          <Tab eventKey="1">Tab 1</Tab>
+          <Tab eventKey="2">Tab 2</Tab>
+        </Nav>
+        <TabPanel
+          transition={Fade}
+          eventKey="1"
+          onEnter={transitionSpy}
+          onEntering={transitionSpy}
+          onEntered={transitionSpy}
+          onExit={transitionSpy}
+          onExiting={transitionSpy}
+          onExited={transitionSpy}
+        >
+          Tab 1 content
+        </TabPanel>
+        <TabPanel title="Tab 2" eventKey="2">
+          Tab 2 content
+        </TabPanel>
+      </Tabs>,
+    );
+
+    fireEvent.click(getByText('Tab 1'));
+    await waitFor(() => transitionSpy.should.have.been.calledThrice);
+
+    fireEvent.click(getByText('Tab 2'));
+    await waitFor(() => transitionSpy.callCount.should.equal(6));
   });
 
   it('should derive active state from context', () => {
