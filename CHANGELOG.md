@@ -1,3 +1,20 @@
+# [1.2.0](https://github.com/react-restart/ui/compare/v1.0.2...v1.2.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* **Portal:** remove proptypes ([#56](https://github.com/react-restart/ui/issues/56)) ([1db951a](https://github.com/react-restart/ui/commit/1db951abf0c47d3a3b695816bdc5b9ba57b35d71))
+* **useTabPanel:** move react-transition-group functions to metadata ([#55](https://github.com/react-restart/ui/issues/55)) ([60ea5c5](https://github.com/react-restart/ui/commit/60ea5c51bc0cd678c1aac3c89649625bb2b64466))
+
+
+### Features
+
+* **useClickOutside:** ensure clicks are fully outside ([#54](https://github.com/react-restart/ui/issues/54)) ([2e89ca8](https://github.com/react-restart/ui/commit/2e89ca84a17b7d94515b29e2a6c42ca3f85f293c))
+
+
+
+
+
 # [1.1.0](https://github.com/react-restart/ui/compare/v1.0.2...v1.1.0) (2022-03-16)
 
 
