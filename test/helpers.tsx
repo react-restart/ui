@@ -1,11 +1,11 @@
-export function shouldWarn(about) {
-  console.error.expected.push(about);
+export function shouldWarn(about: unknown) {
+  (console.error as any).expected.push(about);
 }
 
-let style;
-let seen = [];
+let style: HTMLStyleElement;
+let seen: string[] = [];
 
-export function injectCss(rules) {
+export function injectCss(rules: string) {
   if (seen.indexOf(rules) !== -1) {
     return;
   }
@@ -13,7 +13,7 @@ export function injectCss(rules) {
   style =
     style ||
     (function iife() {
-      let _style = document.createElement('style');
+      const _style = document.createElement('style');
       _style.appendChild(document.createTextNode(''));
       document.head.appendChild(_style);
       return _style;
@@ -27,6 +27,6 @@ injectCss.reset = () => {
   if (style) {
     document.head.removeChild(style);
   }
-  style = null;
+  style = null!;
   seen = [];
 };

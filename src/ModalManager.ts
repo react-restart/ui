@@ -76,14 +76,13 @@ class ModalManager {
       [paddingProp]: container.style[paddingProp],
     };
 
-    if (containerState.scrollBarWidth) {
-      // use computed style, here to get the real padding
-      // to add our scrollbar width
-      style[paddingProp] = `${
-        parseInt(css(container, paddingProp) || '0', 10) +
-        containerState.scrollBarWidth
-      }px`;
-    }
+    // use computed style, here to get the real padding
+    // to add our scrollbar width if present
+    style[paddingProp] = `${
+      parseInt(css(container, paddingProp) || '0', 10) +
+      (containerState.scrollBarWidth || 0)
+    }px`;
+
     container.setAttribute(OPEN_DATA_ATTRIBUTE, '');
 
     css(container, style as any);
