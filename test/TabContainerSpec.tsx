@@ -132,10 +132,16 @@ describe('<Tabs>', () => {
     expect(getByText('Tab 1').getAttribute('aria-hidden')).to.equal('false');
     expect(getByText('Tab 2').getAttribute('aria-hidden')).to.equal('true');
 
+    expect(getByText('One').getAttribute('aria-selected')).to.equal('true');
+    expect(getByText('Two').getAttribute('aria-selected')).to.equal('false');
+
     fireEvent.click(getByText('Two'));
 
     expect(getByText('Tab 1').getAttribute('aria-hidden')).to.equal('true');
     expect(getByText('Tab 2').getAttribute('aria-hidden')).to.equal('false');
+
+    expect(getByText('One').getAttribute('aria-selected')).to.equal('false');
+    expect(getByText('Two').getAttribute('aria-selected')).to.equal('true');
   });
 
   it('Should mount and unmount tabs when set', () => {

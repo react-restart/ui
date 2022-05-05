@@ -88,14 +88,15 @@ export function useNavItem({
   }
 
   if (props.role === 'tab') {
+    props['aria-selected'] = isActive;
+
+    if (!isActive) {
+      props.tabIndex = -1;
+    }
+
     if (disabled) {
       props.tabIndex = -1;
       props['aria-disabled'] = true;
-    }
-    if (isActive) {
-      props['aria-selected'] = isActive;
-    } else {
-      props.tabIndex = -1;
     }
   }
 
