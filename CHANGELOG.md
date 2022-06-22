@@ -1,3 +1,22 @@
+# [1.3.0](https://github.com/react-restart/ui/compare/v1.0.2...v1.3.0) (2022-06-22)
+
+
+### Bug Fixes
+
+* **NavItem:** inactive tabs should have aria-selected=“false” ([#59](https://github.com/react-restart/ui/issues/59)) ([0db76bb](https://github.com/react-restart/ui/commit/0db76bbc183c869d80fbc3f460541c2e98aebb01))
+* **Portal:** remove proptypes ([#56](https://github.com/react-restart/ui/issues/56)) ([1db951a](https://github.com/react-restart/ui/commit/1db951abf0c47d3a3b695816bdc5b9ba57b35d71))
+* update dependencies ([#60](https://github.com/react-restart/ui/issues/60)) ([dea531a](https://github.com/react-restart/ui/commit/dea531adf748eb6066e32dc03b0e965a1fd7a1c0))
+* **useTabPanel:** move react-transition-group functions to metadata ([#55](https://github.com/react-restart/ui/issues/55)) ([60ea5c5](https://github.com/react-restart/ui/commit/60ea5c51bc0cd678c1aac3c89649625bb2b64466))
+
+
+### Features
+
+* **useClickOutside:** ensure clicks are fully outside ([#54](https://github.com/react-restart/ui/issues/54)) ([2e89ca8](https://github.com/react-restart/ui/commit/2e89ca84a17b7d94515b29e2a6c42ca3f85f293c))
+
+
+
+
+
 # [1.2.0](https://github.com/react-restart/ui/compare/v1.0.2...v1.2.0) (2022-03-25)
 
 
