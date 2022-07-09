@@ -14,6 +14,7 @@ export interface UseButtonPropsOptions extends AnchorOptions {
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
   tagName?: keyof JSX.IntrinsicElements;
+  role?: React.AriaRole | undefined;
 }
 
 export function isTrivialHref(href?: string) {
@@ -23,7 +24,7 @@ export function isTrivialHref(href?: string) {
 export interface AriaButtonProps {
   type?: ButtonType | undefined;
   disabled: boolean | undefined;
-  role?: 'button';
+  role?: React.AriaRole;
   tabIndex?: number | undefined;
   href?: string | undefined;
   target?: string | undefined;
@@ -43,6 +44,7 @@ export function useButtonProps({
   href,
   target,
   rel,
+  role,
   onClick,
   tabIndex = 0,
   type,
@@ -90,7 +92,7 @@ export function useButtonProps({
 
   return [
     {
-      role: 'button',
+      role: role ?? 'button',
       // explicitly undefined so that it overrides the props disabled in a spread
       // e.g. <Tag {...props} {...hookProps} />
       disabled: undefined,

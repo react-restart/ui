@@ -32,7 +32,7 @@ const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
       },
     );
 
-    if ((isTrivialHref(props.href) && !props.role) || props.role === 'button') {
+    if (isTrivialHref(props.href) || props.role === 'button') {
       return (
         <a ref={ref} {...props} {...buttonProps} onKeyDown={handleKeyDown} />
       );
