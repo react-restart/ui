@@ -1,3 +1,14 @@
+## [1.3.1](https://github.com/react-restart/ui/compare/v1.3.0...v1.3.1) (2022-07-22)
+
+
+### Bug Fixes
+
+* **Anchor:** don't check role when applying button props ([#62](https://github.com/react-restart/ui/issues/62)) ([a18e665](https://github.com/react-restart/ui/commit/a18e66599ea9c5c3ddc0f461bf5186980c4ff168))
+
+
+
+
+
 # [1.3.0](https://github.com/react-restart/ui/compare/v1.0.2...v1.3.0) (2022-06-22)
 
 
