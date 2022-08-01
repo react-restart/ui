@@ -14,7 +14,7 @@ export interface UseButtonPropsOptions extends AnchorOptions {
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
   tagName?: keyof JSX.IntrinsicElements;
-  role?: React.AriaRole | undefined;
+  role?: React.AriaRole;
 }
 
 export function isTrivialHref(href?: string) {
@@ -22,14 +22,14 @@ export function isTrivialHref(href?: string) {
 }
 
 export interface AriaButtonProps {
-  type?: ButtonType | undefined;
-  disabled: boolean | undefined;
+  type?: ButtonType;
+  disabled: boolean;
   role?: React.AriaRole;
-  tabIndex?: number | undefined;
-  href?: string | undefined;
-  target?: string | undefined;
-  rel?: string | undefined;
-  'aria-disabled'?: true | undefined;
+  tabIndex?: number;
+  href?: string;
+  target?: string;
+  rel?: string;
+  'aria-disabled'?: true;
   onClick?: (event: React.MouseEvent | React.KeyboardEvent) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
 }
@@ -113,18 +113,18 @@ export interface BaseButtonProps {
    * Control the underlying rendered element directly by passing in a valid
    * component type
    */
-  as?: keyof JSX.IntrinsicElements | undefined;
+  as?: keyof JSX.IntrinsicElements;
 
   /** The disabled state of the button */
-  disabled?: boolean | undefined;
+  disabled?: boolean;
 
   /** Optionally specify an href to render a `<a>` tag styled as a button */
-  href?: string | undefined;
+  href?: string;
 
   /** Anchor target, when rendering an anchor as a button */
-  target?: string | undefined;
+  target?: string;
 
-  rel?: string | undefined;
+  rel?: string;
 }
 
 export interface ButtonProps
