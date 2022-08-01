@@ -23,7 +23,7 @@ export function isTrivialHref(href?: string) {
 
 export interface AriaButtonProps {
   type?: ButtonType;
-  disabled: boolean;
+  disabled: boolean | undefined;
   role?: React.AriaRole;
   tabIndex?: number;
   href?: string;
