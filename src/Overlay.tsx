@@ -8,6 +8,7 @@ import usePopper, {
   Placement,
   UsePopperOptions,
   UsePopperState,
+  VirtualElement,
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
@@ -61,8 +62,8 @@ export interface OverlayProps extends TransitionCallbacks {
   popperConfig?: Omit<UsePopperOptions, 'placement'>;
 
   /**
-   * A DOM Element, Ref to an element, or function that returns either. The `container` will have the Portal children
-   * appended to it.
+   * A DOM Element, [Virtual Element](https://popper.js.org/docs/v2/virtual-elements/), Ref to an element, or
+   * function that returns either. The `target` element is where the overlay is positioned relative to.
    */
   container?: DOMContainer;
 
@@ -70,7 +71,7 @@ export interface OverlayProps extends TransitionCallbacks {
    * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
    * the overlay is positioned relative to.
    */
-  target: DOMContainer;
+  target: DOMContainer<HTMLElement | VirtualElement>;
 
   /**
    * Set the visibility of the Overlay
