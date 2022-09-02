@@ -12,7 +12,10 @@ const disabledApplyStylesModifier = {
 };
 
 // until docjs supports type exports...
-export type Modifier<Name, Options> = Popper.Modifier<Name, Options>;
+export type Modifier<Name, Options extends Popper.Obj> = Popper.Modifier<
+  Name,
+  Options
+>;
 export type Options = Popper.Options;
 export type Instance = Popper.Instance;
 export type Placement = Popper.Placement;
@@ -55,7 +58,10 @@ export interface UsePopperState {
   state?: State;
 }
 
-const ariaDescribedByModifier: Modifier<'ariaDescribedBy', undefined> = {
+const ariaDescribedByModifier: Modifier<
+  'ariaDescribedBy',
+  Record<string, never>
+> = {
   name: 'ariaDescribedBy',
   enabled: true,
   phase: 'afterWrite',
