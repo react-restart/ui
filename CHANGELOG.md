@@ -1,3 +1,19 @@
+# [1.4.0](https://github.com/react-restart/ui/compare/v1.3.1...v1.4.0) (2022-09-05)
+
+
+### Bug Fixes
+
+* **usePopper:** adjust types to enable TypeScript 4.8 compatibility ([#66](https://github.com/react-restart/ui/issues/66)) ([c267a0a](https://github.com/react-restart/ui/commit/c267a0a0a6cab37f7147da7bfd256e2dc640c3bd))
+
+
+### Features
+
+* **Overlay:** allow popper virtual elements as targets ([#64](https://github.com/react-restart/ui/issues/64)) ([de7ce33](https://github.com/react-restart/ui/commit/de7ce33ea3af51d77e589bf51f41ca071b3c0a6f))
+
+
+
+
+
 ## [1.3.1](https://github.com/react-restart/ui/compare/v1.3.0...v1.3.1) (2022-07-22)
 
 
