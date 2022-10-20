@@ -21,6 +21,15 @@ export type ContainerState = {
 
 export const OPEN_DATA_ATTRIBUTE = dataAttr('modal-open');
 
+function resetModalTopAttribute(modals: ModalInstance[]) {
+  const max = modals.length - 1;
+  modals.forEach((modal, index) => {
+    const value = index === max ? 'true' : 'false';
+    modal.backdrop.setAttribute('data-top', value);
+    modal.dialog.setAttribute('data-top', value);
+  });
+}
+
 /**
  * Manages a stack of Modals as well as ensuring
  * body scrolling is is disabled and padding accounted for
@@ -108,6 +117,7 @@ class ModalManager {
 
     modalIdx = this.modals.length;
     this.modals.push(modal);
+    resetModalTopAttribute(this.modals);
     this.setModalAttributes(modal);
     if (modalIdx !== 0) {
       return modalIdx;
@@ -133,6 +143,7 @@ class ModalManager {
     }
 
     this.modals.splice(modalIdx, 1);
+    resetModalTopAttribute(this.modals);
 
     // if that was the last modal in a container,
     // clean up the container
