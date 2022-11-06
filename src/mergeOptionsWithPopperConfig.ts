@@ -57,6 +57,7 @@ export default function mergeOptionsWithPopperConfig({
       ...modifiers,
       eventListeners: {
         enabled: enableEvents,
+        options: modifiers.eventListeners?.options,
       },
       preventOverflow: {
         ...modifiers.preventOverflow,
