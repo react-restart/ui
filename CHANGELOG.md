@@ -1,3 +1,14 @@
+## [1.4.1](https://github.com/react-restart/ui/compare/v1.4.0...v1.4.1) (2022-11-06)
+
+
+### Bug Fixes
+
+* forward eventListeners options to popper config ([#69](https://github.com/react-restart/ui/issues/69)) ([bbeaadd](https://github.com/react-restart/ui/commit/bbeaadd00f6db7cb665f9c0549828b915ff5ecf9))
+
+
+
+
+
 # [1.4.0](https://github.com/react-restart/ui/compare/v1.3.1...v1.4.0) (2022-09-05)
 
 
