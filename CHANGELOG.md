@@ -1,3 +1,14 @@
+# [1.5.0](https://github.com/react-restart/ui/compare/v1.4.1...v1.5.0) (2023-01-16)
+
+
+### Features
+
+* add imperative transition API ([#71](https://github.com/react-restart/ui/issues/71)) ([4fff972](https://github.com/react-restart/ui/commit/4fff972ff2df5ab6bcc27cb7afc64c0e78198ed7))
+
+
+
+
+
 ## [1.4.1](https://github.com/react-restart/ui/compare/v1.4.0...v1.4.1) (2022-11-06)
 
 
