@@ -1,3 +1,14 @@
+## [1.5.1](https://github.com/react-restart/ui/compare/v1.5.0...v1.5.1) (2023-01-16)
+
+
+### Bug Fixes
+
+* bad publish ([508a052](https://github.com/react-restart/ui/commit/508a05292fdaefa8c42e77467de43bbaf39280ca))
+
+
+
+
+
 # [1.5.0](https://github.com/react-restart/ui/compare/v1.4.1...v1.5.0) (2023-01-16)
 
 
