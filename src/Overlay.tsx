@@ -12,8 +12,9 @@ import usePopper, {
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
-import { TransitionCallbacks } from './types';
+import { TransitionCallbacks, TransitionComponent } from './types';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
+import { renderTransition, TransitionHandler } from './ImperativeTransition';
 
 export interface OverlayArrowProps extends Record<string, any> {
   ref: React.RefCallback<HTMLElement>;
@@ -82,9 +83,13 @@ export interface OverlayProps extends TransitionCallbacks {
    * A `react-transition-group` `<Transition/>` component
    * used to animate the overlay as it changes visibility.
    */
-  transition?: React.ComponentType<
-    { in?: boolean; appear?: boolean } & TransitionCallbacks
-  >;
+  transition?: TransitionComponent;
+
+  /**
+   * A transition handler, called with the `show` state and overlay element.
+   * Should return a promise when the transition is complete
+   */
+  runTransition?: TransitionHandler;
 
   /**
    * A Callback fired by the Overlay when it wishes to be hidden.
@@ -132,6 +137,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       containerPadding,
       popperConfig = {},
       transition: Transition,
+      runTransition,
     } = props;
 
     const [rootElement, attachRef] = useCallbackRef<HTMLElement>();
@@ -142,6 +148,8 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
     const target = useWaitForDOMRef(props.target);
 
     const [exited, setExited] = useState(!props.show);
+
+    const hasTransition = !!(Transition || runTransition);
 
     const popper = usePopper(
       target,
@@ -159,7 +167,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
 
     if (props.show) {
       if (exited) setExited(false);
-    } else if (!props.transition && !exited) {
+    } else if (!hasTransition && !exited) {
       setExited(true);
     }
 
@@ -172,7 +180,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
     };
 
     // Don't un-render the overlay while it's transitioning out.
-    const mountOverlay = props.show || (Transition && !exited);
+    const mountOverlay = props.show || (hasTransition && !exited);
 
     useRootClose(rootElement, props.onHide!, {
       disabled: !props.rootClose || props.rootCloseDisabled,
@@ -184,6 +192,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       return null;
     }
 
+    const { onExit, onExiting, onEnter, onEntering, onEntered } = props;
     let child = props.children(
       {
         ...popper.attributes.popper,
@@ -200,26 +209,18 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
           ref: attachArrowRef,
         },
       },
-    );
+    ) as React.ReactElement;
 
-    if (Transition) {
-      const { onExit, onExiting, onEnter, onEntering, onEntered } = props;
-
-      child = (
-        <Transition
-          in={props.show}
-          appear
-          onExit={onExit}
-          onExiting={onExiting}
-          onExited={handleHidden}
-          onEnter={onEnter}
-          onEntering={onEntering}
-          onEntered={onEntered}
-        >
-          {child}
-        </Transition>
-      );
-    }
+    child = renderTransition(Transition, runTransition, {
+      in: !!props.show,
+      children: child,
+      onExit,
+      onExiting,
+      onExited: handleHidden,
+      onEnter,
+      onEntering,
+      onEntered,
+    });
 
     return container ? ReactDOM.createPortal(child, container) : null;
   },

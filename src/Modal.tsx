@@ -23,16 +23,19 @@ import ModalManager from './ModalManager';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
 import useWindow from './useWindow';
+import { renderTransition, TransitionHandler } from './ImperativeTransition';
 
 let manager: ModalManager;
 
-export type ModalTransitionComponent = React.ComponentType<
-  {
-    in: boolean;
-    appear?: boolean;
-    unmountOnExit?: boolean;
-  } & TransitionCallbacks
->;
+export interface ModalTransitionProps extends TransitionCallbacks {
+  in: boolean;
+  appear?: boolean;
+  unmountOnExit?: boolean;
+  children: React.ReactElement;
+}
+
+export type ModalTransitionComponent =
+  React.ComponentType<ModalTransitionProps>;
 
 export interface RenderModalDialogProps {
   style: React.CSSProperties | undefined;
@@ -132,10 +135,23 @@ export interface BaseModalProps extends TransitionCallbacks {
   transition?: ModalTransitionComponent;
 
   /**
+   * A transition handler, called with the `show` state and dialog element.
+   * Should return a promise when the transition is complete
+   */
+  runTransition?: TransitionHandler;
+
+  /**
    * A `react-transition-group` `<Transition/>` component used
    * to control animations for the backdrop components.
    */
   backdropTransition?: ModalTransitionComponent;
+
+  /**
+   * A transition handler, called with the `show` state and backdrop element.
+   * Should return a promise when the transition is complete
+   */
+  runBackdropTransition?: TransitionHandler;
+
   /**
    * When `true` The modal will automatically shift focus to itself when it opens, and
    * replace it to the last focused element when it closes. This also
@@ -224,7 +240,11 @@ const Modal: React.ForwardRefExoticComponent<
       onBackdropClick,
       onEscapeKeyDown,
       transition,
+      runTransition,
+
       backdropTransition,
+      runBackdropTransition,
+
       autoFocus = true,
       enforceFocus = true,
       restoreFocus = true,
@@ -254,6 +274,7 @@ const Modal: React.ForwardRefExoticComponent<
     const prevShow = usePrevious(show);
     const [exited, setExited] = useState(!show);
     const lastFocusRef = useRef<HTMLElement | null>(null);
+    const hasTransition = !!(transition || runTransition);
 
     useImperativeHandle(ref, () => modal, [modal]);
 
@@ -261,7 +282,7 @@ const Modal: React.ForwardRefExoticComponent<
       lastFocusRef.current = activeElement() as HTMLElement;
     }
 
-    if (!transition && !show && !exited) {
+    if (!hasTransition && !show && !exited) {
       setExited(true);
     } else if (show && exited) {
       setExited(false);
@@ -389,8 +410,7 @@ const Modal: React.ForwardRefExoticComponent<
       onExited?.(...args);
     };
 
-    const Transition = transition;
-    if (!container || !(show || (Transition && !exited))) {
+    if (!container || !(show || (hasTransition && !exited))) {
       return null;
     }
 
@@ -413,40 +433,36 @@ const Modal: React.ForwardRefExoticComponent<
       </div>
     );
 
-    if (Transition) {
-      dialog = (
-        <Transition
-          appear
-          unmountOnExit
-          in={!!show}
-          onExit={onExit}
-          onExiting={onExiting}
-          onExited={handleHidden}
-          onEnter={onEnter}
-          onEntering={onEntering}
-          onEntered={onEntered}
-        >
-          {dialog}
-        </Transition>
-      );
-    }
+    dialog = renderTransition(transition, runTransition, {
+      unmountOnExit: true,
+      appear: true,
+      in: !!show,
+      onExit,
+      onExiting,
+      onExited: handleHidden,
+      onEnter,
+      onEntering,
+      onEntered,
+      children: dialog as React.ReactElement,
+    });
 
     let backdropElement = null;
     if (backdrop) {
-      const BackdropTransition = backdropTransition;
-
       backdropElement = renderBackdrop({
         ref: modal.setBackdropRef,
         onClick: handleBackdropClick,
       });
 
-      if (BackdropTransition) {
-        backdropElement = (
-          <BackdropTransition appear in={!!show}>
-            {backdropElement}
-          </BackdropTransition>
-        );
-      }
+      backdropElement = renderTransition(
+        backdropTransition,
+        runBackdropTransition,
+        {
+          in: !!show,
+          appear: true,
+          unmountOnExit: true,
+          children: backdropElement as React.ReactElement,
+        },
+      );
     }
 
     return (
