@@ -149,8 +149,6 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
 
     const [exited, setExited] = useState(!props.show);
 
-    const hasTransition = !!(Transition || runTransition);
-
     const popper = usePopper(
       target,
       rootElement,
@@ -165,10 +163,9 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       }),
     );
 
-    if (props.show) {
-      if (exited) setExited(false);
-    } else if (!hasTransition && !exited) {
-      setExited(true);
+    // TODO: I think this needs to be in an effect
+    if (props.show && exited) {
+      setExited(false);
     }
 
     const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
@@ -180,7 +177,7 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
     };
 
     // Don't un-render the overlay while it's transitioning out.
-    const mountOverlay = props.show || (hasTransition && !exited);
+    const mountOverlay = props.show || !exited;
 
     useRootClose(rootElement, props.onHide!, {
       disabled: !props.rootClose || props.rootCloseDisabled,
@@ -213,6 +210,9 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
 
     child = renderTransition(Transition, runTransition, {
       in: !!props.show,
+      appear: true,
+      mountOnEnter: true,
+      unmountOnExit: true,
       children: child,
       onExit,
       onExiting,

@@ -274,7 +274,6 @@ const Modal: React.ForwardRefExoticComponent<
     const prevShow = usePrevious(show);
     const [exited, setExited] = useState(!show);
     const lastFocusRef = useRef<HTMLElement | null>(null);
-    const hasTransition = !!(transition || runTransition);
 
     useImperativeHandle(ref, () => modal, [modal]);
 
@@ -282,9 +281,8 @@ const Modal: React.ForwardRefExoticComponent<
       lastFocusRef.current = activeElement() as HTMLElement;
     }
 
-    if (!hasTransition && !show && !exited) {
-      setExited(true);
-    } else if (show && exited) {
+    // TODO: I think this needs to be in an effect
+    if (show && exited) {
       setExited(false);
     }
 
@@ -410,7 +408,7 @@ const Modal: React.ForwardRefExoticComponent<
       onExited?.(...args);
     };
 
-    if (!container || !(show || (hasTransition && !exited))) {
+    if (!container) {
       return null;
     }
 
@@ -435,6 +433,7 @@ const Modal: React.ForwardRefExoticComponent<
 
     dialog = renderTransition(transition, runTransition, {
       unmountOnExit: true,
+      mountOnEnter: true,
       appear: true,
       in: !!show,
       onExit,
@@ -459,6 +458,7 @@ const Modal: React.ForwardRefExoticComponent<
         {
           in: !!show,
           appear: true,
+          mountOnEnter: true,
           unmountOnExit: true,
           children: backdropElement as React.ReactElement,
         },

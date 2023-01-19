@@ -1,25 +1,32 @@
-import { useEffect, useRef } from 'react';
+import useEventCallback from '@restart/hooks/useEventCallback';
+import useMergedRefs from '@restart/hooks/useMergedRefs';
+import { cloneElement, useEffect, useRef } from 'react';
 import { TransitionProps } from './types';
 
 function NoopTransition({
   children,
   in: inProp,
+  onExited,
   mountOnEnter,
   unmountOnExit,
 }: TransitionProps) {
+  const ref = useRef(null);
   const hasEnteredRef = useRef(inProp);
+  const handleExited = useEventCallback(onExited);
 
   useEffect(() => {
     if (inProp) hasEnteredRef.current = true;
-  }, [inProp]);
+    else {
+      handleExited(ref.current!);
+    }
+  }, [inProp, handleExited]);
 
-  if (inProp) return children;
+  const combinedRef = useMergedRefs(ref, (children as any).ref);
 
-  // not in
-  //
-  // if (!mountOnEnter && !unmountOnExit) {
-  //   return children;
-  // }
+  const child = cloneElement(children, { ref: combinedRef });
+
+  if (inProp) return child;
+
   if (unmountOnExit) {
     return null;
   }
@@ -27,7 +34,7 @@ function NoopTransition({
     return null;
   }
 
-  return children;
+  return child;
 }
 
 export default NoopTransition;
