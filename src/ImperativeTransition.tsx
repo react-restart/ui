@@ -1,7 +1,8 @@
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useEventCallback from '@restart/hooks/useEventCallback';
-import React, { useRef, useEffect, cloneElement } from 'react';
+import React, { useRef, useEffect, cloneElement, useState } from 'react';
 import { TransitionComponent, TransitionProps } from './types';
+import NoopTransition from './NoopTransition';
 
 export interface TransitionFunctionOptions {
   in: boolean;
@@ -22,25 +23,26 @@ export interface UseTransitionOptions {
 export function useTransition({
   in: inProp,
   onTransition,
-  initial = true,
 }: UseTransitionOptions) {
   const ref = useRef<HTMLElement>(null);
   const isInitialRef = useRef(true);
   const handleTransition = useEventCallback(onTransition);
 
   useEffect(() => {
-    if (isInitialRef.current && !initial) {
+    if (!ref.current) {
       return;
     }
+
     handleTransition({
       in: inProp,
       element: ref.current!,
       initial: isInitialRef.current,
     });
-  }, [inProp, initial, handleTransition]);
+  }, [inProp, handleTransition]);
 
   useEffect(() => {
     isInitialRef.current = false;
+    // this is for strict mode
     return () => {
       isInitialRef.current = true;
     };
@@ -51,26 +53,40 @@ export function useTransition({
 
 export interface ImperativeTransitionProps extends TransitionProps {
   transition: TransitionHandler;
+  // eslint-disable-next-line react/no-unused-prop-types
+  appear: true;
+  // eslint-disable-next-line react/no-unused-prop-types
+  mountOnEnter: true;
+  // eslint-disable-next-line react/no-unused-prop-types
+  unmountOnExit: true;
 }
 
 /**
  * Adapts an imperative transition function to a subset of the RTG `<Transition>` component API.
+ *
+ * ImperativeTransition does not support mounting options or `appear` at the moment, meaning
+ * that it always acts like: `mountOnEnter={true} unmountOnExit={true} appear={true}`
  */
 export default function ImperativeTransition({
   children,
   in: inProp,
-  appear,
   onExited,
   onEntered,
   transition,
 }: ImperativeTransitionProps) {
+  const [exited, setExited] = useState(!inProp);
+
   const ref = useTransition({
     in: !!inProp,
-    initial: appear,
     onTransition: (options) => {
       const onFinish = () => {
-        if (options.in) onEntered?.(options.element, options.initial);
-        else onExited?.(options.element);
+        if (options.in) {
+          setExited(false);
+          onEntered?.(options.element, options.initial);
+        } else {
+          setExited(true);
+          onExited?.(options.element);
+        }
       };
 
       Promise.resolve(transition(options)).then(onFinish);
@@ -79,13 +95,15 @@ export default function ImperativeTransition({
 
   const combinedRef = useMergedRefs(ref, (children as any).ref);
 
-  return cloneElement(children, { ref: combinedRef });
+  return exited && !inProp
+    ? null
+    : cloneElement(children, { ref: combinedRef });
 }
 
 export function renderTransition(
   Component: TransitionComponent | undefined,
   runTransition: TransitionHandler | undefined,
-  props: TransitionProps,
+  props: TransitionProps & Omit<ImperativeTransitionProps, 'transition'>,
 ) {
   if (Component) {
     return <Component {...props} />;
@@ -94,5 +112,5 @@ export function renderTransition(
     return <ImperativeTransition {...props} transition={runTransition} />;
   }
 
-  return props.children;
+  return <NoopTransition {...props} />;
 }
