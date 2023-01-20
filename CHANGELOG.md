@@ -1,3 +1,14 @@
+## [1.5.2](https://github.com/react-restart/ui/compare/v1.5.1...v1.5.2) (2023-01-20)
+
+
+### Bug Fixes
+
+* **Modal,Overlay:** elements exit according to their transition ([#72](https://github.com/react-restart/ui/issues/72)) ([3d3f89a](https://github.com/react-restart/ui/commit/3d3f89a2ff604b40a2e525bca092af84670b092a))
+
+
+
+
+
 ## [1.5.1](https://github.com/react-restart/ui/compare/v1.5.0...v1.5.1) (2023-01-16)
 
 
