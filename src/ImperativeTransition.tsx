@@ -8,6 +8,7 @@ export interface TransitionFunctionOptions {
   in: boolean;
   element: HTMLElement;
   initial: boolean;
+  isStale: () => boolean;
 }
 
 export type TransitionHandler = (
@@ -30,14 +31,20 @@ export function useTransition({
 
   useEffect(() => {
     if (!ref.current) {
-      return;
+      return undefined;
     }
+
+    let stale = false;
 
     handleTransition({
       in: inProp,
       element: ref.current!,
       initial: isInitialRef.current,
+      isStale: () => stale,
     });
+    return () => {
+      stale = true;
+    };
   }, [inProp, handleTransition]);
 
   useEffect(() => {
@@ -76,12 +83,18 @@ export default function ImperativeTransition({
 }: ImperativeTransitionProps) {
   const [exited, setExited] = useState(!inProp);
 
+  // TODO: I think this needs to be in an effect
+  if (inProp && exited) {
+    setExited(false);
+  }
+
   const ref = useTransition({
     in: !!inProp,
     onTransition: (options) => {
       const onFinish = () => {
+        if (options.isStale()) return;
+
         if (options.in) {
-          setExited(false);
           onEntered?.(options.element, options.initial);
         } else {
           setExited(true);
@@ -89,7 +102,10 @@ export default function ImperativeTransition({
         }
       };
 
-      Promise.resolve(transition(options)).then(onFinish);
+      Promise.resolve(transition(options)).then(onFinish, (error) => {
+        if (!options.in) setExited(true);
+        throw error;
+      });
     },
   });
 
