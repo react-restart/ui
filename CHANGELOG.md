@@ -1,3 +1,14 @@
+## [1.5.3](https://github.com/react-restart/ui/compare/v1.5.2...v1.5.3) (2023-01-25)
+
+
+### Bug Fixes
+
+* imperative transition sometimes would get stuck never exiting ([50994f3](https://github.com/react-restart/ui/commit/50994f33192d792a26893abf2d34a203d477872b))
+
+
+
+
+
 ## [1.5.2](https://github.com/react-restart/ui/compare/v1.5.1...v1.5.2) (2023-01-20)
 
 
