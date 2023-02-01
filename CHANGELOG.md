@@ -1,3 +1,20 @@
+## [1.5.4](https://github.com/react-restart/ui/compare/v1.5.2...v1.5.4) (2023-02-01)
+
+
+### Bug Fixes
+
+* imperative transition sometimes would get stuck never exiting ([50994f3](https://github.com/react-restart/ui/commit/50994f33192d792a26893abf2d34a203d477872b))
+* **Modal:** use layout effect for transitions if possible ([e2166e8](https://github.com/react-restart/ui/commit/e2166e853a32c845e6620a2f15399078b59c043f))
+
+
+### Reverts
+
+* Revert "Publish v1.5.3" ([e9f0471](https://github.com/react-restart/ui/commit/e9f04718f23ee47b0f269ab30604ea705e9da823))
+
+
+
+
+
 ## [1.5.3](https://github.com/react-restart/ui/compare/v1.5.2...v1.5.3) (2023-01-25)
 
 
