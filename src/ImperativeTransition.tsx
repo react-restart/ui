@@ -1,6 +1,7 @@
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useEventCallback from '@restart/hooks/useEventCallback';
-import React, { useRef, useEffect, cloneElement, useState } from 'react';
+import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
+import React, { useRef, cloneElement, useState } from 'react';
 import { TransitionComponent, TransitionProps } from './types';
 import NoopTransition from './NoopTransition';
 
@@ -29,7 +30,7 @@ export function useTransition({
   const isInitialRef = useRef(true);
   const handleTransition = useEventCallback(onTransition);
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     if (!ref.current) {
       return undefined;
     }
@@ -47,7 +48,7 @@ export function useTransition({
     };
   }, [inProp, handleTransition]);
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     isInitialRef.current = false;
     // this is for strict mode
     return () => {
