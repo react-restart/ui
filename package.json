@@ -11,9 +11,9 @@
     "url": "git+https://github.com/react-restart/ui.git"
   },
   "license": "MIT",
-  "main": "cjs/index.js",
-  "module": "esm/index.js",
-  "types": "esm/index.d.ts",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/esm/index.d.ts",
   "exports": {
     ".": {
       "types": "./esm/index.d.ts",
