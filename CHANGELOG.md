@@ -1,3 +1,14 @@
+## [1.6.1](https://github.com/react-restart/ui/compare/v1.6.0...v1.6.1) (2023-02-10)
+
+
+### Bug Fixes
+
+* fix build ([#74](https://github.com/react-restart/ui/issues/74)) ([88b73d2](https://github.com/react-restart/ui/commit/88b73d21011ce8b1a189ef9dece69f6f4a4576ca))
+
+
+
+
+
 # [1.6.0](https://github.com/react-restart/ui/compare/v1.5.4...v1.6.0) (2023-02-10)
 
 
