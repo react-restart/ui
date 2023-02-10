@@ -1,3 +1,14 @@
+# [1.6.0](https://github.com/react-restart/ui/compare/v1.5.4...v1.6.0) (2023-02-10)
+
+
+### Features
+
+* add exports field in package.json ([#73](https://github.com/react-restart/ui/issues/73)) ([f0baebd](https://github.com/react-restart/ui/commit/f0baebd95baf9424fa955d095f68804083209814))
+
+
+
+
+
 ## [1.5.4](https://github.com/react-restart/ui/compare/v1.5.2...v1.5.4) (2023-02-01)
 
 
