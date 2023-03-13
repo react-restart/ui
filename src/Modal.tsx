@@ -24,6 +24,7 @@ import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
 import { TransitionCallbacks } from './types';
 import useWindow from './useWindow';
 import { renderTransition, TransitionHandler } from './ImperativeTransition';
+import { isEscKey } from './utils';
 
 let manager: ModalManager;
 
@@ -391,7 +392,7 @@ const Modal: React.ForwardRefExoticComponent<
     });
 
     const handleDocumentKeyDown = useEventCallback((e: KeyboardEvent) => {
-      if (keyboard && e.keyCode === 27 && modal.isTopModal()) {
+      if (keyboard && isEscKey(e) && modal.isTopModal()) {
         onEscapeKeyDown?.(e);
 
         if (!e.defaultPrevented) {
