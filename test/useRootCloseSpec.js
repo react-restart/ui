@@ -158,11 +158,15 @@ describe('useRootClose', () => {
 
       expect(spy).to.not.have.been.called;
 
-      simulant.fire(document.body, 'keyup', { keyCode: escapeKeyCode });
+      simulant.fire(document.body, 'keyup', {
+        code: 'Escape',
+        keyCode: escapeKeyCode,
+      });
 
       expect(spy).to.have.been.calledOnce;
 
       expect(spy.getCall(0).args.length).to.be.equal(1);
+      expect(spy.getCall(0).args[0].code).to.be.equal('Escape');
       expect(spy.getCall(0).args[0].keyCode).to.be.equal(escapeKeyCode);
       expect(spy.getCall(0).args[0].type).to.be.equal('keyup');
     });
@@ -182,13 +186,17 @@ describe('useRootClose', () => {
         </Wrapper>,
       );
 
-      simulant.fire(document.body, 'keyup', { keyCode: escapeKeyCode });
+      simulant.fire(document.body, 'keyup', {
+        code: 'Escape',
+        keyCode: escapeKeyCode,
+      });
 
       // TODO: Update to match expectations.
       // expect(outerSpy).to.have.not.been.called;
       expect(innerSpy).to.have.been.calledOnce;
 
       expect(innerSpy.getCall(0).args.length).to.be.equal(1);
+      expect(innerSpy.getCall(0).args[0].code).to.be.equal('Escape');
       expect(innerSpy.getCall(0).args[0].keyCode).to.be.equal(escapeKeyCode);
       expect(innerSpy.getCall(0).args[0].type).to.be.equal('keyup');
     });

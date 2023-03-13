@@ -7,8 +7,8 @@ import useClickOutside, {
   ClickOutsideOptions,
   getRefTarget,
 } from './useClickOutside';
+import { isEscKey } from './utils';
 
-const escapeKeyCode = 27;
 const noop = () => {};
 
 export interface RootCloseOptions extends ClickOutsideOptions {
@@ -37,7 +37,7 @@ function useRootClose(
   useClickOutside(ref, onClose, { disabled, clickTrigger });
 
   const handleKeyUp = useEventCallback((e: KeyboardEvent) => {
-    if (e.keyCode === escapeKeyCode) {
+    if (isEscKey(e)) {
       onClose(e);
     }
   });

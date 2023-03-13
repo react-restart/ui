@@ -158,7 +158,7 @@ describe('<Modal>', () => {
 
     let { backdrop } = ref.current;
 
-    simulant.fire(backdrop, 'keydown', { keyCode: 27 });
+    simulant.fire(backdrop, 'keydown', { code: 'Escape', keyCode: 27 });
   });
 
   it('should not trigger onHide if e.preventDefault() called', () => {
@@ -176,7 +176,7 @@ describe('<Modal>', () => {
 
     let { backdrop } = ref.current;
 
-    simulant.fire(backdrop, 'keydown', { keyCode: 27 });
+    simulant.fire(backdrop, 'keydown', { code: 'Escape', keyCode: 27 });
     expect(onHideSpy).to.not.have.been.called;
   });
 
@@ -306,7 +306,10 @@ describe('<Modal>', () => {
     wrapper.setProps({ show: true });
 
     act(() => {
-      simulant.fire(ref.current.backdrop, 'keydown', { keyCode: 27 });
+      simulant.fire(ref.current.backdrop, 'keydown', {
+        code: 'Escape',
+        keyCode: 27,
+      });
     });
 
     expect(onEscapeSpy).to.have.been.calledOnce;
