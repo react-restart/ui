@@ -1,3 +1,15 @@
+## [1.6.2](https://github.com/react-restart/ui/compare/v1.6.1...v1.6.2) (2023-03-17)
+
+
+### Bug Fixes
+
+* support KeyboardEvent.code ([#76](https://github.com/react-restart/ui/issues/76)) ([6fe458f](https://github.com/react-restart/ui/commit/6fe458fe105fcc3496a0701e9c334f88cf8a9eda))
+* update dependencies ([#77](https://github.com/react-restart/ui/issues/77)) ([a1ff85b](https://github.com/react-restart/ui/commit/a1ff85bb9e2897046ddbeef9754f5b1a77146527))
+
+
+
+
+
 ## [1.6.1](https://github.com/react-restart/ui/compare/v1.6.0...v1.6.1) (2023-02-10)
 
 
