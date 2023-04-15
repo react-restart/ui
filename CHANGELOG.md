@@ -1,3 +1,14 @@
+## [1.6.3](https://github.com/react-restart/ui/compare/v1.6.2...v1.6.3) (2023-04-15)
+
+
+### Bug Fixes
+
+* downgrade uncontrollable to 7.2.1 ([#79](https://github.com/react-restart/ui/issues/79)) ([d77682a](https://github.com/react-restart/ui/commit/d77682ac7a175d8fb1cbc2b1ea504cbf0d317317))
+
+
+
+
+
 ## [1.6.2](https://github.com/react-restart/ui/compare/v1.6.1...v1.6.2) (2023-03-17)
 
 
