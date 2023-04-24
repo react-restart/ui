@@ -5,9 +5,6 @@ import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
 
-import getScrollTop from 'dom-helpers/scrollTop';
-import getScrollLeft from 'dom-helpers/scrollLeft';
-
 import {
   useState,
   useRef,
@@ -279,7 +276,6 @@ const Modal: React.ForwardRefExoticComponent<
     const prevShow = usePrevious(show);
     const [exited, setExited] = useState(!show);
     const lastFocusRef = useRef<HTMLElement | null>(null);
-    const scrollPositionRef = useRef<any>(null);
 
     useImperativeHandle(ref, () => modal, [modal]);
 
@@ -294,11 +290,6 @@ const Modal: React.ForwardRefExoticComponent<
 
     const handleShow = useEventCallback(() => {
       modal.add();
-
-      scrollPositionRef.current = {
-        x: getScrollLeft(container!),
-        y: getScrollTop(container!),
-      };
 
       removeKeydownListenerRef.current = listen(
         document as any,
