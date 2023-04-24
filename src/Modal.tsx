@@ -4,6 +4,10 @@ import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import listen from 'dom-helpers/listen';
+
+import getScrollTop from 'dom-helpers/scrollTop';
+import getScrollLeft from 'dom-helpers/scrollLeft';
+
 import {
   useState,
   useRef,
@@ -275,6 +279,7 @@ const Modal: React.ForwardRefExoticComponent<
     const prevShow = usePrevious(show);
     const [exited, setExited] = useState(!show);
     const lastFocusRef = useRef<HTMLElement | null>(null);
+    const scrollPositionRef = useRef<any>(null);
 
     useImperativeHandle(ref, () => modal, [modal]);
 
@@ -290,6 +295,11 @@ const Modal: React.ForwardRefExoticComponent<
     const handleShow = useEventCallback(() => {
       modal.add();
 
+      scrollPositionRef.current = {
+        x: getScrollLeft(container!),
+        y: getScrollTop(container!),
+      };
+
       removeKeydownListenerRef.current = listen(
         document as any,
         'keydown',
@@ -299,9 +309,7 @@ const Modal: React.ForwardRefExoticComponent<
       removeFocusListenerRef.current = listen(
         document as any,
         'focus',
-        // the timeout is necessary b/c this will run before the new modal is mounted
-        // and so steals focus from it
-        () => setTimeout(handleEnforceFocus),
+        handleEnforceFocus,
         true,
       );
 
@@ -363,7 +371,7 @@ const Modal: React.ForwardRefExoticComponent<
 
     // --------------------------------
 
-    const handleEnforceFocus = useEventCallback(() => {
+    const handleEnforceFocus = useEventCallback((event: FocusEvent) => {
       if (!enforceFocus || !isMounted() || !modal.isTopModal()) {
         return;
       }
@@ -375,7 +383,9 @@ const Modal: React.ForwardRefExoticComponent<
         currentActiveElement &&
         !contains(modal.dialog, currentActiveElement)
       ) {
+        event.preventDefault();
         modal.dialog.focus();
+        manager.maybeResetScrollPosition();
       }
     });
 
@@ -417,7 +427,8 @@ const Modal: React.ForwardRefExoticComponent<
       role,
       ref: modal.setDialogRef,
       // apparently only works on the dialog role element
-      'aria-modal': role === 'dialog' ? true : undefined,
+      'aria-modal':
+        role === 'dialog' || role === 'alertdialog' ? true : undefined,
       ...rest,
       style,
       className,
