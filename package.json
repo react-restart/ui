@@ -17,11 +17,13 @@
   "exports": {
     ".": {
       "types": "./esm/index.d.ts",
+      "node": "./cjs/index.js",
       "import": "./esm/index.js",
       "require": "./cjs/index.js"
     },
     "./*": {
       "types": "./esm/*.d.ts",
+      "node": "./cjs/*.js",
       "import": "./esm/*.js",
       "require": "./cjs/*.js"
     }
