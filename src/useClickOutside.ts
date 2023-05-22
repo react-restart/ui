@@ -95,10 +95,13 @@ function useClickOutside(
     if (disabled || ref == null) return undefined;
 
     const doc = ownerDocument(getRefTarget(ref)!);
+    const ownerWindow = doc.defaultView || window;
 
     // Store the current event to avoid triggering handlers immediately
+    // For things rendered in an iframe, the event might originate on the parent window
+    // so we should fall back to that global event if the local one doesn't exist
     // https://github.com/facebook/react/issues/20074
-    let currentEvent = (doc.defaultView || window).event;
+    let currentEvent = ownerWindow.event ?? ownerWindow.parent?.event;
 
     let removeInitialTriggerListener: (() => void) | null = null;
     if (InitialTriggerEvents[clickTrigger]) {
