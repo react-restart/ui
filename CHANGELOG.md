@@ -1,3 +1,15 @@
+## [1.6.4](https://github.com/react-restart/ui/compare/v1.6.3...v1.6.4) (2023-05-22)
+
+
+### Bug Fixes
+
+* point node to the common js build ([#85](https://github.com/react-restart/ui/issues/85)) ([6731f29](https://github.com/react-restart/ui/commit/6731f294bb4af1a2849f9afba8b388d33bb549b6))
+* **useOutsideClick:** fix a case where click outside fired twice in a row in an iframe ([#86](https://github.com/react-restart/ui/issues/86)) ([0677a13](https://github.com/react-restart/ui/commit/0677a134df2d1861ddc78d2aec659a1956859f70))
+
+
+
+
+
 ## [1.6.3](https://github.com/react-restart/ui/compare/v1.6.2...v1.6.3) (2023-04-15)
 
 
