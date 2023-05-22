@@ -1,3 +1,14 @@
+## [1.6.5](https://github.com/react-restart/ui/compare/v1.6.4...v1.6.5) (2023-05-22)
+
+
+### Bug Fixes
+
+* bump uncontrollable to latest again ([d05cf52](https://github.com/react-restart/ui/commit/d05cf52cec995579898b89859694f3b927a18ece))
+
+
+
+
+
 ## [1.6.4](https://github.com/react-restart/ui/compare/v1.6.3...v1.6.4) (2023-05-22)
 
 
