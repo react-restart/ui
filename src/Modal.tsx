@@ -268,6 +268,7 @@ const Modal: React.ForwardRefExoticComponent<
     }: ModalProps,
     ref: React.Ref<ModalHandle>,
   ) => {
+    const ownerWindow = useWindow();
     const container = useWaitForDOMRef(containerRef);
     const modal = useModalManager(providedManager);
 
@@ -279,7 +280,9 @@ const Modal: React.ForwardRefExoticComponent<
     useImperativeHandle(ref, () => modal, [modal]);
 
     if (canUseDOM && !prevShow && show) {
-      lastFocusRef.current = activeElement() as HTMLElement;
+      lastFocusRef.current = activeElement(
+        ownerWindow?.document,
+      ) as HTMLElement | null;
     }
 
     // TODO: I think this needs to be in an effect
@@ -312,7 +315,9 @@ const Modal: React.ForwardRefExoticComponent<
       // autofocus after onShow to not trigger a focus event for previous
       // modals before this one is shown.
       if (autoFocus) {
-        const currentActiveElement = activeElement(document) as HTMLElement;
+        const currentActiveElement = activeElement(
+          modal.dialog?.ownerDocument ?? ownerWindow?.document,
+        ) as HTMLElement | null;
 
         if (
           modal.dialog &&
@@ -368,7 +373,7 @@ const Modal: React.ForwardRefExoticComponent<
         return;
       }
 
-      const currentActiveElement = activeElement();
+      const currentActiveElement = activeElement(ownerWindow?.document);
 
       if (
         modal.dialog &&
