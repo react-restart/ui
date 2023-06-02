@@ -1,3 +1,14 @@
+## [1.6.6](https://github.com/react-restart/ui/compare/v1.6.5...v1.6.6) (2023-06-02)
+
+
+### Bug Fixes
+
+* use correct document for activeElement ([#87](https://github.com/react-restart/ui/issues/87)) ([ceafd14](https://github.com/react-restart/ui/commit/ceafd14327683b1b15543ff49a793836acc53b90))
+
+
+
+
+
 ## [1.6.5](https://github.com/react-restart/ui/compare/v1.6.4...v1.6.5) (2023-05-22)
 
 
