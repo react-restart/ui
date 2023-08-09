@@ -54,6 +54,7 @@ function useClickOutside(
 ) {
   const preventMouseClickOutsideRef = useRef(false);
   const waitingForTrigger = useRef(false);
+  const initialSetHandlers = useRef(false);
 
   const handleMouseCapture = useCallback(
     (e) => {
@@ -102,6 +103,11 @@ function useClickOutside(
     // so we should fall back to that global event if the local one doesn't exist
     // https://github.com/facebook/react/issues/20074
     let currentEvent = ownerWindow.event ?? ownerWindow.parent?.event;
+    if (!currentEvent) {
+      // Current event would be undefined when in the shadow DOM, so use a ref
+      // to track the initial event.
+      initialSetHandlers.current = true;
+    }
 
     let removeInitialTriggerListener: (() => void) | null = null;
     if (InitialTriggerEvents[clickTrigger]) {
@@ -125,8 +131,9 @@ function useClickOutside(
 
     const removeMouseListener = listen(doc as any, clickTrigger, (e) => {
       // skip if this event is the same as the one running when we added the handlers
-      if (e === currentEvent) {
+      if (e === currentEvent || initialSetHandlers.current) {
         currentEvent = undefined;
+        initialSetHandlers.current = false;
         return;
       }
       handleMouse(e);
