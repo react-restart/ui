@@ -240,23 +240,32 @@ describe('<Modal>', () => {
 
   it('should pass transition callbacks to Transition', (done) => {
     let count = 0;
-    let increment = () => count++;
+    const increment = () => count++;
+    const onEnter = (node, isAppearing) => {
+      expect(node).to.be.an.instanceOf(HTMLElement);
+      expect(isAppearing).to.be.true;
+      increment();
+    };
+    const onExit = (node) => {
+      expect(node).to.be.an.instanceOf(HTMLElement);
+      increment();
+    };
 
     wrapper = mount(
       <Modal
         show
         transition={(p) => <Transition {...p} timeout={0} />}
-        onExit={increment}
-        onExiting={increment}
-        onExited={() => {
-          increment();
+        onExit={onExit}
+        onExiting={onExit}
+        onExited={(...args) => {
+          onExit(...args);
           expect(count).to.equal(6);
           done();
         }}
-        onEnter={increment}
-        onEntering={increment}
-        onEntered={() => {
-          increment();
+        onEnter={onEnter}
+        onEntering={onEnter}
+        onEntered={(...args) => {
+          onEnter(...args);
           wrapper.setProps({ show: false });
         }}
       >

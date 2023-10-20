@@ -21,18 +21,19 @@ import usePrevious from '@restart/hooks/usePrevious';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import ModalManager from './ModalManager';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
-import { TransitionCallbacks } from './types';
+import { ReactTransitionGroupCallbacks, TransitionCallbacks } from './types';
 import useWindow from './useWindow';
-import { renderTransition, TransitionHandler } from './ImperativeTransition';
+import { RenderTransition, TransitionHandler } from './ImperativeTransition';
 import { isEscKey } from './utils';
 
 let manager: ModalManager;
 
-export interface ModalTransitionProps extends TransitionCallbacks {
-  in: boolean;
+export interface ModalTransitionProps extends ReactTransitionGroupCallbacks {
   appear?: boolean;
-  unmountOnExit?: boolean;
   children: React.ReactElement;
+  in: boolean;
+  nodeRef: React.RefObject<HTMLElement>;
+  unmountOnExit?: boolean;
 }
 
 export type ModalTransitionComponent =
@@ -54,7 +55,7 @@ export interface RenderModalBackdropProps {
 
 /*
   Modal props are split into a version with and without index signature so that you can fully use them in another projects
-  This is due to Typescript not playing well with index singatures e.g. when using Omit
+  This is due to Typescript not playing well with index signatures e.g. when using Omit
 */
 export interface BaseModalProps extends TransitionCallbacks {
   children?: React.ReactElement;
@@ -198,10 +199,14 @@ function getManager(window?: Window) {
 function useModalManager(provided?: ModalManager) {
   const window = useWindow();
   const modalManager = provided || getManager(window);
+  const dialogRef = useRef<HTMLElement>(null);
+  const backdropRef = useRef<HTMLElement>(null);
 
   const modal = useRef({
     dialog: null as any as HTMLElement,
+    dialogRef,
     backdrop: null as any as HTMLElement,
+    backdropRef,
   });
 
   return Object.assign(modal.current, {
@@ -212,10 +217,12 @@ function useModalManager(provided?: ModalManager) {
     isTopModal: () => modalManager.isTopModal(modal.current),
 
     setDialogRef: useCallback((ref: HTMLElement | null) => {
+      (dialogRef as React.MutableRefObject<HTMLElement | null>).current = ref;
       modal.current.dialog = ref!;
     }, []),
 
     setBackdropRef: useCallback((ref: HTMLElement | null) => {
+      (backdropRef as React.MutableRefObject<HTMLElement | null>).current = ref;
       modal.current.backdrop = ref!;
     }, []),
   });
@@ -437,39 +444,51 @@ const Modal: React.ForwardRefExoticComponent<
       </div>
     );
 
-    dialog = renderTransition(transition, runTransition, {
-      unmountOnExit: true,
-      mountOnEnter: true,
-      appear: true,
-      in: !!show,
-      onExit,
-      onExiting,
-      onExited: handleHidden,
-      onEnter,
-      onEntering,
-      onEntered,
-      children: dialog as React.ReactElement,
-    });
-
-    let backdropElement = null;
-    if (backdrop) {
-      backdropElement = renderBackdrop({
-        ref: modal.setBackdropRef,
-        onClick: handleBackdropClick,
-      });
-
-      backdropElement = renderTransition(
-        backdropTransition,
-        runBackdropTransition,
-        {
-          in: !!show,
-          appear: true,
-          mountOnEnter: true,
+    dialog = (
+      <RenderTransition
+        component={transition}
+        nodeRef={modal.dialogRef}
+        props={{
           unmountOnExit: true,
-          children: backdropElement as React.ReactElement,
-        },
-      );
-    }
+          mountOnEnter: true,
+          appear: true,
+          in: !!show,
+          onExit,
+          onExiting,
+          onExited: handleHidden,
+          onEnter,
+          onEntering,
+          onEntered,
+          children: dialog as React.ReactElement,
+        }}
+        runTransition={runTransition}
+      />
+    );
+
+    const backdropElement = (() => {
+      if (backdrop) {
+        const backdropNode = renderBackdrop({
+          ref: modal.setBackdropRef,
+          onClick: handleBackdropClick,
+        });
+
+        return (
+          <RenderTransition
+            component={backdropTransition}
+            nodeRef={modal.backdropRef}
+            props={{
+              in: !!show,
+              appear: true,
+              mountOnEnter: true,
+              unmountOnExit: true,
+              children: backdropNode as React.ReactElement,
+            }}
+            runTransition={runBackdropTransition}
+          />
+        );
+      }
+      return null;
+    })();
 
     return (
       <>

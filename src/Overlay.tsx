@@ -1,8 +1,7 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
-import useMergedRefs from '@restart/hooks/useMergedRefs';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import usePopper, {
   Offset,
   Placement,
@@ -12,9 +11,9 @@ import usePopper, {
 } from './usePopper';
 import useRootClose, { RootCloseOptions } from './useRootClose';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
-import { TransitionCallbacks, TransitionComponent } from './types';
+import { ReactTransitionGroupComponent, TransitionCallbacks } from './types';
 import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
-import { renderTransition, TransitionHandler } from './ImperativeTransition';
+import { RenderTransition, TransitionHandler } from './ImperativeTransition';
 
 export interface OverlayArrowProps extends Record<string, any> {
   ref: React.RefCallback<HTMLElement>;
@@ -47,13 +46,13 @@ export interface OverlayProps extends TransitionCallbacks {
 
   /**
    * Control offset of the overlay to the reference element.
-   * A convenience shortcut to setting `popperConfig.modfiers.offset`
+   * A convenience shortcut to setting `popperConfig.modifiers.offset`
    */
   offset?: Offset;
 
   /**
    * Control how much space there is between the edge of the boundary element and overlay.
-   * A convenience shortcut to setting `popperConfig.modfiers.preventOverflow.padding`
+   * A convenience shortcut to setting `popperConfig.modifiers.preventOverflow.padding`
    */
   containerPadding?: number;
 
@@ -83,7 +82,7 @@ export interface OverlayProps extends TransitionCallbacks {
    * A `react-transition-group` `<Transition/>` component
    * used to animate the overlay as it changes visibility.
    */
-  transition?: TransitionComponent;
+  transition?: ReactTransitionGroupComponent;
 
   /**
    * A transition handler, called with the `show` state and overlay element.
@@ -129,32 +128,63 @@ export interface OverlayProps extends TransitionCallbacks {
  * great for custom tooltip overlays.
  */
 const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
-  (props, outerRef) => {
-    const {
+  (
+    {
+      children,
+      container: upstreamContainer,
+      containerPadding,
       flip,
       offset,
+      onExited,
+      onHide,
       placement,
-      containerPadding,
       popperConfig = {},
-      transition: Transition,
+      rootClose,
       runTransition,
-    } = props;
-
-    const [rootElement, attachRef] = useCallbackRef<HTMLElement>();
+      show,
+      target: upstreamTarget,
+      transition: Transition,
+      rootCloseDisabled,
+      rootCloseEvent,
+      onExit,
+      onExiting,
+      onEnter,
+      onEntering,
+      onEntered,
+    },
+    outerRef,
+  ) => {
+    /** Popper works best with HTMLElement objects rather than refs. */
+    const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+    /** react-transition-group requires a ref to an HTMLElement */
+    const rootElementRef = useRef<HTMLElement | null>(null);
+    /** Popper wants an HTMLElement baked into the render lifecycle, while
+     * react-transition-group wants a RefObject. Update both instances in one
+     * callback.
+     */
+    const setRootStateAndRef = useCallback((ref: HTMLElement | null) => {
+      setRootElement(ref);
+      rootElementRef.current = ref;
+    }, []);
+    /** Update the forwarded ref, if present. */
+    React.useImperativeHandle<HTMLElement | null, HTMLElement | null>(
+      outerRef,
+      () => rootElement,
+      [rootElement],
+    );
     const [arrowElement, attachArrowRef] = useCallbackRef<Element>();
-    const mergedRef = useMergedRefs<HTMLElement | null>(attachRef, outerRef);
 
-    const container = useWaitForDOMRef(props.container);
-    const target = useWaitForDOMRef(props.target);
+    const container = useWaitForDOMRef(upstreamContainer);
+    const target = useWaitForDOMRef(upstreamTarget);
 
-    const [exited, setExited] = useState(!props.show);
+    const [exited, setExited] = useState(!show);
 
     const popper = usePopper(
       target,
       rootElement,
       mergeOptionsWithPopperConfig({
         placement,
-        enableEvents: !!props.show,
+        enableEvents: !!show,
         containerPadding: containerPadding || 5,
         flip,
         offset,
@@ -163,64 +193,60 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       }),
     );
 
-    // TODO: I think this needs to be in an effect
-    if (props.show && exited) {
-      setExited(false);
-    }
-
     const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
       setExited(true);
 
-      if (props.onExited) {
-        props.onExited(...args);
+      if (onExited) {
+        onExited(...args);
       }
     };
 
-    // Don't un-render the overlay while it's transitioning out.
-    const mountOverlay = props.show || !exited;
-
-    useRootClose(rootElement, props.onHide!, {
-      disabled: !props.rootClose || props.rootCloseDisabled,
-      clickTrigger: props.rootCloseEvent,
+    useRootClose(rootElement, onHide!, {
+      disabled: !rootClose || rootCloseDisabled,
+      clickTrigger: rootCloseEvent,
     });
 
-    if (!mountOverlay) {
+    if (!show && exited) {
       // Don't bother showing anything if we don't have to.
       return null;
     }
 
-    const { onExit, onExiting, onEnter, onEntering, onEntered } = props;
-    let child = props.children(
-      {
-        ...popper.attributes.popper,
-        style: popper.styles.popper as any,
-        ref: mergedRef,
-      },
-      {
-        popper,
-        placement,
-        show: !!props.show,
-        arrowProps: {
-          ...popper.attributes.arrow,
-          style: popper.styles.arrow as any,
-          ref: attachArrowRef,
-        },
-      },
-    ) as React.ReactElement;
-
-    child = renderTransition(Transition, runTransition, {
-      in: !!props.show,
-      appear: true,
-      mountOnEnter: true,
-      unmountOnExit: true,
-      children: child,
-      onExit,
-      onExiting,
-      onExited: handleHidden,
-      onEnter,
-      onEntering,
-      onEntered,
-    });
+    const child = (
+      <RenderTransition
+        component={Transition}
+        nodeRef={rootElementRef}
+        runTransition={runTransition}
+        props={{
+          in: !!show,
+          appear: true,
+          mountOnEnter: true,
+          unmountOnExit: true,
+          children: children(
+            {
+              ...popper.attributes.popper,
+              style: popper.styles.popper as any,
+              ref: setRootStateAndRef,
+            },
+            {
+              popper,
+              placement,
+              show: !!show,
+              arrowProps: {
+                ...popper.attributes.arrow,
+                style: popper.styles.arrow as any,
+                ref: attachArrowRef,
+              },
+            },
+          ) as React.ReactElement,
+          onExit,
+          onExiting,
+          onExited: handleHidden,
+          onEnter,
+          onEntering,
+          onEntered,
+        }}
+      />
+    );
 
     return container ? ReactDOM.createPortal(child, container) : null;
   },

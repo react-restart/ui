@@ -74,35 +74,78 @@ export interface TransitionCallbacks {
   /**
    * Callback fired before the component transitions in
    */
-  onEnter?(node: HTMLElement, isAppearing: boolean): any;
+  onEnter?(node: HTMLElement, isAppearing: boolean): void;
   /**
    * Callback fired as the component begins to transition in
    */
-  onEntering?(node: HTMLElement, isAppearing: boolean): any;
+  onEntering?(node: HTMLElement, isAppearing: boolean): void;
   /**
    * Callback fired after the component finishes transitioning in
    */
-  onEntered?(node: HTMLElement, isAppearing: boolean): any;
+  onEntered?(node: HTMLElement, isAppearing: boolean): void;
   /**
    * Callback fired right before the component transitions out
    */
-  onExit?(node: HTMLElement): any;
+  onExit?(node: HTMLElement): void;
   /**
    * Callback fired as the component begins to transition out
    */
-  onExiting?(node: HTMLElement): any;
+  onExiting?(node: HTMLElement): void;
   /**
    * Callback fired after the component finishes transitioning out
    */
-  onExited?(node: HTMLElement): any;
+  onExited?(node: HTMLElement): void;
+}
+
+/** Callback function signatures actually sent to react-transition-group
+ * components.
+ *
+ * Because nodeRef is supplied, react-transition-group leaves off the first
+ * HTMLElement positional prop.
+ */
+export interface ReactTransitionGroupCallbacks {
+  /**
+   * Callback fired before the component transitions in
+   */
+  onEnter?(isAppearing: boolean): void;
+  /**
+   * Callback fired as the component begins to transition in
+   */
+  onEntering?(isAppearing: boolean): void;
+  /**
+   * Callback fired after the component finishes transitioning in
+   */
+  onEntered?(isAppearing: boolean): void;
+  /**
+   * Callback fired right before the component transitions out
+   */
+  onExit?(): void;
+  /**
+   * Callback fired as the component begins to transition out
+   */
+  onExiting?(): void;
+  /**
+   * Callback fired after the component finishes transitioning out
+   */
+  onExited?(): void;
 }
 
 export interface TransitionProps extends TransitionCallbacks {
-  in?: boolean;
   appear?: boolean;
   children: React.ReactElement;
+  in?: boolean;
   mountOnEnter?: boolean;
+  unmountOnExit?: boolean;
+}
+export interface ReactTransitionGroupProps
+  extends ReactTransitionGroupCallbacks {
+  children: React.ReactElement;
+  in?: boolean;
+  mountOnEnter?: boolean;
+  nodeRef: React.RefObject<HTMLElement>;
   unmountOnExit?: boolean;
 }
 
 export type TransitionComponent = React.ComponentType<TransitionProps>;
+export type ReactTransitionGroupComponent =
+  React.ComponentType<ReactTransitionGroupProps>;

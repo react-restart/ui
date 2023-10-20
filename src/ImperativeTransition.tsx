@@ -1,8 +1,14 @@
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
-import React, { useRef, cloneElement, useState } from 'react';
-import { TransitionComponent, TransitionProps } from './types';
+import React, {
+  useRef,
+  cloneElement,
+  useState,
+  ReactElement,
+  useCallback,
+} from 'react';
+import { ReactTransitionGroupComponent, TransitionProps } from './types';
 import NoopTransition from './NoopTransition';
 
 export interface TransitionFunctionOptions {
@@ -117,17 +123,75 @@ export default function ImperativeTransition({
     : cloneElement(children, { ref: combinedRef });
 }
 
-export function renderTransition(
-  Component: TransitionComponent | undefined,
-  runTransition: TransitionHandler | undefined,
-  props: TransitionProps & Omit<ImperativeTransitionProps, 'transition'>,
-) {
+export interface RenderTransitionProps {
+  component: ReactTransitionGroupComponent | undefined;
+  nodeRef: React.RefObject<HTMLElement>;
+  props: Omit<ImperativeTransitionProps, 'transition'>;
+  runTransition: TransitionHandler | undefined;
+}
+export function RenderTransition({
+  component: Component,
+  nodeRef,
+  props,
+  runTransition,
+}: RenderTransitionProps): ReactElement {
+  const { onExit, onExiting, onExited, onEnter, onEntering, onEntered } = props;
+
+  /** react-transition-group does not supply an HTMLElement as its first
+   * positional argument in its callback functions when nodeRef is provided.
+   * Supply this argument so that any callback functions supplied through props
+   * continue to receive an HTMLElement as their first argument */
+  const handleExit = useCallback(() => {
+    onExit?.(nodeRef.current!);
+  }, [nodeRef, onExit]);
+  const handleExiting = useCallback(() => {
+    onExiting?.(nodeRef.current!);
+  }, [nodeRef, onExiting]);
+  const handleExited = useCallback(() => {
+    onExited?.(nodeRef.current!);
+  }, [nodeRef, onExited]);
+  const handleEnter = useCallback(
+    (isAppearing: boolean) => {
+      onEnter?.(nodeRef.current!, isAppearing);
+    },
+    [nodeRef, onEnter],
+  );
+  const handleEntering = useCallback(
+    (isAppearing: boolean) => {
+      onEntering?.(nodeRef.current!, isAppearing);
+    },
+    [nodeRef, onEntering],
+  );
+  const handleEntered = useCallback(
+    (isAppearing: boolean) => {
+      onEntered?.(nodeRef.current!, isAppearing);
+    },
+    [nodeRef, onEntered],
+  );
   if (Component) {
-    return <Component {...props} />;
+    const DefinedComponent = Component as ReactTransitionGroupComponent;
+    return (
+      <DefinedComponent
+        {...props}
+        nodeRef={nodeRef}
+        onExit={handleExit}
+        onExiting={handleExiting}
+        onExited={handleExited}
+        onEnter={handleEnter}
+        onEntering={handleEntering}
+        onEntered={handleEntered}
+      />
+    );
   }
+  const imperativeProps = props as Omit<
+    ImperativeTransitionProps,
+    'transition'
+  >;
   if (runTransition) {
-    return <ImperativeTransition {...props} transition={runTransition} />;
+    return (
+      <ImperativeTransition {...imperativeProps} transition={runTransition} />
+    );
   }
 
-  return <NoopTransition {...props} />;
+  return <NoopTransition {...imperativeProps} />;
 }
