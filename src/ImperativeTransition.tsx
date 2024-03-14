@@ -4,6 +4,7 @@ import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
 import React, { useRef, cloneElement, useState } from 'react';
 import { TransitionComponent, TransitionProps } from './types';
 import NoopTransition from './NoopTransition';
+import RTGTransition from './RTGTransition';
 
 export interface TransitionFunctionOptions {
   in: boolean;
@@ -118,12 +119,12 @@ export default function ImperativeTransition({
 }
 
 export function renderTransition(
-  Component: TransitionComponent | undefined,
+  component: TransitionComponent | undefined,
   runTransition: TransitionHandler | undefined,
   props: TransitionProps & Omit<ImperativeTransitionProps, 'transition'>,
 ) {
-  if (Component) {
-    return <Component {...props} />;
+  if (component) {
+    return <RTGTransition {...props} component={component} />;
   }
   if (runTransition) {
     return <ImperativeTransition {...props} transition={runTransition} />;
