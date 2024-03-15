@@ -1,3 +1,14 @@
+## [1.6.7](https://github.com/react-restart/ui/compare/v1.6.6...v1.6.7) (2024-03-15)
+
+
+### Bug Fixes
+
+* fix warnings in strict mode ([#97](https://github.com/react-restart/ui/issues/97)) ([e900a9b](https://github.com/react-restart/ui/commit/e900a9b57f588e32ddd41589457f931c7cd262b0))
+
+
+
+
+
 ## [1.6.6](https://github.com/react-restart/ui/compare/v1.6.5...v1.6.6) (2023-06-02)
 
 
