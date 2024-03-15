@@ -8,12 +8,15 @@ jobs:
     steps:
       - name: Checking out Repository
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 20.x
+
       - name: Install Dependencies
         run: yarn bootstrap
+
       - name: Build and Deploy Production Files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
