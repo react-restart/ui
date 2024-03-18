@@ -1,3 +1,14 @@
+## [1.6.8](https://github.com/react-restart/ui/compare/v1.6.7...v1.6.8) (2024-03-18)
+
+
+### Bug Fixes
+
+* **useRTGTransitionProps:** only add transition callbacks if user passed ([#99](https://github.com/react-restart/ui/issues/99)) ([c606485](https://github.com/react-restart/ui/commit/c606485882e5efc0ffc2646ddbef8fc2d8fde381))
+
+
+
+
+
 ## [1.6.7](https://github.com/react-restart/ui/compare/v1.6.6...v1.6.7) (2024-03-15)
 
 
