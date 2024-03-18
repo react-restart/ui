@@ -60,13 +60,13 @@ export default function useRTGTransitionProps({
   return {
     ...props,
     nodeRef,
-    onEnter: handleEnter,
-    onEntering: handleEntering,
-    onEntered: handleEntered,
-    onExit: handleExit,
-    onExiting: handleExiting,
-    onExited: handleExited,
-    addEndListener: handleAddEndListener,
+    ...(onEnter && { onEnter: handleEnter }),
+    ...(onEntering && { onEntering: handleEntering }),
+    ...(onEntered && { onEntered: handleEntered }),
+    ...(onExit && { onExit: handleExit }),
+    ...(onExiting && { onExiting: handleExiting }),
+    ...(onExited && { onExited: handleExited }),
+    ...(addEndListener && { addEndListener: handleAddEndListener }),
     children:
       typeof children === 'function'
         ? (((status: TransitionStatus, innerProps: Record<string, unknown>) =>
