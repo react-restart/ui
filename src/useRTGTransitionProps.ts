@@ -35,7 +35,9 @@ export default function useRTGTransitionProps({
   const nodeRef = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(
     nodeRef,
-    typeof children === 'function' ? null : (children as any).ref,
+    typeof children === 'function'
+      ? null
+      : (children as any).props.ref || (children as any).ref,
   );
 
   const normalize =
