@@ -8,7 +8,6 @@ import simulant from 'simulant';
 
 import { render } from '@testing-library/react';
 import { mount } from 'enzyme';
-import { shouldWarn } from './helpers';
 
 import Modal from '../src/Modal';
 import { OPEN_DATA_ATTRIBUTE } from '../src/ModalManager';
@@ -240,8 +239,6 @@ describe('<Modal>', () => {
   });
 
   it('should pass transition callbacks to Transition', (done) => {
-    // Expected since ref is only a prop in react 19+.
-    shouldWarn('Warning: div: `ref` is not a prop');
     let count = 0;
     let increment = () => count++;
 
