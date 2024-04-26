@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { cloneElement, useCallback, useRef } from 'react';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import {
