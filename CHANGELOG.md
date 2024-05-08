@@ -1,3 +1,15 @@
+## [1.6.9](https://github.com/react-restart/ui/compare/v1.6.8...v1.6.9) (2024-05-08)
+
+
+### Bug Fixes
+
+* **DropdownMenu:** remove defaultProps ([#103](https://github.com/react-restart/ui/issues/103)) ([42943d8](https://github.com/react-restart/ui/commit/42943d86c5c72c290e63257dc320916112364f15))
+* **useRTGTransitionProps:** fix ref warning for react 18.3+ ([#102](https://github.com/react-restart/ui/issues/102)) ([ba3d534](https://github.com/react-restart/ui/commit/ba3d534b44265fb83affe35cdbffbab73628f84f))
+
+
+
+
+
 ## [1.6.8](https://github.com/react-restart/ui/compare/v1.6.7...v1.6.8) (2024-03-18)
 
 
