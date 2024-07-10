@@ -1,7 +1,5 @@
-/* eslint-disable mocha/no-hooks-for-single-case */
-
 import { fireEvent, render, screen } from '@testing-library/react';
-import { expect } from 'chai';
+import { expect, describe, beforeEach, afterEach, it } from 'vitest';
 import Tabs from '../src/Tabs';
 import Nav from '../src/Nav';
 import NavItem from '../src/NavItem';
@@ -32,6 +30,6 @@ describe('<Nav>', () => {
 
     fireEvent.keyDown(screen.getByText('One'), { key: 'ArrowRight' });
 
-    expect(document.activeElement).to.equal(screen.getByRole('textbox'));
+    expect(document.activeElement).toEqual(screen.getByRole('textbox'));
   });
 });

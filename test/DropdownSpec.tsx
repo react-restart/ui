@@ -1,7 +1,7 @@
-import ReactDOM from 'react-dom';
-import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { expect, describe, it, afterEach, beforeEach, vi } from 'vitest';
 
+import userEvent from '@testing-library/user-event';
 import Dropdown from '../src/Dropdown';
 import DropdownItem from '../src/DropdownItem';
 
@@ -13,7 +13,7 @@ describe('<Dropdown>', () => {
     popperConfig,
     renderMenuOnMount = true,
     ...props
-  }) => (
+  }: any) => (
     <Dropdown.Menu
       flip
       usePopper={usePopper}
@@ -33,6 +33,7 @@ describe('<Dropdown>', () => {
             {...menuProps}
             data-show={show}
             className="menu"
+            data-testid="menu"
             style={{ display: show ? 'flex' : 'none' }}
           />
         );
@@ -40,13 +41,14 @@ describe('<Dropdown>', () => {
     </Dropdown.Menu>
   );
 
-  const Toggle = (props) => (
+  const Toggle = (props: any) => (
     <Dropdown.Toggle>
       {(toggleProps) => (
         <button
           {...props}
           {...toggleProps}
           id="test-id"
+          data-testid="toggle"
           type="button"
           className="toggle"
         />
@@ -60,7 +62,7 @@ describe('<Dropdown>', () => {
     usePopper,
     renderMenuOnMount,
     ...outer
-  }) => (
+  }: any) => (
     <Dropdown {...outer}>
       {children || (
         <>
@@ -81,7 +83,7 @@ describe('<Dropdown>', () => {
     </Dropdown>
   );
 
-  let focusableContainer;
+  let focusableContainer: HTMLElement;
 
   beforeEach(() => {
     focusableContainer = document.createElement('div');
@@ -89,27 +91,24 @@ describe('<Dropdown>', () => {
   });
 
   afterEach(() => {
-    ReactDOM.unmountComponentAtNode(focusableContainer);
     document.body.removeChild(focusableContainer);
   });
 
   it('renders toggle with Dropdown.Toggle', () => {
-    const { container } = render(<SimpleDropdown />);
+    render(<SimpleDropdown />);
 
-    const toggle = container.querySelector('button.toggle');
+    const buttonNode = screen.getByTestId('toggle');
 
-    toggle.textContent.should.match(/Toggle/);
+    expect(buttonNode.textContent).toMatch(/Toggle/);
 
-    toggle.hasAttribute('aria-haspopup').should.equal(false);
-
-    toggle.getAttribute('aria-expanded').should.equal('false');
-
-    toggle.getAttribute('id').should.be.ok;
+    expect(buttonNode.hasAttribute('aria-haspopup')).toEqual(false);
+    expect(buttonNode.getAttribute('aria-expanded')).toEqual('false');
+    expect(buttonNode.getAttribute('id')).toBeTruthy();
   });
 
   it('forwards placement to menu', () => {
-    const renderSpy = sinon.spy((meta) => {
-      meta.placement.should.equal('bottom-end');
+    const renderSpy = vi.fn((meta) => {
+      expect(meta.placement).toEqual('bottom-end');
     });
 
     render(
@@ -121,7 +120,7 @@ describe('<Dropdown>', () => {
       />,
     );
 
-    renderSpy.should.have.been.called;
+    expect(renderSpy).toHaveBeenCalled();
   });
 
   // NOTE: The onClick event handler is invoked for both the Enter and Space
@@ -130,38 +129,38 @@ describe('<Dropdown>', () => {
   it('toggles open/closed when clicked', () => {
     const { container } = render(<SimpleDropdown />);
 
-    expect(container.querySelector('.show')).to.not.exist;
+    expect(container.querySelector('.show')).toBeNull();
 
-    fireEvent.click(container.querySelector('button[aria-expanded="false"]'));
+    fireEvent.click(container.querySelector('button[aria-expanded="false"]')!);
 
     expect(container.querySelector('div[data-show="true"]')).to.exist;
 
-    fireEvent.click(container.querySelector('button[aria-expanded="true"]'));
+    fireEvent.click(container.querySelector('button[aria-expanded="true"]')!);
 
-    expect(container.querySelector('.show')).to.not.exist;
+    expect(container.querySelector('.show')).toBeNull();
     expect(container.querySelector('button[aria-expanded="false"]')).to.exist;
   });
 
   it('closes when clicked outside', () => {
-    const closeSpy = sinon.spy();
+    const closeSpy = vi.fn();
     const { container } = render(<SimpleDropdown onToggle={closeSpy} />);
 
-    fireEvent.click(container.querySelector('.toggle'));
+    fireEvent.click(container.querySelector('.toggle')!);
 
     fireEvent.click(document.body);
 
-    closeSpy.should.have.been.calledTwice;
+    expect(closeSpy).toHaveBeenCalledTimes(2);
 
-    closeSpy.lastCall.args[0].should.equal(false);
+    expect(closeSpy.mock.calls.at(-1)![0]).to.equal(false);
   });
 
   it('closes when mousedown outside if rootCloseEvent set', () => {
-    const closeSpy = sinon.spy();
+    const closeSpy = vi.fn();
 
     const { container } = render(
-      <Dropdown onToggle={closeSpy} id="test-id">
+      <Dropdown onToggle={closeSpy}>
         <div>
-          <Toggle>Child Title</Toggle>,
+          <Toggle>Toggle</Toggle>,
           <Menu rootCloseEvent="mousedown">
             <button type="button">Item 1</button>
             <button type="button">Item 2</button>
@@ -170,38 +169,40 @@ describe('<Dropdown>', () => {
       </Dropdown>,
     );
 
-    fireEvent.click(container.querySelector('.toggle'));
+    fireEvent.click(container.querySelector('.toggle')!);
 
     fireEvent.mouseDown(document.body);
 
-    closeSpy.should.have.been.calledTwice;
-    closeSpy.lastCall.args[0].should.equal(false);
+    expect(closeSpy).toHaveBeenCalledTimes(2);
+    expect(closeSpy.mock.calls.at(-1)![0]).to.equal(false);
   });
 
   it('when focused and closed toggles open when the key "down" is pressed', () => {
-    const closeSpy = sinon.spy();
+    const closeSpy = vi.fn();
     const { container } = render(<SimpleDropdown onToggle={closeSpy} />, {
       container: focusableContainer,
     });
 
-    fireEvent.keyDown(container.querySelector('.toggle'), { key: 'ArrowDown' });
+    fireEvent.keyDown(container.querySelector('.toggle')!, {
+      key: 'ArrowDown',
+    });
 
-    closeSpy.should.have.been.calledOnce;
-    closeSpy.lastCall.args[0].should.equal(true);
+    expect(closeSpy).toHaveBeenCalledOnce();
+    expect(closeSpy.mock.calls.at(-1)![0]).to.equal(true);
   });
 
   it('closes when item is clicked', () => {
-    const onToggle = sinon.spy();
+    const onToggle = vi.fn();
 
     const root = render(<SimpleDropdown show onToggle={onToggle} />);
 
     fireEvent.click(root.getByText('Item 4'));
 
-    onToggle.should.have.been.calledWith(false);
+    expect(onToggle.mock.calls[0][0]).toEqual(false);
   });
 
   it('does not close when onToggle is controlled', () => {
-    const onToggle = sinon.spy();
+    const onToggle = vi.fn();
 
     const root = render(<SimpleDropdown show onToggle={onToggle} />);
 
@@ -209,7 +210,7 @@ describe('<Dropdown>', () => {
 
     fireEvent.click(root.getByText('Item 1'));
 
-    onToggle.should.have.been.calledWith(false);
+    expect(onToggle.mock.calls[0][0]).toEqual(false);
 
     expect(root.container.querySelector('div[data-show="true"]')).to.exist;
   });
@@ -217,12 +218,9 @@ describe('<Dropdown>', () => {
   it('has aria-labelledby same id as toggle button', () => {
     const root = render(<SimpleDropdown defaultShow />);
 
-    root
-      .getByText('Toggle')
-      .getAttribute('id')
-      .should.equal(
-        root.container.querySelector('.menu').getAttribute('aria-labelledby'),
-      );
+    expect(root.getByText('Toggle').getAttribute('id')).to.equal(
+      root.container.querySelector('.menu')!.getAttribute('aria-labelledby'),
+    );
   });
 
   it('has aria-haspopup when menu has role=menu and not otherwise', () => {
@@ -262,8 +260,8 @@ describe('<Dropdown>', () => {
   });
 
   describe('focusable state', () => {
-    it('when focus should not be moved to first item when focusFirstItemOnShow is `false`', () => {
-      const root = render(
+    it('when focus should not be moved to first item when focusFirstItemOnShow is `false`', async () => {
+      render(
         <Dropdown focusFirstItemOnShow={false}>
           <div>
             <Toggle>Toggle</Toggle>,
@@ -275,83 +273,91 @@ describe('<Dropdown>', () => {
         { container: focusableContainer },
       );
 
-      const toggle = root.getByText('Toggle');
+      const toggle = screen.getByTestId('toggle');
 
       toggle.focus();
 
-      fireEvent.click(toggle);
+      await userEvent.click(toggle);
 
-      document.activeElement.should.equal(toggle);
+      expect(document.activeElement).toEqual(toggle);
     });
 
-    it('when focused and closed sets focus on first menu item when the key "down" is pressed for role="menu"', (done) => {
-      const root = render(
+    it('when focused and closed sets focus on first menu item when the key "down" is pressed for role="menu"', async () => {
+      render(
         <Dropdown>
           <div>
             <Toggle>Toggle</Toggle>,
             <Menu role="menu">
-              <DropdownItem>Item 1</DropdownItem>
-              <DropdownItem>Item 2</DropdownItem>
+              <Dropdown.Item>Item 1</Dropdown.Item>
+              <Dropdown.Item>Item 2</Dropdown.Item>
             </Menu>
           </div>
         </Dropdown>,
         { container: focusableContainer },
       );
 
-      const toggle = root.getByText('Toggle');
+      const toggle = screen.getByTestId('toggle');
 
       toggle.focus();
 
-      fireEvent.keyDown(toggle, { key: 'ArrowDown' });
-
-      setTimeout(() => {
-        document.activeElement.should.equal(root.getByText('Item 1'));
-        done();
+      fireEvent.keyDown(toggle, {
+        key: 'ArrowDown',
       });
+
+      await waitFor(() =>
+        expect(document.activeElement).toEqual(
+          screen.getByRole('button', { name: 'Item 1' }),
+        ),
+      );
     });
 
     it('when focused and closed sets focus on first menu item when the focusFirstItemOnShow is true', () => {
-      const root = render(
+      render(
         <Dropdown focusFirstItemOnShow>
           <div>
             <Toggle>Toggle</Toggle>,
             <Menu>
-              <DropdownItem>Item 1</DropdownItem>
-              <DropdownItem>Item 2</DropdownItem>
+              <Dropdown.Item>Item 1</Dropdown.Item>
+              <Dropdown.Item>Item 2</Dropdown.Item>
             </Menu>
           </div>
         </Dropdown>,
         { container: focusableContainer },
       );
 
-      const toggle = root.getByText('Toggle');
+      const toggle = screen.getByTestId('toggle');
 
       toggle.focus();
 
-      fireEvent.click(toggle);
-
-      return Promise.resolve().then(() => {
-        document.activeElement.should.equal(root.getByText('Item 1'));
+      fireEvent.keyDown(toggle, {
+        key: 'ArrowDown',
       });
+
+      expect(document.activeElement).toEqual(
+        screen.getByRole('button', { name: 'Item 1' }),
+      );
     });
 
     it('when open and the key "Escape" is pressed the menu is closed and focus is returned to the button', () => {
-      const root = render(<SimpleDropdown defaultShow />, {
+      render(<SimpleDropdown defaultShow />, {
         container: focusableContainer,
       });
 
-      const firstItem = root.getByText('Item 1');
+      const firstItem = screen.getByRole('button', { name: 'Item 1' });
 
       firstItem.focus();
-      document.activeElement.should.equal(firstItem);
 
-      fireEvent.keyDown(firstItem, { key: 'Escape' });
+      expect(document.activeElement).toEqual(firstItem);
 
-      document.activeElement.should.equal(root.getByText('Toggle'));
+      fireEvent.keyDown(firstItem, {
+        key: 'Escape',
+      });
+
+      expect(document.activeElement).toEqual(screen.getByTestId('toggle'));
     });
 
     it('when open and a search input is focused and the key "Escape" is pressed the menu stays open', () => {
-      const toggleSpy = sinon.spy();
+      const toggleSpy = vi.fn();
       const root = render(
         <Dropdown defaultShow onToggle={toggleSpy}>
           <Toggle key="toggle">Toggle</Toggle>,
@@ -367,17 +373,17 @@ describe('<Dropdown>', () => {
       const input = root.getByTestId('input');
 
       input.focus();
-      document.activeElement.should.equal(input);
+      expect(document.activeElement).toEqual(input);
 
       fireEvent.keyDown(input, { key: 'Escape' });
 
-      document.activeElement.should.equal(input);
+      expect(document.activeElement).toEqual(input);
 
-      toggleSpy.should.not.be.called;
+      expect(toggleSpy).not.toHaveBeenCalled();
     });
 
     it('when open and the key "tab" is pressed the menu is closed and focus is progress to the next focusable element', () => {
-      const root = render(
+      render(
         <div>
           <SimpleDropdown defaultShow />
           <input type="text" id="next-focusable" />
@@ -385,14 +391,14 @@ describe('<Dropdown>', () => {
         { container: focusableContainer },
       );
 
-      const toggle = root.getByText('Toggle');
+      const toggle = screen.getByTestId('toggle');
 
       toggle.focus();
 
       fireEvent.keyDown(toggle, { key: 'Tab' });
       fireEvent.keyUp(toggle, { key: 'Tab' });
 
-      toggle.getAttribute('aria-expanded').should.equal('false');
+      expect(toggle.getAttribute('aria-expanded')).toEqual('false');
 
       // simulating a tab event doesn't actually shift focus.
       // at least that seems to be the case according to SO.
@@ -401,7 +407,7 @@ describe('<Dropdown>', () => {
   });
 
   it('should not call onToggle if the menu ref not defined and "tab" is pressed', () => {
-    const onToggleSpy = sinon.spy();
+    const onToggleSpy = vi.fn();
     const root = render(
       <SimpleDropdown onToggle={onToggleSpy} renderMenuOnMount={false} />,
       {
@@ -415,11 +421,11 @@ describe('<Dropdown>', () => {
     fireEvent.keyDown(toggle, { key: 'Tab' });
     fireEvent.keyUp(toggle, { key: 'Tab' });
 
-    onToggleSpy.should.not.be.called;
+    expect(onToggleSpy).not.toHaveBeenCalled();
   });
 
   it('should not call onToggle if the menu is hidden and "tab" is pressed', () => {
-    const onToggleSpy = sinon.spy();
+    const onToggleSpy = vi.fn();
     const root = render(<SimpleDropdown onToggle={onToggleSpy} />, {
       container: focusableContainer,
     });
@@ -430,12 +436,12 @@ describe('<Dropdown>', () => {
     fireEvent.keyDown(toggle, { key: 'Tab' });
     fireEvent.keyUp(toggle, { key: 'Tab' });
 
-    onToggleSpy.should.not.be.called;
+    expect(onToggleSpy).not.toHaveBeenCalled();
   });
 
   describe('popper config', () => {
-    it('can add modifiers', (done) => {
-      const spy = sinon.spy();
+    it('can add modifiers', async () => {
+      const spy = vi.fn();
       const popper = {
         modifiers: [
           {
@@ -448,21 +454,18 @@ describe('<Dropdown>', () => {
       };
 
       render(
-        <Dropdown show id="test-id">
+        <Dropdown show>
           <div>
-            <Toggle>Child Title</Toggle>
+            <Toggle>Toggle</Toggle>
             <Menu popperConfig={popper}>
-              <button type="button">Item 1</button>
-              <button type="button">Item 2</button>
+              <Dropdown.Item>Item 1</Dropdown.Item>
+              <Dropdown.Item>Item 2</Dropdown.Item>
             </Menu>
           </div>
         </Dropdown>,
       );
 
-      setTimeout(() => {
-        spy.should.have.been.calledOnce;
-        done();
-      });
+      await waitFor(() => expect(spy).toHaveBeenCalledOnce());
     });
   });
 });

@@ -1,14 +1,16 @@
 import css from 'dom-helpers/css';
 import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
-import ModalManager from '../src/ModalManager';
+import { expect, describe, it, beforeEach, afterEach } from 'vitest';
+import ModalManager, { ModalInstance } from '../src/ModalManager';
 
 import { injectCss } from './helpers';
 
-const createModal = () => ({ dialog: null, backdrop: null });
+const createModal = (): ModalInstance =>
+  ({ dialog: null, backdrop: null } as any);
 
 describe('ModalManager', () => {
-  let container, manager;
+  let container: HTMLElement, manager: ModalManager;
 
   beforeEach(() => {
     manager?.reset();
@@ -21,19 +23,17 @@ describe('ModalManager', () => {
   afterEach(() => {
     manager?.reset();
     document.body.removeChild(container);
-    container = null;
-    manager = null;
   });
 
   it('should add Modal', () => {
-    let modal = createModal();
+    const modal = createModal();
 
     manager.add(modal);
 
     expect(manager.modals.length).to.equal(1);
     expect(manager.modals[0]).to.equal(modal);
 
-    expect(manager.state).to.eql({
+    expect((manager as any).state).to.eql({
       scrollBarWidth: 0,
       style: {
         overflow: '',
@@ -43,7 +43,7 @@ describe('ModalManager', () => {
   });
 
   it('should not add a modal twice', () => {
-    let modal = createModal();
+    const modal = createModal();
     manager.add(modal);
     manager.add(modal);
 
@@ -51,8 +51,8 @@ describe('ModalManager', () => {
   });
 
   it('should add multiple modals', () => {
-    let modalA = createModal();
-    let modalB = createModal();
+    const modalA = createModal();
+    const modalB = createModal();
 
     manager.add(modalA);
     manager.add(modalB);
@@ -61,8 +61,8 @@ describe('ModalManager', () => {
   });
 
   it('should remove modal', () => {
-    let modalA = createModal();
-    let modalB = createModal();
+    const modalA = createModal();
+    const modalB = createModal();
 
     manager.add(modalA);
     manager.add(modalB);
@@ -90,7 +90,7 @@ describe('ModalManager', () => {
     afterEach(() => injectCss.reset());
 
     it('should set container overflow to hidden ', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(document.body.style.overflow).to.equal('');
 
@@ -100,7 +100,7 @@ describe('ModalManager', () => {
     });
 
     it('should respect handleContainerOverflow', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(document.body.style.overflow).to.equal('');
 
@@ -115,7 +115,7 @@ describe('ModalManager', () => {
     });
 
     it('should set add to existing container padding', () => {
-      let modal = createModal();
+      const modal = createModal();
       manager.add(modal);
 
       expect(document.body.style.paddingRight).to.equal(
@@ -124,7 +124,7 @@ describe('ModalManager', () => {
     });
 
     it('should set padding to left side if RTL', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       new ModalManager({ isRTL: true }).add(modal);
 
@@ -134,7 +134,7 @@ describe('ModalManager', () => {
     });
 
     it('should restore container overflow style', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       document.body.style.overflow = 'scroll';
 
@@ -148,7 +148,7 @@ describe('ModalManager', () => {
     });
 
     it('should reset overflow style to the computed one', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(css(document.body, 'overflow')).to.equal('scroll');
 
@@ -160,8 +160,8 @@ describe('ModalManager', () => {
     });
 
     it('should only remove styles when there are no associated modals', () => {
-      let modalA = createModal();
-      let modalB = createModal();
+      const modalA = createModal();
+      const modalB = createModal();
 
       expect(document.body.style.overflow).to.equal('');
 

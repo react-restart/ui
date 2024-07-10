@@ -1,6 +1,5 @@
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
+import { expect, vi, describe, it } from 'vitest';
 import Nav from '../src/Nav';
 import NavItem from '../src/NavItem';
 import TabPanel from '../src/TabPanel';
@@ -8,7 +7,7 @@ import Tabs from '../src/Tabs';
 
 describe('<Tabs>', () => {
   it('should not propagate context past TabPanels', () => {
-    const onSelect = sinon.spy();
+    const onSelect = vi.fn();
 
     const { getByText } = render(
       <Tabs id="custom-id" onSelect={onSelect}>
@@ -27,15 +26,16 @@ describe('<Tabs>', () => {
 
     const nestedNavItem = getByText('Two');
     fireEvent.click(nestedNavItem);
-    onSelect.should.not.have.been.called;
+
+    expect(onSelect).not.toHaveBeenCalled();
 
     const topNavItem = getByText('One');
     fireEvent.click(topNavItem);
-    onSelect.should.have.been.calledOnce;
+    expect(onSelect).toHaveBeenCalledOnce();
   });
 
   it('should let generateChildId function create id', () => {
-    const generateChildIdSpy = sinon.spy(() => 'test-id');
+    const generateChildIdSpy = vi.fn(() => 'test-id');
 
     const { getByRole } = render(
       <Tabs generateChildId={generateChildIdSpy}>
@@ -111,7 +111,7 @@ describe('<Tabs>', () => {
     expect(getByRole('navigation')).to.exist;
 
     // make sure it's not passed to the NavItem
-    expect(getByRole('button').getAttribute('role')).to.not.exist;
+    expect(getByRole('button').getAttribute('role')).toBeNull();
   });
 
   it('Should show the correct tab when selected', () => {
@@ -160,9 +160,9 @@ describe('<Tabs>', () => {
     );
 
     expect(queryByText('Tab 1')).to.exist;
-    expect(queryByText('Tab 2')).to.not.exist;
+    expect(queryByText('Tab 2')).toBeNull();
     fireEvent.click(getByText('Two'));
-    expect(queryByText('Tab 1')).to.not.exist;
+    expect(queryByText('Tab 1')).toBeNull();
     expect(queryByText('Tab 2')).to.exist;
   });
 
@@ -203,13 +203,13 @@ describe('<Tabs>', () => {
     );
 
     expect(queryByText('Tab 1')).to.exist;
-    expect(queryByText('Tab 2')).to.not.exist;
+    expect(queryByText('Tab 2')).toBeNull();
     expect(getByText('One').getAttribute('aria-controls')).to.exist;
-    expect(getByText('Two').getAttribute('aria-controls')).to.not.exist;
+    expect(getByText('Two').getAttribute('aria-controls')).toBeNull();
     fireEvent.click(getByText('Two'));
-    expect(queryByText('Tab 1')).to.not.exist;
+    expect(queryByText('Tab 1')).toBeNull();
     expect(queryByText('Tab 2')).to.exist;
-    expect(getByText('One').getAttribute('aria-controls')).to.not.exist;
+    expect(getByText('One').getAttribute('aria-controls')).toBeNull();
     expect(getByText('Two').getAttribute('aria-controls')).to.exist;
   });
 
@@ -228,13 +228,13 @@ describe('<Tabs>', () => {
       </Tabs>,
     );
     expect(queryByText('Tab 1')).to.exist;
-    expect(queryByText('Tab 2')).to.not.exist;
+    expect(queryByText('Tab 2')).toBeNull();
     expect(getByText('One').getAttribute('aria-controls')).to.exist;
-    expect(getByText('Two').getAttribute('aria-controls')).to.not.exist;
+    expect(getByText('Two').getAttribute('aria-controls')).toBeNull();
     fireEvent.click(getByText('Two'));
     expect(queryByText('Tab 1')).to.exist;
     expect(queryByText('Tab 2')).to.exist;
-    expect(getByText('One').getAttribute('aria-controls')).to.not.exist;
+    expect(getByText('One').getAttribute('aria-controls')).toBeNull();
     expect(getByText('Two').getAttribute('aria-controls')).to.exist;
   });
 });

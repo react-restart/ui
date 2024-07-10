@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import sinon from 'sinon';
 
+import { vi, expect, describe, it } from 'vitest';
 import DropdownItem from '../src/DropdownItem';
 import SelectableContext from '../src/SelectableContext';
 
@@ -9,31 +9,32 @@ describe('<DropdownItem>', () => {
   it('should output a nav item as button', () => {
     const { getByText } = render(<DropdownItem>test</DropdownItem>);
 
-    getByText('test').tagName.should.equal('BUTTON');
+    expect(getByText('test').tagName).toEqual('BUTTON');
   });
 
   it('should trigger onClick', () => {
-    const onClickSpy = sinon.spy();
+    const onClickSpy = vi.fn();
     const { getByText } = render(
       <DropdownItem onClick={onClickSpy}>test</DropdownItem>,
     );
     fireEvent.click(getByText('test'));
-    onClickSpy.should.be.called;
+
+    expect(onClickSpy).toHaveBeenCalled();
   });
 
   it('should not trigger onClick if disabled', () => {
-    const onClickSpy = sinon.spy();
+    const onClickSpy = vi.fn();
     const { getByText } = render(
       <DropdownItem onClick={onClickSpy} disabled>
         test
       </DropdownItem>,
     );
     fireEvent.click(getByText('test'));
-    onClickSpy.should.not.be.called;
+    expect(onClickSpy).not.toHaveBeenCalled();
   });
 
   it('should call onSelect if a key is defined', () => {
-    const onSelect = sinon.spy();
+    const onSelect = vi.fn();
     const { getByText } = render(
       <SelectableContext.Provider value={onSelect}>
         <DropdownItem eventKey="abc">test</DropdownItem>
@@ -41,11 +42,11 @@ describe('<DropdownItem>', () => {
     );
 
     fireEvent.click(getByText('test'));
-    onSelect.should.be.calledWith('abc');
+    expect(onSelect.mock.calls.at(-1)![0]).toEqual('abc');
   });
 
   it('should not call onSelect onClick stopPropagation called', () => {
-    const onSelect = sinon.spy();
+    const onSelect = vi.fn();
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
     };
@@ -58,6 +59,6 @@ describe('<DropdownItem>', () => {
     );
 
     fireEvent.click(getByText('test'));
-    onSelect.should.not.be.called;
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });
