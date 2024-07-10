@@ -52,7 +52,7 @@
     "build:pick": "cherry-pick --cwd=lib --input-dir=../src --cjs-dir=cjs --esm-dir=esm",
     "build:popper": "rollup src/popper.ts --file lib/cjs/popper.js --format cjs --name popper --plugin @rollup/plugin-node-resolve",
     "deploy-docs": "yarn --cwd www deploy",
-    "lint": "eslint www/*.js www/src src test *.js  --ext .js,.ts,.tsx",
+    "lint": "eslint www/*.js www/src src test *.ts  --ext .js,.ts,.tsx",
     "prepublishOnly": "yarn build",
     "release": "rollout",
     "start": "yarn --cwd www start",
