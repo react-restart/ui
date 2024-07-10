@@ -56,7 +56,7 @@ function useClickOutside(
   const waitingForTrigger = useRef(false);
 
   const handleMouseCapture = useCallback(
-    (e) => {
+    (e: any) => {
       const currentTarget = getRefTarget(ref);
 
       warning(

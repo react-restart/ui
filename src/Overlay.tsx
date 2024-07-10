@@ -222,7 +222,9 @@ const Overlay = React.forwardRef<HTMLElement, OverlayProps>(
       onEntered,
     });
 
-    return container ? ReactDOM.createPortal(child, container) : null;
+    return (
+      <>{container ? ReactDOM.createPortal(<>{child}</>, container) : null}</>
+    );
   },
 );
 
