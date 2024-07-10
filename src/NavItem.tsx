@@ -117,21 +117,23 @@ export function useNavItem({
   return [props, { isActive }] as const;
 }
 
-const NavItem: DynamicRefForwardingComponent<typeof Button, NavItemProps> =
-  React.forwardRef<HTMLElement, NavItemProps>(
-    ({ as: Component = Button, active, eventKey, ...options }, ref) => {
-      const [props, meta] = useNavItem({
-        key: makeEventKey(eventKey, options.href),
-        active,
-        ...options,
-      });
+const NavItem: DynamicRefForwardingComponent<
+  typeof Button,
+  NavItemProps
+> = React.forwardRef<HTMLElement, NavItemProps>(
+  ({ as: Component = Button, active, eventKey, ...options }, ref) => {
+    const [props, meta] = useNavItem({
+      key: makeEventKey(eventKey, options.href),
+      active,
+      ...options,
+    });
 
-      // @ts-ignore
-      props[dataAttr('active')] = meta.isActive;
+    // @ts-ignore
+    props[dataAttr('active')] = meta.isActive;
 
-      return <Component {...options} {...props} ref={ref} />;
-    },
-  );
+    return <Component {...options} {...props} ref={ref} />;
+  },
+);
 
 NavItem.displayName = 'NavItem';
 

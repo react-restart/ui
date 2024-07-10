@@ -4,10 +4,8 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import Transition from 'react-transition-group/Transition';
-import simulant from 'simulant';
 
 import { render } from '@testing-library/react';
-import { mount } from 'enzyme';
 
 import Modal from '../src/Modal';
 import { OPEN_DATA_ATTRIBUTE } from '../src/ModalManager';
@@ -18,8 +16,8 @@ describe('<Modal>', () => {
 
   const mountWithRef = (el, options) => {
     const ref = React.createRef();
-    const Why = (props) => React.cloneElement(el, { ...props, ref });
-    wrapper = mount(<Why />, options);
+
+    render(React.cloneElement(el, { ...el.props, ref }), options);
     return ref;
   };
 
