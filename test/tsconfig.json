@@ -1,0 +1,9 @@
+{
+  "extends": "@4c/tsconfig/web.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "lib": ["DOM", "ESNext"],
+    "noImplicitAny": false
+  },
+  "include": ["../src", "."]
+}

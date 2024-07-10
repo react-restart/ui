@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-shadow */
+/* eslint-disable max-classes-per-file */
+import { render } from '@testing-library/react';
+import { expect, describe, it, vi } from 'vitest';
+
 import React, { useRef } from 'react';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
 
 import useWaitForDOMRef from '../src/useWaitForDOMRef';
 
@@ -10,28 +13,27 @@ describe('useWaitForDOMRef', () => {
     let renderCount = 0;
     const container = document.createElement('div');
 
-    function Test({ container, onResolved }) {
+    function Test({ container, onResolved }: any) {
       useWaitForDOMRef(container, onResolved);
       renderCount++;
       return null;
     }
 
-    const onResolved = sinon.spy((resolved) => {
+    const onResolved = vi.fn((resolved) => {
       expect(resolved).to.equal(container);
     });
 
-    act(() => {
-      mount(<Test container={container} onResolved={onResolved} />);
-    });
+    render(<Test container={container} onResolved={onResolved} />);
 
-    renderCount.should.equal(1);
-    onResolved.should.have.been.calledOnce;
+    expect(renderCount).toEqual(1);
+    expect(onResolved).toHaveBeenCalledOnce();
   });
 
   it('should resolve on first render if possible (ref)', () => {
     let renderCount = 0;
     const container = React.createRef();
-    container.current = document.createElement('div');
+
+    (container as any).current = document.createElement('div');
 
     function Test({ container, onResolved }) {
       useWaitForDOMRef(container, onResolved);
@@ -39,16 +41,14 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy((resolved) => {
-      expect(resolved).to.equal(container.current);
+    const onResolved = vi.fn((resolved) => {
+      expect(resolved).toEqual(container.current);
     });
 
-    act(() => {
-      mount(<Test container={container} onResolved={onResolved} />);
-    });
+    render(<Test container={container} onResolved={onResolved} />);
 
-    renderCount.should.equal(1);
-    onResolved.should.have.been.calledOnce;
+    expect(renderCount).toEqual(1);
+    expect(onResolved).toHaveBeenCalledOnce();
   });
 
   it('should resolve on first render if possible (function)', () => {
@@ -62,15 +62,14 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy((resolved) => {
+    const onResolved = vi.fn((resolved) => {
       expect(resolved).to.equal(div);
     });
 
-    act(() => {
-      mount(<Test container={container} onResolved={onResolved} />);
-    });
-    renderCount.should.equal(1);
-    onResolved.should.have.been.calledOnce;
+    render(<Test container={container} onResolved={onResolved} />);
+
+    expect(renderCount).toEqual(1);
+    expect(onResolved).toHaveBeenCalledOnce();
   });
 
   it('should resolve after if required', () => {
@@ -82,7 +81,7 @@ describe('useWaitForDOMRef', () => {
       return null;
     }
 
-    const onResolved = sinon.spy((resolved) => {
+    const onResolved = vi.fn((resolved) => {
       expect(resolved.tagName).to.equal('DIV');
     });
 
@@ -96,10 +95,10 @@ describe('useWaitForDOMRef', () => {
         </>
       );
     }
-    act(() => {
-      mount(<Wrapper onResolved={onResolved} />).update();
-    });
-    renderCount.should.equal(2);
-    onResolved.should.have.been.calledOnce;
+
+    render(<Wrapper />);
+
+    expect(renderCount).toEqual(2);
+    expect(onResolved).toHaveBeenCalledOnce();
   });
 });

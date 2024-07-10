@@ -1,11 +1,14 @@
 import css from 'dom-helpers/css';
 import getScrollbarSize from 'dom-helpers/scrollbarSize';
 
-import ModalManager from '../src/ModalManager';
+import { expect } from 'chai';
+import { describe, beforeEach, afterEach, it } from 'vitest';
+import ModalManager, { ModalInstance } from '../src/ModalManager';
 
 import { injectCss } from './helpers';
 
-const createModal = () => ({ dialog: null, backdrop: null });
+const createModal = (): ModalInstance =>
+  ({ dialog: null, backdrop: null } as any);
 
 describe('ModalManager', () => {
   let container, manager;
@@ -14,6 +17,17 @@ describe('ModalManager', () => {
     manager = new ModalManager();
     container = document.createElement('div');
     container.setAttribute('id', 'container');
+
+    const proto = Reflect.getPrototypeOf(container.style)!;
+    const base = Reflect.getOwnPropertyDescriptor(proto, 'cssText')!;
+
+    Object.defineProperty(container.style, 'cssText', {
+      ...base,
+      set: (value) => {
+        base.set!.call(container.style, value.replace(/^;/g, ''));
+      },
+    });
+
     document.body.appendChild(container);
   });
 
@@ -24,7 +38,7 @@ describe('ModalManager', () => {
   });
 
   it('should add Modal', () => {
-    let modal = createModal();
+    const modal = createModal();
 
     manager.add(modal, container);
 
@@ -44,7 +58,7 @@ describe('ModalManager', () => {
   });
 
   it('should not add a modal twice', () => {
-    let modal = createModal();
+    const modal = createModal();
     manager.add(modal, container);
     manager.add(modal, container);
 
@@ -54,8 +68,8 @@ describe('ModalManager', () => {
   });
 
   it('should not add a container twice', () => {
-    let modalA = createModal();
-    let modalB = createModal();
+    const modalA = createModal();
+    const modalB = createModal();
 
     manager.add(modalA, container);
     manager.add(modalB, container);
@@ -66,8 +80,8 @@ describe('ModalManager', () => {
   });
 
   it('should remove modal', () => {
-    let modalA = createModal();
-    let modalB = createModal();
+    const modalA = createModal();
+    const modalB = createModal();
 
     manager.add(modalA, container);
     manager.add(modalB, container);
@@ -80,8 +94,8 @@ describe('ModalManager', () => {
   });
 
   it('should remove container when there are no more modals associated with it', () => {
-    let modalA = createModal();
-    let modalB = createModal();
+    const modalA = createModal();
+    const modalB = createModal();
 
     manager.add(modalA, container);
     manager.add(modalB, container);
@@ -112,8 +126,8 @@ describe('ModalManager', () => {
     });
 
     it('should not add aria-hidden to modal', () => {
-      let modal = createModal();
-      let mount = document.createElement('div');
+      const modal = createModal();
+      const mount = document.createElement('div');
 
       modal.dialog = mount;
       container.appendChild(mount);
@@ -123,8 +137,8 @@ describe('ModalManager', () => {
     });
 
     it('should add aria-hidden to previous modals', () => {
-      let modalA = createModal();
-      let mount = document.createElement('div');
+      const modalA = createModal();
+      const mount = document.createElement('div');
 
       modalA.dialog = mount;
       container.appendChild(mount);
@@ -137,9 +151,9 @@ describe('ModalManager', () => {
     });
 
     it('should remove aria-hidden on americas next top modal', () => {
-      let modalA = createModal();
-      let modalB = createModal();
-      let mount = document.createElement('div');
+      const modalA = createModal();
+      const modalB = createModal();
+      const mount = document.createElement('div');
 
       modalA.dialog = mount;
       container.appendChild(mount);
@@ -155,7 +169,7 @@ describe('ModalManager', () => {
     });
 
     it('should remove aria-hidden on siblings', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       manager.add(modal, container);
 
@@ -170,6 +184,7 @@ describe('ModalManager', () => {
   describe('container styles', () => {
     beforeEach(() => {
       container.appendChild(document.createElement('div'));
+
       injectCss(`
         #container {
           padding-right: 20px;
@@ -186,7 +201,7 @@ describe('ModalManager', () => {
     afterEach(() => injectCss.reset());
 
     it('should set container overflow to hidden ', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(container.style.overflow).to.equal('');
 
@@ -196,7 +211,7 @@ describe('ModalManager', () => {
     });
 
     it('should respect handleContainerOverflow', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(container.style.overflow).to.equal('');
 
@@ -209,7 +224,7 @@ describe('ModalManager', () => {
     });
 
     it('should set add to existing container padding', () => {
-      let modal = createModal();
+      const modal = createModal();
       manager.add(modal, container);
 
       expect(container.style.paddingRight).to.equal(
@@ -218,7 +233,7 @@ describe('ModalManager', () => {
     });
 
     it('should add container classes ', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(container.className).to.equal('');
 
@@ -228,7 +243,7 @@ describe('ModalManager', () => {
     });
 
     it('should restore container overflow style', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       container.style.overflow = 'scroll';
 
@@ -241,7 +256,7 @@ describe('ModalManager', () => {
     });
 
     it('should reset overflow style to the computed one', () => {
-      let modal = createModal();
+      const modal = createModal();
 
       expect(css(container, 'overflow')).to.equal('scroll');
 
@@ -253,8 +268,8 @@ describe('ModalManager', () => {
     });
 
     it('should only remove styles when there are no associated modals', () => {
-      let modalA = createModal();
-      let modalB = createModal();
+      const modalA = createModal();
+      const modalB = createModal();
 
       expect(container.style.overflow).to.equal('');
 
