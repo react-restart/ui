@@ -4,7 +4,7 @@ import { expect, describe, it, vi } from 'vitest';
 
 import Anchor from '../src/Anchor';
 
-describe.only('Anchor', () => {
+describe('Anchor', () => {
   it('renders an anchor tag', () => {
     const { container } = render(<Anchor data-testid="anchor" />);
 
