@@ -233,6 +233,7 @@ function Dropdown({
     }
 
     const first = qsa(menuRef.current!, itemSelector)[0];
+
     if (first && first.focus) first.focus();
   });
 

@@ -1,27 +1,30 @@
 import * as React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
 
+import { vi, expect, describe, it } from 'vitest';
 import Button from '../src/Button';
 
 describe('<Button>', () => {
   it('Should output a button', () => {
     const { container } = render(<Button>Title</Button>);
 
-    container.firstElementChild!.tagName.should.equal('BUTTON');
+    expect(container.firstElementChild!.tagName).toEqual('BUTTON');
   });
 
   it('Should have type=button by default', () => {
     const { container } = render(<Button>Title</Button>);
 
-    container.firstElementChild!.getAttribute('type')!.should.equal('button');
+    expect(container.firstElementChild!.getAttribute('type')!).toEqual(
+      'button',
+    );
   });
 
   it('Should show the type if passed one', () => {
     const { container } = render(<Button type="submit">Title</Button>);
 
-    container.firstElementChild!.getAttribute('type')!.should.equal('submit');
+    expect(container.firstElementChild!.getAttribute('type')!).toEqual(
+      'submit',
+    );
   });
 
   it('Should show the type if explicitly passed in when "as" is used', () => {
@@ -31,7 +34,9 @@ describe('<Button>', () => {
       </Button>,
     );
 
-    container.firstElementChild!.getAttribute('type')!.should.equal('submit');
+    expect(container.firstElementChild!.getAttribute('type')!).toEqual(
+      'submit',
+    );
   });
 
   it('Should not have default type=button when "as" is used', () => {
@@ -48,7 +53,7 @@ describe('<Button>', () => {
       </div>,
     );
 
-    ref.current!.tagName.should.equal('BUTTON');
+    expect(ref.current!.tagName).toEqual('BUTTON');
 
     rerender(
       <div>
@@ -58,7 +63,7 @@ describe('<Button>', () => {
       </div>,
     );
 
-    ref.current.tagName.should.equal('A');
+    expect(ref.current.tagName).toEqual('A');
   });
 
   it('Should output an anchor if called with a href', () => {
@@ -70,10 +75,13 @@ describe('<Button>', () => {
     expect(container.querySelector(`a[href="${href}"]`)).to.exist;
   });
 
-  it('Should call onClick callback', (done) => {
-    const { container } = render(<Button onClick={() => done()}>Title</Button>);
+  it('Should call onClick callback', async () => {
+    const spy = vi.fn();
+    const { container } = render(<Button onClick={spy}>Title</Button>);
 
     fireEvent.click(container.firstElementChild!);
+
+    expect(spy).toHaveBeenCalled();
   });
 
   it('Should be disabled button', () => {
@@ -83,7 +91,7 @@ describe('<Button>', () => {
   });
 
   it('Should be inferred disabled link', () => {
-    const clickSpy = sinon.spy();
+    const clickSpy = vi.fn();
 
     const { container } = render(
       <Button disabled href="#foo" onClick={clickSpy}>
@@ -91,20 +99,19 @@ describe('<Button>', () => {
       </Button>,
     );
 
-    expect(container.querySelector(`a[disabled]`)).to.not.exist;
+    expect(container.querySelector(`a[disabled]`)).toBeNull();
     const anchor = container.querySelector(`a[role="button"][aria-disabled]`)!;
 
     expect(anchor).to.exist;
 
     fireEvent.click(anchor);
 
-    expect(clickSpy).to.have.not.been.called;
+    expect(clickSpy).not.toHaveBeenCalled();
   });
 
-  // eslint-disable-next-line mocha/no-setup-in-describe
   ['#', ''].forEach((href) => {
     it(`should prevent default on trivial href="${href}" clicks`, () => {
-      const clickSpy = sinon.spy();
+      const clickSpy = vi.fn();
 
       const { getByText } = render(
         <div onClick={clickSpy}>
@@ -118,15 +125,15 @@ describe('<Button>', () => {
 
       fireEvent.click(button);
 
-      expect(clickSpy).to.have.been.called;
-      const event = clickSpy.getCall(0).args[0];
+      expect(clickSpy).toHaveBeenCalledOnce();
+      const event = clickSpy.mock.calls[0][0];
 
       expect(event.defaultPrevented).to.equal(true);
     });
   });
 
   it(`should not prevent default on button clicks`, () => {
-    const clickSpy = sinon.spy();
+    const clickSpy = vi.fn();
 
     const { getByText } = render(
       <div onClick={clickSpy}>
@@ -140,14 +147,14 @@ describe('<Button>', () => {
 
     fireEvent.click(button);
 
-    expect(clickSpy).to.have.been.called;
-    const event = clickSpy.getCall(0).args[0];
+    expect(clickSpy).toHaveBeenCalledOnce();
+    const event = clickSpy.mock.calls[0][0];
 
     expect(event.defaultPrevented).to.equal(false);
   });
 
   it('Should be disabled link', () => {
-    const clickSpy = sinon.spy();
+    const clickSpy = vi.fn();
 
     const { container } = render(
       <Button disabled as="a" onClick={clickSpy}>
@@ -161,12 +168,12 @@ describe('<Button>', () => {
 
     fireEvent.click(anchor);
 
-    expect(clickSpy).to.have.not.been.called;
+    expect(clickSpy).not.toHaveBeenCalled();
   });
 
   it('should render an anchor with # if href not provided', () => {
     const { container } = render(<Button as="a">Title</Button>);
 
-    container.firstElementChild!.getAttribute('href')!.should.equal('#');
+    expect(container.firstElementChild!.getAttribute('href')!).toEqual('#');
   });
 });

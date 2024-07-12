@@ -39,7 +39,7 @@ export function useDropdownToggle(): [
     menuElement,
   } = useContext(DropdownContext) || {};
   const handleClick = useCallback(
-    (e) => {
+    (e: Event | React.SyntheticEvent<Element, Event>) => {
       toggle(!show, e);
     },
     [show, toggle],

@@ -1,7 +1,6 @@
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
+import { expect, vi, describe, it } from 'vitest';
 import Transition from 'react-transition-group/Transition';
 
 import TabContext from '../src/TabContext';
@@ -12,27 +11,27 @@ describe('<TabPanel>', () => {
   it('should render a TabPanel', () => {
     const { getByText } = render(<TabPanel active>test</TabPanel>);
 
-    getByText('test').should.exist;
+    expect(getByText('test')).toBeTruthy();
   });
 
   it('should render a TabPanel with role tabpanel', () => {
     const { getByRole } = render(<TabPanel active>test</TabPanel>);
 
-    getByRole('tabpanel').should.exist;
+    expect(getByRole('tabpanel')).toBeTruthy();
   });
 
   it('should not render if not active and mountOnEnter=true', () => {
     const { queryByText } = render(<TabPanel mountOnEnter>test</TabPanel>);
 
-    expect(queryByText('test')).to.not.exist;
+    expect(queryByText('test')).toBeNull();
   });
 
   it('should not unmount if rendered already', () => {
     const { getByText, rerender } = render(<TabPanel active>test</TabPanel>);
-    getByText('test').should.exist;
+    expect(getByText('test')).toBeTruthy();
 
     rerender(<TabPanel>test</TabPanel>);
-    getByText('test').should.exist;
+    expect(getByText('test')).toBeTruthy();
   });
 
   it('should unmount', () => {
@@ -41,23 +40,23 @@ describe('<TabPanel>', () => {
         test
       </TabPanel>,
     );
-    getByText('test').should.exist;
+    expect(getByText('test')).toBeTruthy();
 
     rerender(<TabPanel unmountOnExit>test</TabPanel>);
-    expect(queryByText('test')).to.not.exist;
+    expect(queryByText('test')).toBeNull();
   });
 
   it('should call getControlledId for id', () => {
-    const getControlledIdSpy = sinon.spy();
+    const getControlledIdSpy = vi.fn();
 
     render(
       <TabContext.Provider
         value={{
-          onSelect: sinon.spy(),
+          onSelect: vi.fn(),
           mountOnEnter: false,
           unmountOnExit: false,
           getControlledId: getControlledIdSpy,
-          getControllerId: sinon.spy(),
+          getControllerId: vi.fn(),
         }}
       >
         <TabPanel active eventKey="mykey">
@@ -66,11 +65,11 @@ describe('<TabPanel>', () => {
       </TabContext.Provider>,
     );
 
-    getControlledIdSpy.should.be.calledWith('mykey');
+    expect(getControlledIdSpy).toHaveBeenLastCalledWith('mykey');
   });
 
   it('should fire transition events', async () => {
-    const transitionSpy = sinon.spy();
+    const transitionSpy = vi.fn();
 
     const FADE_DURATION = 200;
 
@@ -121,10 +120,10 @@ describe('<TabPanel>', () => {
     );
 
     fireEvent.click(getByText('Tab 1'));
-    await waitFor(() => transitionSpy.should.have.been.calledThrice);
+    await waitFor(() => expect(transitionSpy).toHaveBeenCalledTimes(3));
 
     fireEvent.click(getByText('Tab 2'));
-    await waitFor(() => transitionSpy.callCount.should.equal(6));
+    await waitFor(() => expect(transitionSpy).toHaveBeenCalledTimes(6));
   });
 
   it('should derive active state from context', () => {
@@ -132,11 +131,11 @@ describe('<TabPanel>', () => {
       <TabContext.Provider
         value={{
           activeKey: 'mykey',
-          onSelect: sinon.spy(),
+          onSelect: vi.fn(),
           mountOnEnter: false,
           unmountOnExit: false,
-          getControlledId: sinon.spy(),
-          getControllerId: sinon.spy(),
+          getControlledId: vi.fn(),
+          getControllerId: vi.fn(),
         }}
       >
         <TabPanel eventKey="mykey">test</TabPanel>
@@ -144,7 +143,7 @@ describe('<TabPanel>', () => {
     );
 
     const node = getByText('test');
-    node.should.exist;
+    expect(node).toBeTruthy();
     expect(node.getAttribute('aria-hidden')).to.equal('false');
   });
 
@@ -159,7 +158,7 @@ describe('<TabPanel>', () => {
 
       render(<Wrapper />);
 
-      props.role.should.equal('tabpanel');
+      expect(props.role).toEqual('tabpanel');
     });
 
     it('should have role tabpanel also within a context', () => {
@@ -173,18 +172,18 @@ describe('<TabPanel>', () => {
       render(
         <TabContext.Provider
           value={{
-            onSelect: sinon.spy(),
+            onSelect: vi.fn(),
             mountOnEnter: true,
             unmountOnExit: false,
-            getControlledId: sinon.spy(),
-            getControllerId: sinon.spy(),
+            getControlledId: vi.fn(),
+            getControllerId: vi.fn(),
           }}
         >
           <Wrapper />
         </TabContext.Provider>,
       );
 
-      props.role.should.equal('tabpanel');
+      expect(props.role).toEqual('tabpanel');
     });
 
     it('should use mountOnEnter from props if provided', () => {
@@ -198,18 +197,18 @@ describe('<TabPanel>', () => {
       render(
         <TabContext.Provider
           value={{
-            onSelect: sinon.spy(),
+            onSelect: vi.fn(),
             mountOnEnter: true,
             unmountOnExit: false,
-            getControlledId: sinon.spy(),
-            getControllerId: sinon.spy(),
+            getControlledId: vi.fn(),
+            getControllerId: vi.fn(),
           }}
         >
           <Wrapper mountOnEnter={false} />
         </TabContext.Provider>,
       );
 
-      meta.mountOnEnter.should.equal(false);
+      expect(meta.mountOnEnter).toEqual(false);
     });
 
     it('should use unmountOnExit from props if provided', () => {
@@ -223,18 +222,18 @@ describe('<TabPanel>', () => {
       render(
         <TabContext.Provider
           value={{
-            onSelect: sinon.spy(),
+            onSelect: vi.fn(),
             mountOnEnter: false,
             unmountOnExit: true,
-            getControlledId: sinon.spy(),
-            getControllerId: sinon.spy(),
+            getControlledId: vi.fn(),
+            getControllerId: vi.fn(),
           }}
         >
           <Wrapper unmountOnExit={false} />
         </TabContext.Provider>,
       );
 
-      meta.unmountOnExit.should.equal(false);
+      expect(meta.unmountOnExit).toEqual(false);
     });
   });
 });

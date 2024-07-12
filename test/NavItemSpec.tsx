@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { expect } from 'chai';
-import sinon from 'sinon';
+import { expect, describe, it, vi } from 'vitest';
 
 import NavContext from '../src/NavContext';
 import NavItem from '../src/NavItem';
@@ -11,12 +10,12 @@ describe('<NavItem>', () => {
   it('should output a nav item as button', () => {
     const { getByText } = render(<NavItem>test</NavItem>);
 
-    getByText('test').tagName.should.equal('BUTTON');
+    expect(getByText('test').tagName).toEqual('BUTTON');
   });
 
   it('should output custom role', () => {
     const { getByRole } = render(<NavItem role="abc">test</NavItem>);
-    getByRole('abc').should.exist;
+    expect(getByRole('abc')).toBeTruthy();
   });
 
   it('should set role to tab if inside nav context', () => {
@@ -25,15 +24,15 @@ describe('<NavItem>', () => {
         value={{
           role: 'tablist',
           activeKey: 'key',
-          getControlledId: sinon.spy(),
-          getControllerId: sinon.spy(),
+          getControlledId: vi.fn(),
+          getControllerId: vi.fn(),
         }}
       >
         <NavItem>test</NavItem>
       </NavContext.Provider>,
     );
 
-    getByRole('tab').should.exist;
+    expect(getByRole('tab')).toBeTruthy();
   });
 
   it('should not override custom role if inside nav context', () => {
@@ -42,15 +41,15 @@ describe('<NavItem>', () => {
         value={{
           role: 'tablist',
           activeKey: 'key',
-          getControlledId: sinon.spy(),
-          getControllerId: sinon.spy(),
+          getControlledId: vi.fn(),
+          getControllerId: vi.fn(),
         }}
       >
         <NavItem role="abc">test</NavItem>
       </NavContext.Provider>,
     );
 
-    getByRole('abc').should.exist;
+    expect(getByRole('abc')).toBeTruthy();
   });
 
   it('should use active from nav context', () => {
@@ -59,8 +58,8 @@ describe('<NavItem>', () => {
         value={{
           role: 'tablist',
           activeKey: 'key',
-          getControlledId: sinon.spy(),
-          getControllerId: sinon.spy(),
+          getControlledId: vi.fn(),
+          getControllerId: vi.fn(),
         }}
       >
         <NavItem eventKey="key">test</NavItem>
@@ -80,18 +79,18 @@ describe('<NavItem>', () => {
     );
     const node = getByText('test');
     expect(node.getAttribute('aria-disabled')).to.equal('true');
-    node.tabIndex.should.equal(-1);
+    expect(node.tabIndex).toEqual(-1);
   });
 
   it('should trigger onClick', () => {
-    const onClickSpy = sinon.spy();
+    const onClickSpy = vi.fn();
     const { getByText } = render(<NavItem onClick={onClickSpy}>test</NavItem>);
     fireEvent.click(getByText('test'));
-    onClickSpy.should.be.called;
+    expect(onClickSpy).toHaveBeenCalled();
   });
 
   it('should not trigger onClick if disabled', () => {
-    const onClickSpy = sinon.spy();
+    const onClickSpy = vi.fn();
     const { getByText } = render(
       // Render as div because onClick won't get triggered with Button when disabled.
       <NavItem as="div" onClick={onClickSpy} disabled>
@@ -99,11 +98,11 @@ describe('<NavItem>', () => {
       </NavItem>,
     );
     fireEvent.click(getByText('test'));
-    onClickSpy.should.not.be.called;
+    expect(onClickSpy).not.toHaveBeenCalled();
   });
 
   it('should call onSelect if a key is defined', () => {
-    const onSelect = sinon.spy();
+    const onSelect = vi.fn();
     const { getByText } = render(
       <SelectableContext.Provider value={onSelect}>
         <NavItem eventKey="abc">test</NavItem>
@@ -111,11 +110,11 @@ describe('<NavItem>', () => {
     );
 
     fireEvent.click(getByText('test'));
-    onSelect.should.be.calledWith('abc');
+    expect(onSelect.mock.calls[0][0]).toEqual('abc');
   });
 
   it('should not call onSelect onClick stopPropagation called', () => {
-    const onSelect = sinon.spy();
+    const onSelect = vi.fn();
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
     };
@@ -128,6 +127,6 @@ describe('<NavItem>', () => {
     );
 
     fireEvent.click(getByText('test'));
-    onSelect.should.not.be.called;
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });
