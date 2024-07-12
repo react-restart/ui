@@ -23,10 +23,6 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: Update Brew (macOS)
-        if: matrix.os == 'macOS-latest'
-        run: brew update
-
       - name: Install Dependencies
         run: yarn bootstrap
 
@@ -34,7 +30,7 @@ jobs:
         run: yarn playwright install --with-deps
 
       - name: Run Tests
-        run: yarn test --browser.name=$BROWSER --browser.headless
+        run: yarn test --browser.name=${{ env.BROWSER }} --browser.headless
         env:
           BROWSER: ${{ matrix.browser }}
 
