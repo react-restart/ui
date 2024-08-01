@@ -1,3 +1,19 @@
+# [1.8.0](https://github.com/react-restart/ui/compare/v1.6.9...v1.8.0) (2024-08-01)
+
+
+### Bug Fixes
+
+* trigger build ([77247f8](https://github.com/react-restart/ui/commit/77247f83bcd8c90aa2a7d6e483a201e55259b8b7))
+
+
+### Features
+
+* add `isTopModal` on the modal ref handle ([#105](https://github.com/react-restart/ui/issues/105)) ([2f7acc8](https://github.com/react-restart/ui/commit/2f7acc855ead72d475c6a0c9dda49a839ed7db00))
+
+
+
+
+
 ## [1.6.9](https://github.com/react-restart/ui/compare/v1.6.8...v1.6.9) (2024-05-08)
 
 
