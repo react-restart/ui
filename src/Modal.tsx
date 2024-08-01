@@ -224,6 +224,7 @@ function useModalManager(provided?: ModalManager) {
 export interface ModalHandle {
   dialog: HTMLElement | null;
   backdrop: HTMLElement | null;
+  isTopModal: () => boolean;
 }
 
 const Modal: React.ForwardRefExoticComponent<
