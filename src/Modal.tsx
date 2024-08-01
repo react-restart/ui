@@ -54,7 +54,7 @@ export interface RenderModalBackdropProps {
 
 /*
   Modal props are split into a version with and without index signature so that you can fully use them in another projects
-  This is due to Typescript not playing well with index singatures e.g. when using Omit
+  This is due to Typescript not playing well with index signatures e.g. when using Omit
 */
 export interface BaseModalProps extends TransitionCallbacks {
   children?: React.ReactElement;
@@ -224,6 +224,7 @@ function useModalManager(provided?: ModalManager) {
 export interface ModalHandle {
   dialog: HTMLElement | null;
   backdrop: HTMLElement | null;
+  isTopModal: () => boolean;
 }
 
 const Modal: React.ForwardRefExoticComponent<
