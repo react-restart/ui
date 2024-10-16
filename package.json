@@ -58,7 +58,7 @@
     "start": "yarn --cwd www start",
     "tdd": "vitest",
     "test": "yarn lint && yarn testonly",
-    "testonly": "yarn vitest --run"
+    "testonly": "vitest --run"
   },
   "lint-staged": {
     "*.js,*.tsx": "eslint --fix --ext .js,.ts,.tsx"
@@ -108,8 +108,9 @@
     "@types/react-transition-group": "^4.4.4",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "@vitest/browser": "^2.0.2",
+    "@vitejs/plugin-react": "^4.3.2",
+    "@vitest/browser": "^2.1.3",
+    "@vitest/coverage-istanbul": "2.1.3",
     "babel-eslint": "^10.1.0",
     "babel-plugin-istanbul": "^6.1.1",
     "babel-preset-env-modules": "^1.0.1",
@@ -126,7 +127,7 @@
     "gh-pages": "^3.1.0",
     "hookem": "^1.0.9",
     "lint-staged": "^10.5.4",
-    "playwright": "^1.45.1",
+    "playwright": "^1.48.0",
     "prettier": "^2.7.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -134,9 +135,10 @@
     "rimraf": "^3.0.2",
     "rollup": "^4.18.1",
     "typescript": "^4.7.4",
-    "vitest": "^2.0.2"
+    "vitest": "^2.1.3"
   },
   "bugs": {
     "url": "https://github.com/react-restart/ui/issues"
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }
