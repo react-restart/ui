@@ -4,7 +4,7 @@ import {
   TransitionProps as RTGTransitionProps,
   TransitionStatus,
 } from 'react-transition-group/Transition';
-import { getReactVersion } from './utils';
+import { getChildRef } from './utils';
 
 export type TransitionProps = RTGTransitionProps & {
   children:
@@ -33,15 +33,8 @@ export default function useRTGTransitionProps({
   children,
   ...props
 }: TransitionProps) {
-  const { major } = getReactVersion();
-  const childRef =
-    major >= 19 ? (children as any).props.ref : (children as any).ref;
-
   const nodeRef = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(
-    nodeRef,
-    typeof children === 'function' ? null : childRef,
-  );
+  const mergedRef = useMergedRefs(nodeRef, getChildRef(children));
 
   const normalize =
     (callback?: (node: HTMLElement, param: any) => void) => (param: any) => {
