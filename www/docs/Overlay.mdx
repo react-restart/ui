@@ -153,3 +153,59 @@ function Example() {
   );
 }
 ```
+
+## Scroll example
+
+When the overlay is overflowing and contains a scrollbar, use the `rootCloseEvent="mouseup"` to ensure the overlay is closed when clicking the scrollbar and then outside of it.
+
+```jsx live editor=collapse
+import clsx from "clsx";
+import { Overlay } from "@restart/ui";
+import Button from "../src/Button";
+import Tooltip from "../src/Tooltip";
+
+function OverlayScrollTooltip() {
+  const [show, setShow] = useState(false);
+  const triggerRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const toggleShow = () => {
+    setShow(!show);
+  };
+
+  return (
+    <div
+      className="flex flex-col items-center"
+      ref={containerRef}
+    >
+      <Button
+        className="mb-4"
+        id="overlay-toggle"
+        ref={triggerRef}
+        onClick={toggleShow}
+      >
+        Toggle a tooltip with a scrollbar
+      </Button>
+      <Overlay
+        show={show}
+        rootClose
+        rootCloseEvent="mouseup"
+        placement="left"
+        container={containerRef}
+        target={triggerRef}
+        onHide={toggleShow}
+      >
+        {(props, { arrowProps, popper }) => (
+          <Tooltip {...props} arrowProps={arrowProps} popper={popper}>
+              <div style={{ width: 150, height: 100, overflow: "auto"}}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hend rerit arcu
+            </div>
+          </Tooltip>
+        )}
+      </Overlay>
+    </div>
+  );
+}
+
+<OverlayScrollTooltip />;
+```
