@@ -82,6 +82,11 @@ function useClickOutside(
 
     if (currentTarget && contains(currentTarget, e.target as any)) {
       waitingForTrigger.current = true;
+    } else {
+      // When clicking on scrollbars within current target, click events are not triggered, so this ref
+      // is never reset inside `handleMouseCapture`. This would cause a bug where it requires 2 clicks
+      // to close the overlay.
+      waitingForTrigger.current = false;
     }
   });
 
