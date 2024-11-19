@@ -17,3 +17,10 @@ https://react-restart.github.io/ui/
 ```sh
 npm install --save @restart/ui
 ```
+
+## Contributing
+
+Checkout the repo and setup the project:
+
+1. Bootstrap your environment `yarn bootstrap`
+2. Start the development server `yarn start`
