@@ -12,3 +12,14 @@ export function getReactVersion() {
     patch: +parts[2],
   };
 }
+
+export function getChildRef(
+  element?: React.ReactElement | ((...args: any[]) => React.ReactNode) | null,
+) {
+  if (!element || typeof element === 'function') {
+    return null;
+  }
+  const { major } = getReactVersion();
+  const childRef = major >= 19 ? element.props.ref : (element as any).ref;
+  return childRef;
+}
