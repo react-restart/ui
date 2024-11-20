@@ -1,3 +1,19 @@
+# [1.9.0](https://github.com/react-restart/ui/compare/v1.8.0...v1.9.0) (2024-11-20)
+
+
+### Bug Fixes
+
+* **useClickOutside:** reset waitingForTrigger if clicking outside target ([#112](https://github.com/react-restart/ui/issues/112)) ([730a174](https://github.com/react-restart/ui/commit/730a174f26157cc3304f6971ddb10a86443e83a1))
+
+
+### Features
+
+* **utils:** add getChildRef ([#109](https://github.com/react-restart/ui/issues/109)) ([d573045](https://github.com/react-restart/ui/commit/d5730456fe617bda63165c41692e22d5a17c8452))
+
+
+
+
+
 # [1.8.0](https://github.com/react-restart/ui/compare/v1.6.9...v1.8.0) (2024-08-01)
 
 
