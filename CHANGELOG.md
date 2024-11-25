@@ -1,3 +1,14 @@
+## [1.9.1](https://github.com/react-restart/ui/compare/v1.9.0...v1.9.1) (2024-11-25)
+
+
+### Bug Fixes
+
+* bump hooks dependency for strict mode fixes ([3b73c01](https://github.com/react-restart/ui/commit/3b73c0133ef9638b8ea35be38b14837233b88361))
+
+
+
+
+
 # [1.9.0](https://github.com/react-restart/ui/compare/v1.8.0...v1.9.0) (2024-11-20)
 
 
