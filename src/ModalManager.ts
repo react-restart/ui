@@ -1,4 +1,8 @@
 import css from 'dom-helpers/css';
+import getSetScrollTop from 'dom-helpers/scrollTop';
+import getSetScrollLeft from 'dom-helpers/scrollLeft';
+import getScrollParent from 'dom-helpers/scrollParent';
+import isDocument from 'dom-helpers/isDocument';
 import { dataAttr } from './DataKey';
 import getBodyScrollbarWidth from './getScrollbarWidth';
 
@@ -49,6 +53,11 @@ class ModalManager {
 
   getScrollbarWidth() {
     return getBodyScrollbarWidth(this.ownerDocument);
+  }
+
+  protected getScollingElement() {
+    const element = getScrollParent(this.getElement());
+    return isDocument(element) ? element.defaultView! : element;
   }
 
   getElement() {
@@ -113,8 +122,12 @@ class ModalManager {
       return modalIdx;
     }
 
+    const scrollElement = this.getScollingElement() as Element;
+
     this.state = {
       scrollBarWidth: this.getScrollbarWidth(),
+      scrollTop: getSetScrollTop(scrollElement),
+      scrollLeft: getSetScrollLeft(scrollElement),
       style: {},
     };
 
@@ -123,6 +136,19 @@ class ModalManager {
     }
 
     return modalIdx;
+  }
+
+  maybeResetScrollPosition() {
+    const scrollElement = this.getScollingElement() as Element;
+
+    const { scrollTop, scrollLeft } = this.state;
+
+    if (getSetScrollTop(scrollElement) !== scrollTop) {
+      getSetScrollTop(scrollElement, scrollTop);
+    }
+    if (getSetScrollLeft(scrollElement) !== scrollLeft) {
+      getSetScrollLeft(scrollElement, scrollLeft);
+    }
   }
 
   remove(modal: ModalInstance) {
