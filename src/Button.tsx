@@ -13,7 +13,7 @@ export interface UseButtonPropsOptions extends AnchorOptions {
   disabled?: boolean;
   onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   tabIndex?: number;
-  tagName?: keyof JSX.IntrinsicElements;
+  tagName?: keyof React.JSX.IntrinsicElements;
   role?: React.AriaRole | undefined;
 }
 
@@ -113,7 +113,7 @@ export interface BaseButtonProps {
    * Control the underlying rendered element directly by passing in a valid
    * component type
    */
-  as?: keyof JSX.IntrinsicElements | undefined;
+  as?: keyof React.JSX.IntrinsicElements | undefined;
 
   /** The disabled state of the button */
   disabled?: boolean | undefined;
