@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export type EventKey = string | number;
 
-export type IntrinsicElementTypes = keyof JSX.IntrinsicElements;
+export type IntrinsicElementTypes = keyof React.JSX.IntrinsicElements;
 
 export type AssignPropsWithRef<
   Inner extends string | React.ComponentType<any>,
