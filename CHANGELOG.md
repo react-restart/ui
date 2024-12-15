@@ -1,3 +1,15 @@
+## [1.9.2](https://github.com/react-restart/ui/compare/v1.9.0...v1.9.2) (2024-12-15)
+
+
+### Bug Fixes
+
+* bump hooks dependency for strict mode fixes ([3b73c01](https://github.com/react-restart/ui/commit/3b73c0133ef9638b8ea35be38b14837233b88361))
+* replace deprecated JSX global types ([#113](https://github.com/react-restart/ui/issues/113)) ([62ea59f](https://github.com/react-restart/ui/commit/62ea59f7e4ca98e95e48c5c9f8f3b63510c161d3))
+
+
+
+
+
 ## [1.9.1](https://github.com/react-restart/ui/compare/v1.9.0...v1.9.1) (2024-11-25)
 
 
