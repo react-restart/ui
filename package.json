@@ -11,26 +11,44 @@
     "url": "git+https://github.com/react-restart/ui.git"
   },
   "license": "MIT",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/esm/index.d.ts",
+  "main": "cjs/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "types": "./esm/index.d.ts",
-      "node": "./cjs/index.js",
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
+      "node": {
+        "types": "./cjs/index.d.ts",
+        "default": "./cjs/index.js"
+      },
+      "require": {
+        "types": "./cjs/index.d.ts",
+        "default": "./cjs/index.js"
+      },
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      }
     },
     "./*": {
-      "types": "./esm/*.d.ts",
-      "node": "./cjs/*.js",
-      "import": "./esm/*.js",
-      "require": "./cjs/*.js"
+      "node": {
+        "types": "./cjs/*.d.ts",
+        "default": "./cjs/*.js"
+      },
+      "require": {
+        "types": "./cjs/*.d.ts",
+        "default": "./cjs/*.js"
+      },
+      "import": {
+        "types": "./lib/*.d.ts",
+        "default": "./lib/*.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
-    "lib"
+    "lib",
+    "cjs"
   ],
   "gitHooks": {
     "pre-commit": "lint-staged"
@@ -48,11 +66,15 @@
   ],
   "scripts": {
     "bootstrap": "yarn --network-timeout 100000 && yarn --cwd www --network-timeout 100000",
-    "build": "rimraf lib && 4c build src && yarn build:popper && yarn build:pick",
+    "build": "rimraf lib && yarn build:esm && yarn build:cjs && yarn build:popper",
+    "build:esm": "babel src --out-dir lib --delete-dir-on-start --extensions '.ts,.tsx' --ignore='**/*.d.ts' && yarn build:esm:types",
+    "build:cjs": "babel src --out-dir cjs --env-name cjs --delete-dir-on-start --extensions '.ts,.tsx'  --ignore='**/*.d.ts' && yarn build:cjs:types && echo '{\"type\": \"commonjs\"}' > cjs/package.json",
+    "build:esm:types": "tsc -p . --emitDeclarationOnly --declaration --outDir lib",
+    "build:cjs:types": "tsc -p . --emitDeclarationOnly --declaration --outDir cjs",
     "build:pick": "cherry-pick --cwd=lib --input-dir=../src --cjs-dir=cjs --esm-dir=esm",
-    "build:popper": "rollup src/popper.ts --file lib/cjs/popper.js --format cjs --name popper --plugin @rollup/plugin-node-resolve",
+    "build:popper": "rollup src/popper.ts --file cjs/popper.js --format cjs --name popper --plugin @rollup/plugin-node-resolve && rollup src/popper.ts --file lib/popper.js --format esm --name popper --plugin @rollup/plugin-node-resolve",
     "deploy-docs": "yarn --cwd www deploy",
-    "lint": "eslint src test *.ts",
+    "lint": "eslint src test",
     "prepublishOnly": "yarn build",
     "release": "rollout",
     "start": "yarn --cwd www start",
@@ -79,11 +101,11 @@
     "@babel/runtime": "^7.26.0",
     "@popperjs/core": "^2.11.8",
     "@react-aria/ssr": "^3.5.0",
-    "@restart/hooks": "^0.5.0",
+    "@restart/hooks": "^0.6.2",
     "@types/warning": "^3.0.3",
     "dequal": "^2.0.3",
     "dom-helpers": "^5.2.0",
-    "uncontrollable": "^8.0.4",
+    "uncontrollable": "^9.0.0",
     "warning": "^4.0.3"
   },
   "peerDependencies": {

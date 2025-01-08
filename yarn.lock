@@ -2043,10 +2043,10 @@
     eslint-config-prettier "^8.1.0"
     eslint-plugin-react-hooks "^4.2.0"
 
-"@restart/hooks@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.5.0.tgz#a594af7c3b64f5e65a7aca011551b0cdd93ec14e"
-  integrity sha512-wS+h6IusJCPjTkmOOrRZxIPICD/mtFA3PRZviutoM23/b7akyDGfZF/WS+nIFk27u7JDhPE2+0GBdZxjSqHZkg==
+"@restart/hooks@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.6.2.tgz#55a1f9b9bb413aaf2cbb00b0ff337f807082b72e"
+  integrity sha512-0QzYBe1raty/ULcuyTk0ZdLf+e//4n/f39hDPt5JYZW5kSbHEAgnZhLpWErCKEYSzi14oVBSbNsllnJmWlloBg==
   dependencies:
     dequal "^2.0.3"
 
@@ -10856,10 +10856,10 @@ unbox-primitive@^1.1.0:
     has-symbols "^1.1.0"
     which-boxed-primitive "^1.1.1"
 
-uncontrollable@^8.0.4:
-  version "8.0.4"
-  resolved "https://registry.yarnpkg.com/uncontrollable/-/uncontrollable-8.0.4.tgz#a0a8307f638795162fafd0550f4a1efa0f8c5eb6"
-  integrity sha512-ulRWYWHvscPFc0QQXvyJjY6LIXU56f0h8pQFvhxiKk5V1fcI8gp9Ht9leVAhrVjzqMw0BgjspBINx9r6oyJUvQ==
+uncontrollable@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uncontrollable/-/uncontrollable-9.0.0.tgz#a20495552b1c23640edd530733ed8c57bf66c103"
+  integrity sha512-wPScOFmvRkHdvebf7qNPn9Wog9B1TL8Dqcx0Vecz6HYTKFKMfGKP6MJHTjiKL8kwd8KTW3YfIUke7pmRDtkcRQ==
 
 undici-types@~5.26.4:
   version "5.26.5"

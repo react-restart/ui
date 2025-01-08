@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useEventCallback } from '@restart/hooks';
+import useEventCallback from '@restart/hooks/useEventCallback';
 import { useButtonProps } from './Button';
 
 export function isTrivialHref(href?: string) {
