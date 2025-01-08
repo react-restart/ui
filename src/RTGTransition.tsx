@@ -16,4 +16,6 @@ const RTGTransition = React.forwardRef<any, RTGTransitionProps>(
   },
 );
 
+RTGTransition.displayName = 'RTGTransition';
+
 export default RTGTransition;

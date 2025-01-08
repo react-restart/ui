@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/anchor-has-content */
-
 import * as React from 'react';
 
 import { useEventCallback } from '@restart/hooks';

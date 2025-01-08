@@ -2,7 +2,10 @@ import * as React from 'react';
 import type { Placement } from './usePopper';
 
 export type DropdownContextValue = {
-  toggle: (nextShow: boolean, event?: React.SyntheticEvent | Event) => void;
+  toggle: (
+    nextShow: boolean,
+    event?: React.SyntheticEvent | KeyboardEvent | MouseEvent,
+  ) => void;
   menuElement: HTMLElement | null;
   toggleElement: HTMLElement | null;
   setMenu: (ref: HTMLElement | null) => void;

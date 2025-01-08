@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-use-before-define, react/prop-types */
+/* eslint-disable react/prop-types */
 
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/contains';
@@ -21,7 +21,7 @@ import usePrevious from '@restart/hooks/usePrevious';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import ModalManager from './ModalManager';
 import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
-import { TransitionCallbacks } from './types';
+import { TransitionCallbacks, TransitionComponent } from './types';
 import useWindow from './useWindow';
 import { renderTransition, TransitionHandler } from './ImperativeTransition';
 import { isEscKey } from './utils';
@@ -438,19 +438,23 @@ const Modal: React.ForwardRefExoticComponent<
       </div>
     );
 
-    dialog = renderTransition(transition, runTransition, {
-      unmountOnExit: true,
-      mountOnEnter: true,
-      appear: true,
-      in: !!show,
-      onExit,
-      onExiting,
-      onExited: handleHidden,
-      onEnter,
-      onEntering,
-      onEntered,
-      children: dialog as React.ReactElement,
-    });
+    dialog = renderTransition(
+      transition as TransitionComponent,
+      runTransition,
+      {
+        unmountOnExit: true,
+        mountOnEnter: true,
+        appear: true,
+        in: !!show,
+        onExit,
+        onExiting,
+        onExited: handleHidden,
+        onEnter,
+        onEntering,
+        onEntered,
+        children: dialog as React.ReactElement,
+      },
+    );
 
     let backdropElement = null;
     if (backdrop) {
@@ -460,7 +464,7 @@ const Modal: React.ForwardRefExoticComponent<
       });
 
       backdropElement = renderTransition(
-        backdropTransition,
+        backdropTransition as TransitionComponent,
         runBackdropTransition,
         {
           in: !!show,

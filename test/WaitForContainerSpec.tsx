@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-shadow */
 import { render } from '@testing-library/react';
 import { expect, describe, it, vi } from 'vitest';
 

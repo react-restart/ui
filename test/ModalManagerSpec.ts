@@ -10,7 +10,7 @@ vi.mock('../src/getScrollbarWidth', () => ({
 }));
 
 const createModal = (): ModalInstance =>
-  ({ dialog: null, backdrop: null } as any);
+  ({ dialog: null, backdrop: null }) as any;
 
 describe('ModalManager', () => {
   let container: HTMLElement, manager: ModalManager;

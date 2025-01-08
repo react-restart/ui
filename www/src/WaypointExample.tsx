@@ -51,7 +51,6 @@ function Overlay({ horizontal }) {
 
 function Margins({ margins }) {
   const { top, bottom } = margins;
-  // eslint-disable-next-line no-nested-ternary
 
   return (
     <>

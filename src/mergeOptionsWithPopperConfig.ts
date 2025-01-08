@@ -20,7 +20,6 @@ export function toModifierMap(modifiers: Modifiers | undefined) {
     return modifiers || result;
   }
 
-  // eslint-disable-next-line no-unused-expressions
   modifiers?.forEach((m) => {
     result[m.name!] = m;
   });

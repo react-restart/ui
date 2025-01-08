@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { Button } from '../src';
 
 const _1 = <Button href="hi" />;
