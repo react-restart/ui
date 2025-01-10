@@ -6,7 +6,7 @@ import { Portal } from '../src';
 describe('Portal', () => {
   it('should render overlay into container (document)', () => {
     render(
-      /* @ts-expect-error   */
+      /* @ts-expect-error missing required props  */
       <Portal>
         <div id="test1" />
       </Portal>,
@@ -54,7 +54,7 @@ describe('Portal', () => {
       render() {
         return (
           <div ref={this.container} id="test1">
-            {/* @ts-expect-error   */}
+            {/* @ts-expect-error  missing required props   */}
             <Portal container={this.container} />
           </div>
         );

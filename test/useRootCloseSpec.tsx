@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable no-use-before-define */
 import { useRef } from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';

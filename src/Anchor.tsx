@@ -1,9 +1,6 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/anchor-has-content */
-
 import * as React from 'react';
 
-import { useEventCallback } from '@restart/hooks';
+import useEventCallback from '@restart/hooks/useEventCallback';
 import { useButtonProps } from './Button';
 
 export function isTrivialHref(href?: string) {

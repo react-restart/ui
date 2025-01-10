@@ -66,7 +66,6 @@ export function useNavItem({
     const contextControllerId = navContext.getControllerId(key ?? null);
     const contextControlledId = navContext.getControlledId(key ?? null);
 
-    // @ts-ignore
     props[dataAttr('event-key')] = key;
 
     props.id = contextControllerId || id;
@@ -126,7 +125,6 @@ const NavItem: DynamicRefForwardingComponent<typeof Button, NavItemProps> =
         ...options,
       });
 
-      // @ts-ignore
       props[dataAttr('active')] = meta.isActive;
 
       return <Component {...options} {...props} ref={ref} />;

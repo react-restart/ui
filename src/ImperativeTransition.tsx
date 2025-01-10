@@ -1,7 +1,7 @@
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
-import React, { useRef, cloneElement, useState } from 'react';
+import { useRef, cloneElement, useState } from 'react';
 import { TransitionComponent, TransitionProps } from './types';
 import NoopTransition from './NoopTransition';
 import RTGTransition from './RTGTransition';
@@ -62,11 +62,8 @@ export function useTransition({
 
 export interface ImperativeTransitionProps extends TransitionProps {
   transition: TransitionHandler;
-  // eslint-disable-next-line react/no-unused-prop-types
   appear: true;
-  // eslint-disable-next-line react/no-unused-prop-types
   mountOnEnter: true;
-  // eslint-disable-next-line react/no-unused-prop-types
   unmountOnExit: true;
 }
 

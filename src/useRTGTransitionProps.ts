@@ -43,7 +43,6 @@ export default function useRTGTransitionProps({
       }
     };
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   const handleEnter = useCallback(normalize(onEnter), [onEnter]);
   const handleEntering = useCallback(normalize(onEntering), [onEntering]);
   const handleEntered = useCallback(normalize(onEntered), [onEntered]);
@@ -53,7 +52,6 @@ export default function useRTGTransitionProps({
   const handleAddEndListener = useCallback(normalize(addEndListener), [
     addEndListener,
   ]);
-  /* eslint-enable react-hooks/exhaustive-deps */
 
   return {
     ...props,

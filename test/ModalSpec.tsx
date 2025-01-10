@@ -1,5 +1,3 @@
-/* eslint-disable react/display-name */
-
 import * as React from 'react';
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';

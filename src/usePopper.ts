@@ -222,7 +222,6 @@ function usePopper(
       }
     };
     // This is only run once to _create_ the popper
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, referenceElement, popperElement]);
 
   return popperState;

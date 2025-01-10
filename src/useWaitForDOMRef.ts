@@ -16,7 +16,7 @@ export const resolveContainerRef = <T extends HTMLElement | VirtualElement>(
   if (typeof ref === 'function') ref = ref();
 
   if (ref && 'current' in ref) ref = ref.current;
-  if (ref && ('nodeType' in ref || ref.getBoundingClientRect)) return ref;
+  if (ref && ('nodeType' in ref || 'getBoundingClientRect' in ref)) return ref;
 
   return null;
 };

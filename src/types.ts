@@ -33,7 +33,7 @@ export interface DynamicRefForwardingComponent<
   <As extends string | React.ComponentType<any> = TInitial>(
     props: AssignPropsWithRef<As, { as?: As } & P>,
     context?: any,
-  ): React.ReactElement | null;
+  ): React.ReactNode;
   propTypes?: any;
   contextTypes?: any;
   defaultProps?: Partial<P>;
@@ -47,7 +47,7 @@ export interface DynamicFunctionComponent<
   <As extends string | React.ComponentType<any> = TInitial>(
     props: AssignPropsWithoutRef<As, { as?: As } & P>,
     context?: any,
-  ): React.ReactElement | null;
+  ): React.ReactNode;
   propTypes?: any;
   contextTypes?: any;
   defaultProps?: Partial<P>;
@@ -67,7 +67,7 @@ export type DynamicComponentClass<
 
 export type SelectCallback = (
   eventKey: string | null,
-  e: React.SyntheticEvent<unknown>,
+  e: React.SyntheticEvent<any>,
 ) => void;
 
 export interface TransitionCallbacks {

@@ -96,7 +96,7 @@ const Tabs = (props: TabsProps) => {
       transition,
       mountOnEnter: mountOnEnter || false,
       unmountOnExit: unmountOnExit || false,
-      getControlledId: (key: EventKey) => generateChildId(key, 'tabpane'),
+      getControlledId: (key: EventKey) => generateChildId(key, 'pane'),
       getControllerId: (key: EventKey) => generateChildId(key, 'tab'),
     }),
     [

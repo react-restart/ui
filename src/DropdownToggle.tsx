@@ -40,7 +40,7 @@ export function useDropdownToggle(): [
   } = useContext(DropdownContext) || {};
   const handleClick = useCallback(
     (e: Event | React.SyntheticEvent<Element, Event>) => {
-      toggle(!show, e);
+      toggle(!show, e as any);
     },
     [show, toggle],
   );

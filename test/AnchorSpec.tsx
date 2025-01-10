@@ -86,11 +86,13 @@ describe('Anchor', () => {
   });
 
   it('forwards provided role', () => {
-    render(<Anchor role="test" />).getByRole('test');
+    render(<Anchor role="dialog" />).getByRole('dialog');
   });
 
   it('forwards provided role with href', () => {
-    render(<Anchor role="test" href="http://google.com" />).getByRole('test');
+    render(<Anchor role="dialog" href="http://google.com" />).getByRole(
+      'dialog',
+    );
   });
 
   it('set role=button with no provided href', () => {

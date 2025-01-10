@@ -16,7 +16,6 @@ import NavItem, { UseNavItemOptions, NavItemProps } from './NavItem';
 
 export type { UseNavItemOptions, NavItemProps };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
 export interface NavProps
@@ -149,7 +148,7 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
       needsRefocusRef.current = false;
     });
 
-    const mergedRef = useMergedRefs(ref, listNode);
+    const mergedRef = useMergedRefs(ref as any, listNode);
 
     return (
       <SelectableContext.Provider value={handleSelect}>
@@ -157,7 +156,9 @@ const Nav: DynamicRefForwardingComponent<'div', NavProps> = React.forwardRef<
           value={{
             role, // used by NavLink to determine it's role
             activeKey: makeEventKey(activeKey),
+            // @ts-expect-error null
             getControlledId: getControlledId || noop,
+            // @ts-expect-error null
             getControllerId: getControllerId || noop,
           }}
         >

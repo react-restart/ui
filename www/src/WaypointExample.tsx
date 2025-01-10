@@ -1,4 +1,4 @@
-import { useCallbackRef } from '@restart/hooks';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
 import Waypoint, { Position } from '@restart/ui/Waypoint';
 import clsx from 'clsx';
@@ -51,7 +51,6 @@ function Overlay({ horizontal }) {
 
 function Margins({ margins }) {
   const { top, bottom } = margins;
-  // eslint-disable-next-line no-nested-ternary
 
   return (
     <>
