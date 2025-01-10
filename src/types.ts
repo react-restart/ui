@@ -100,7 +100,7 @@ export interface TransitionCallbacks {
 export interface TransitionProps extends TransitionCallbacks {
   in?: boolean;
   appear?: boolean;
-  children: React.ReactElement;
+  children: React.ReactElement<any>;
   mountOnEnter?: boolean;
   unmountOnExit?: boolean;
 }

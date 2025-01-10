@@ -71,7 +71,7 @@ export default function useRTGTransitionProps({
               ...innerProps,
               ref: mergedRef,
             })) as any)
-        : cloneElement(children as React.ReactElement, {
+        : cloneElement(children as React.ReactElement<any>, {
             ref: mergedRef,
           }),
   };

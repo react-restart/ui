@@ -57,7 +57,7 @@ export interface RenderModalBackdropProps {
   This is due to Typescript not playing well with index signatures e.g. when using Omit
 */
 export interface BaseModalProps extends TransitionCallbacks {
-  children?: React.ReactElement;
+  children?: React.ReactElement<any>;
   role?: string;
   style?: React.CSSProperties;
   className?: string;
@@ -407,8 +407,12 @@ const Modal: React.ForwardRefExoticComponent<
       }
     });
 
-    const removeFocusListenerRef = useRef<ReturnType<typeof listen> | null>();
-    const removeKeydownListenerRef = useRef<ReturnType<typeof listen> | null>();
+    const removeFocusListenerRef = useRef<ReturnType<typeof listen> | null>(
+      null,
+    );
+    const removeKeydownListenerRef = useRef<ReturnType<typeof listen> | null>(
+      null,
+    );
 
     const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
       setExited(true);

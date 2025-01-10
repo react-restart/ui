@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { expect, vi, describe, it } from 'vitest';
 import Transition from 'react-transition-group/Transition';
@@ -78,16 +78,21 @@ describe('<TabPanel>', () => {
       entered: 'show',
     };
 
-    const Fade = ({ children, ...props }: any) => (
-      <Transition {...props} timeout={FADE_DURATION}>
-        {(status: keyof typeof fadeStyles, innerProps: any) =>
-          React.cloneElement(children, {
-            ...innerProps,
-            className: `fade ${fadeStyles[status]} ${children.props.className}`,
-          })
-        }
-      </Transition>
-    );
+    function Fade({ children, ...props }: any) {
+      const ref = useRef(null);
+      return (
+        <Transition {...props} nodeRef={ref} timeout={FADE_DURATION}>
+          {(status: keyof typeof fadeStyles, innerProps: any) =>
+            React.cloneElement(children, {
+              ...innerProps,
+              ref: ref,
+              className: `fade ${fadeStyles[status]} ${children.props.className}`,
+            })
+          }
+        </Transition>
+      );
+    }
+
     function Tab({ eventKey, ...props }: any) {
       const [navItemProps, _] = useNavItem({
         key: eventKey,

@@ -125,7 +125,7 @@ function usePopper(
   }: UsePopperOptions = {},
 ): UsePopperState {
   const prevModifiers = useRef<UsePopperOptions['modifiers']>(modifiers);
-  const popperInstanceRef = useRef<Instance>();
+  const popperInstanceRef = useRef<Instance>(undefined);
 
   const update = useCallback(() => {
     popperInstanceRef.current?.update();

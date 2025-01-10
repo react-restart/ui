@@ -2,6 +2,7 @@ import useEventCallback from '@restart/hooks/useEventCallback';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import { cloneElement, useEffect, useRef } from 'react';
 import { TransitionProps } from './types';
+import { getChildRef } from './utils';
 
 function NoopTransition({
   children,
@@ -21,7 +22,7 @@ function NoopTransition({
     }
   }, [inProp, handleExited]);
 
-  const combinedRef = useMergedRefs(ref, (children as any).ref);
+  const combinedRef = useMergedRefs(ref, getChildRef(children));
 
   const child = cloneElement(children, { ref: combinedRef });
 
