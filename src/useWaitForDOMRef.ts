@@ -5,7 +5,11 @@ import useWindow from './useWindow';
 import { VirtualElement } from './usePopper';
 
 export type DOMContainer<T extends HTMLElement | VirtualElement = HTMLElement> =
-  T | React.RefObject<T> | null | (() => T | React.RefObject<T> | null);
+
+    | T
+    | React.RefObject<T | null>
+    | null
+    | (() => T | React.RefObject<T | null> | null);
 
 export const resolveContainerRef = <T extends HTMLElement | VirtualElement>(
   ref: DOMContainer<T> | undefined,
