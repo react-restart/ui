@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import { useUncontrolledProp } from 'uncontrollable';
-import { useSSRSafeId } from './ssr';
 
 import TabContext, { TabContextType } from './TabContext';
 import SelectableContext from './SelectableContext';
@@ -80,7 +79,8 @@ const Tabs = (props: TabsProps) => {
     propsOnSelect,
   );
 
-  const id = useSSRSafeId(userId);
+  const generatedId = useId();
+  const id = userId ?? generatedId;
 
   const generateChildId = useMemo(
     () =>

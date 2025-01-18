@@ -1,6 +1,5 @@
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback, useId } from 'react';
 import * as React from 'react';
-import { useSSRSafeId } from './ssr';
 import DropdownContext, { DropdownContextValue } from './DropdownContext';
 
 export const isRoleMenu = (el: HTMLElement) =>
@@ -31,7 +30,7 @@ export function useDropdownToggle(): [
   UseDropdownToggleProps,
   UseDropdownToggleMetadata,
 ] {
-  const id = useSSRSafeId();
+  const id = useId();
   const {
     show = false,
     toggle = noop,

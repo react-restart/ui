@@ -100,7 +100,6 @@
     "@babel/eslint-parser": "^7.25.9",
     "@babel/runtime": "^7.26.0",
     "@popperjs/core": "^2.11.8",
-    "@react-aria/ssr": "^3.5.0",
     "@restart/hooks": "^0.6.2",
     "@types/warning": "^3.0.3",
     "dequal": "^2.0.3",
