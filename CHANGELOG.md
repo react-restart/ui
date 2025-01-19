@@ -1,3 +1,14 @@
+## [1.9.3](https://github.com/react-restart/ui/compare/v1.9.2...v1.9.3) (2025-01-19)
+
+
+### Bug Fixes
+
+* **Overlay:** fix target type for react 19 refs ([#115](https://github.com/react-restart/ui/issues/115)) ([c7aab07](https://github.com/react-restart/ui/commit/c7aab075a97a2bfe359ef3cfab516aa3f46fb22e))
+
+
+
+
+
 ## [1.9.2](https://github.com/react-restart/ui/compare/v1.9.0...v1.9.2) (2024-12-15)
 
 
