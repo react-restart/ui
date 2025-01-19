@@ -54,7 +54,7 @@
     "deploy-docs": "yarn --cwd www deploy",
     "lint": "eslint www/*.js www/src src test *.ts  --ext .js,.ts,.tsx",
     "prepublishOnly": "yarn build",
-    "release": "rollout",
+    "release": "rollout --allow-branch v1",
     "start": "yarn --cwd www start",
     "tdd": "vitest",
     "test": "yarn lint && yarn testonly",
