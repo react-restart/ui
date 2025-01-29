@@ -15,11 +15,12 @@ export function getReactVersion() {
 
 export function getChildRef(
   element?: React.ReactElement | ((...args: any[]) => React.ReactNode) | null,
-) {
+): React.Ref<any> | null {
   if (!element || typeof element === 'function') {
     return null;
   }
   const { major } = getReactVersion();
-  const childRef = major >= 19 ? element.props.ref : (element as any).ref;
+  const childRef =
+    major >= 19 ? (element.props as any).ref : (element as any).ref;
   return childRef;
 }

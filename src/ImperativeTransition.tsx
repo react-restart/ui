@@ -5,6 +5,7 @@ import React, { useRef, cloneElement, useState } from 'react';
 import { TransitionComponent, TransitionProps } from './types';
 import NoopTransition from './NoopTransition';
 import RTGTransition from './RTGTransition';
+import { getChildRef } from './utils';
 
 export interface TransitionFunctionOptions {
   in: boolean;
@@ -111,7 +112,7 @@ export default function ImperativeTransition({
     },
   });
 
-  const combinedRef = useMergedRefs(ref, (children as any).ref);
+  const combinedRef = useMergedRefs(ref, getChildRef(children));
 
   return exited && !inProp
     ? null
