@@ -1,3 +1,14 @@
+## [1.9.4](https://github.com/react-restart/ui/compare/v1.9.3...v1.9.4) (2025-01-30)
+
+
+### Bug Fixes
+
+* fix react 19 ref usage ([#117](https://github.com/react-restart/ui/issues/117)) ([461b304](https://github.com/react-restart/ui/commit/461b304458fa3098847797296453f49f4a03a23d))
+
+
+
+
+
 ## [1.9.3](https://github.com/react-restart/ui/compare/v1.9.2...v1.9.3) (2025-01-19)
 
 
