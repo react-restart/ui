@@ -1,3 +1,24 @@
+# [2.0.0-beta.1](https://github.com/react-restart/ui/compare/v1.9.2...v2.0.0-beta.1) (2025-02-11)
+
+
+### Bug Fixes
+
+* **Overlay:** fix target type for react 19 refs ([#115](https://github.com/react-restart/ui/issues/115)) ([0018dff](https://github.com/react-restart/ui/commit/0018dffd87c33ddfbc8e22436206d79d0498b027))
+
+
+* feat!: remove @react-aria/ssr (#116) ([44aafa8](https://github.com/react-restart/ui/commit/44aafa89e527fdb7c86bb2251d89a8d8d77f9ed5)), closes [#116](https://github.com/react-restart/ui/issues/116)
+* build!: Update supported React ranges ([4af9c50](https://github.com/react-restart/ui/commit/4af9c50d3b100848c8990f3525cdf0f2073e0df0))
+
+
+### BREAKING CHANGES
+
+* Remove SSR utils. Use React 18's useId hook for generating SSR-safe ids
+* drop react 16 & 17 support
+
+
+
+
+
 ## [1.9.2](https://github.com/react-restart/ui/compare/v1.9.0...v1.9.2) (2024-12-15)
 
 
