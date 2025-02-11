@@ -1,3 +1,14 @@
+# [2.0.0-beta.2](https://github.com/react-restart/ui/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2025-02-11)
+
+
+### Bug Fixes
+
+* fix publish directory ([67d500a](https://github.com/react-restart/ui/commit/67d500ad5267a683cb6ece97a1ef9074ac42f530))
+
+
+
+
+
 # [2.0.0-beta.1](https://github.com/react-restart/ui/compare/v1.9.2...v2.0.0-beta.1) (2025-02-11)
 
 
