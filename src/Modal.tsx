@@ -281,9 +281,15 @@ const Modal: React.ForwardRefExoticComponent<
     useImperativeHandle(ref, () => modal, [modal]);
 
     if (canUseDOM && !prevShow && show) {
-      lastFocusRef.current = activeElement(
-        ownerWindow?.document,
-      ) as HTMLElement | null;
+      let last = activeElement(ownerWindow?.document) as HTMLElement | null;
+      while (
+        last &&
+        last.shadowRoot instanceof ShadowRoot &&
+        last.shadowRoot.activeElement instanceof HTMLElement
+      ) {
+        last = last.shadowRoot.activeElement;
+      }
+      lastFocusRef.current = last;
     }
 
     // TODO: I think this needs to be in an effect
