@@ -247,6 +247,31 @@ describe('<Modal>', () => {
     );
   });
 
+  it('should not render in a portal when `portal` is false', () => {
+    render(
+      <div data-testid="container">
+        <Modal show portal={false}>
+          <strong>Message</strong>
+        </Modal>
+      </div>,
+    );
+
+    expect(
+      screen.getByTestId('container').contains(screen.getByRole('dialog')),
+    ).toBeTruthy();
+  });
+
+  it('should render the dialog when mountDialogOnEnter and mountDialogOnEnter are false when not shown', () => {
+    render(
+      <Modal mountDialogOnEnter={false} unmountDialogOnExit={false}>
+        <strong>Message</strong>
+      </Modal>,
+      { container: attachTo },
+    );
+
+    expect(screen.getByText('Message')).toBeTruthy();
+  });
+
   describe('Focused state', () => {
     let focusableContainer: HTMLElement;
 

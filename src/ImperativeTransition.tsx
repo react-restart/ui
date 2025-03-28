@@ -63,9 +63,6 @@ export function useTransition({
 
 export interface ImperativeTransitionProps extends TransitionProps {
   transition: TransitionHandler;
-  appear: true;
-  mountOnEnter: true;
-  unmountOnExit: true;
 }
 
 /**
