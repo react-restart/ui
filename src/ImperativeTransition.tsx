@@ -61,7 +61,8 @@ export function useTransition({
   return ref;
 }
 
-export interface ImperativeTransitionProps extends TransitionProps {
+export interface ImperativeTransitionProps
+  extends Omit<TransitionProps, 'appear' | 'mountOnEnter' | 'unmountOnExit'> {
   transition: TransitionHandler;
 }
 
