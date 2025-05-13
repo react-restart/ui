@@ -42,7 +42,7 @@ export interface RenderModalDialogProps {
   style: React.CSSProperties | undefined;
   className: string | undefined;
   tabIndex: number;
-  role: string;
+  role: string | undefined;
   ref: React.RefCallback<Element>;
   'aria-modal': boolean | undefined;
 }
@@ -184,6 +184,27 @@ export interface BaseModalProps extends TransitionCallbacks {
   restoreFocusOptions?: {
     preventScroll: boolean;
   };
+
+  /**
+   * Lazy mount the dialog element when the Modal is shown.
+   *
+   * @default true
+   */
+  mountDialogOnEnter?: boolean | undefined;
+
+  /**
+   * Unmount the dialog element (remove it from the DOM) when the modal is no longer visible.
+   *
+   * @default true
+   */
+  unmountDialogOnExit?: boolean | undefined;
+
+  /**
+   * Render modal in a portal.
+   *
+   * @default true
+   */
+  portal?: boolean | undefined;
 }
 
 export interface ModalProps extends BaseModalProps {
@@ -251,6 +272,9 @@ const Modal: React.ForwardRefExoticComponent<
       enforceFocus = true,
       restoreFocus = true,
       restoreFocusOptions,
+      mountDialogOnEnter = true,
+      unmountDialogOnExit = true,
+      portal = true,
       renderDialog,
       renderBackdrop = (props: RenderModalBackdropProps) => <div {...props} />,
       manager: providedManager,
@@ -349,10 +373,10 @@ const Modal: React.ForwardRefExoticComponent<
     // Show logic when:
     //  - show is `true` _and_ `container` has resolved
     useEffect(() => {
-      if (!show || !container) return;
+      if (!show || (!container && portal)) return;
 
       handleShow();
-    }, [show, container, /* should never change: */ handleShow]);
+    }, [show, container, portal, /* should never change: */ handleShow]);
 
     // Hide cleanup logic when:
     //  - `exited` switches to true
@@ -419,15 +443,15 @@ const Modal: React.ForwardRefExoticComponent<
       onExited?.(...args);
     };
 
-    if (!container) {
+    if (!container && portal) {
       return null;
     }
 
     const dialogProps = {
-      role,
+      role: show ? role : undefined,
       ref: modal.setDialogRef,
       // apparently only works on the dialog role element
-      'aria-modal': role === 'dialog' ? true : undefined,
+      'aria-modal': show && role === 'dialog' ? true : undefined,
       ...rest,
       style,
       className,
@@ -446,8 +470,8 @@ const Modal: React.ForwardRefExoticComponent<
       transition as TransitionComponent,
       runTransition,
       {
-        unmountOnExit: true,
-        mountOnEnter: true,
+        unmountOnExit: unmountDialogOnExit,
+        mountOnEnter: mountDialogOnEnter,
         appear: true,
         in: !!show,
         onExit,
@@ -480,15 +504,18 @@ const Modal: React.ForwardRefExoticComponent<
       );
     }
 
-    return (
+    return portal && container ? (
+      ReactDOM.createPortal(
+        <>
+          {backdropElement}
+          {dialog}
+        </>,
+        container,
+      )
+    ) : (
       <>
-        {ReactDOM.createPortal(
-          <>
-            {backdropElement}
-            {dialog}
-          </>,
-          container,
-        )}
+        {backdropElement}
+        {dialog}
       </>
     );
   },
