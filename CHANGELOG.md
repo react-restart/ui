@@ -1,3 +1,14 @@
+# [2.0.0-beta.3](https://github.com/react-restart/ui/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2025-05-15)
+
+
+### Features
+
+* **Modal:** add new render options for modal ([#122](https://github.com/react-restart/ui/issues/122)) ([484723f](https://github.com/react-restart/ui/commit/484723f64b635e3a03784c5b27f5aab2f6972242))
+
+
+
+
+
 # [2.0.0-beta.2](https://github.com/react-restart/ui/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2025-02-11)
 
 
