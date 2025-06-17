@@ -23,7 +23,7 @@ function isModifiedEvent(event: MouseEvent) {
 }
 
 export const getRefTarget = (
-  ref: React.RefObject<Element> | Element | null | undefined,
+  ref: React.RefObject<Element | null> | Element | null | undefined,
 ) => ref && ('current' in ref ? ref.current : ref);
 
 export interface ClickOutsideOptions {
@@ -41,14 +41,14 @@ const InitialTriggerEvents: Partial<Record<MouseEvents, MouseEvents>> = {
  * The `useClickOutside` hook registers your callback on the document that fires
  * when a pointer event is registered outside of the provided ref or element.
  *
- * @param {Ref<HTMLElement>| HTMLElement} ref  The element boundary
+ * @param {Ref<HTMLElement | null>| HTMLElement} ref  The element boundary
  * @param {function} onClickOutside
  * @param {object=}  options
  * @param {boolean=} options.disabled
  * @param {string=}  options.clickTrigger The DOM event name (click, mousedown, etc) to attach listeners on
  */
 function useClickOutside(
-  ref: React.RefObject<Element> | Element | null | undefined,
+  ref: React.RefObject<Element | null> | Element | null | undefined,
   onClickOutside: (e: Event) => void = noop,
   { disabled, clickTrigger = 'click' }: ClickOutsideOptions = {},
 ) {
