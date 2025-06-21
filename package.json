@@ -67,7 +67,7 @@
   "scripts": {
     "bootstrap": "yarn --network-timeout 100000 && yarn --cwd www --network-timeout 100000",
     "build": "rimraf lib && yarn build:esm && yarn build:cjs && yarn build:popper",
-    "build:esm": "babel src --out-dir lib --delete-dir-on-start --extensions .ts,.tsx --ignore '**/*.d.ts' && yarn build:esm:types",
+    "build:esm": "babel src --out-dir lib --delete-dir-on-start --extensions .ts,.tsx --ignore '**/*.d.ts' && yarn build:esm:types && echo '{\"type\": \"module\"}' > lib/package.json",
     "build:cjs": "babel src --out-dir cjs --env-name cjs --delete-dir-on-start --extensions .ts,.tsx --ignore '**/*.d.ts' && yarn build:cjs:types && echo '{\"type\": \"commonjs\"}' > cjs/package.json",
     "build:esm:types": "tsc -p . --emitDeclarationOnly --declaration --outDir lib",
     "build:cjs:types": "tsc -p . --emitDeclarationOnly --declaration --outDir cjs",
@@ -100,7 +100,7 @@
     "@restart/hooks": "^0.6.2",
     "@types/warning": "^3.0.3",
     "dequal": "^2.0.3",
-    "dom-helpers": "^5.2.0",
+    "dom-helpers": "^6.0.1",
     "uncontrollable": "^9.0.0",
     "warning": "^4.0.3"
   },
@@ -131,6 +131,7 @@
     "@vitest/browser": "^3.1.3",
     "@vitest/coverage-istanbul": "3.1.3",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-add-import-extension": "^1.6.0",
     "babel-preset-env-modules": "^1.0.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.20.0",
