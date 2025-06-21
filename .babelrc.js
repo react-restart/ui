@@ -4,5 +4,8 @@ module.exports = (api) => ({
     ['@babel/react', { runtime: 'automatic' }],
     '@babel/preset-typescript',
   ],
-  plugins: [api.env() === 'test' && 'istanbul'].filter(Boolean),
+  plugins: [
+    'babel-plugin-add-import-extension',
+    api.env() === 'test' && 'istanbul',
+  ].filter(Boolean),
 });
