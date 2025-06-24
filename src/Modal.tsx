@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import activeElement from 'dom-helpers/activeElement';
 import contains from 'dom-helpers/contains';
 import canUseDOM from 'dom-helpers/canUseDOM';
@@ -19,12 +17,15 @@ import useWillUnmount from '@restart/hooks/useWillUnmount';
 
 import usePrevious from '@restart/hooks/usePrevious';
 import useEventCallback from '@restart/hooks/useEventCallback';
-import ModalManager from './ModalManager';
-import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
-import { TransitionCallbacks, TransitionComponent } from './types';
-import useWindow from './useWindow';
-import { renderTransition, TransitionHandler } from './ImperativeTransition';
-import { isEscKey } from './utils';
+import ModalManager from './ModalManager.js';
+import useWaitForDOMRef, { type DOMContainer } from './useWaitForDOMRef.js';
+import type { TransitionCallbacks, TransitionComponent } from './types.js';
+import useWindow from './useWindow.js';
+import {
+  renderTransition,
+  type TransitionHandler,
+} from './ImperativeTransition.js';
+import { isEscKey } from './utils.js';
 
 let manager: ModalManager;
 

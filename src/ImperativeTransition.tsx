@@ -2,10 +2,10 @@ import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
 import { useRef, cloneElement, useState } from 'react';
-import { TransitionComponent, TransitionProps } from './types';
-import NoopTransition from './NoopTransition';
-import RTGTransition from './RTGTransition';
-import { getChildRef } from './utils';
+import type { TransitionComponent, TransitionProps } from './types.js';
+import NoopTransition from './NoopTransition.js';
+import RTGTransition from './RTGTransition.js';
+import { getChildRef } from './utils.js';
 
 export interface TransitionFunctionOptions {
   in: boolean;

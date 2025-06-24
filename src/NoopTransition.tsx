@@ -1,8 +1,8 @@
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import { cloneElement, useEffect, useRef } from 'react';
-import { TransitionProps } from './types';
-import { getChildRef } from './utils';
+import type { TransitionProps } from './types.js';
+import { getChildRef } from './utils.js';
 
 function NoopTransition({
   children,

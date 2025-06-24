@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EventKey, SelectCallback, TransitionComponent } from './types';
+import type { EventKey, SelectCallback, TransitionComponent } from './types.js';
 
 export interface TabContextType {
   onSelect: SelectCallback;

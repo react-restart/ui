@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useClickOutside, {
-  ClickOutsideOptions,
+  type ClickOutsideOptions,
   getRefTarget,
-} from './useClickOutside';
-import { isEscKey } from './utils';
+} from './useClickOutside.js';
+import { isEscKey } from './utils.js';
 
 const noop = () => {};
 

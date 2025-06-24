@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useContext } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
-import NavContext from './NavContext';
-import SelectableContext, { makeEventKey } from './SelectableContext';
-import { EventKey, DynamicRefForwardingComponent } from './types';
-import Button from './Button';
-import { dataAttr } from './DataKey';
-import TabContext from './TabContext';
+import NavContext from './NavContext.js';
+import SelectableContext, { makeEventKey } from './SelectableContext.js';
+import type { EventKey, DynamicRefForwardingComponent } from './types.js';
+import Button from './Button.js';
+import { dataAttr } from './DataKey.js';
+import TabContext from './TabContext.js';
 
 export interface NavItemProps extends React.HTMLAttributes<HTMLElement> {
   /**

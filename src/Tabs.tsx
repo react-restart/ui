@@ -2,10 +2,10 @@ import * as React from 'react';
 import { useId, useMemo } from 'react';
 import { useUncontrolledProp } from 'uncontrollable';
 
-import TabContext, { TabContextType } from './TabContext';
-import SelectableContext from './SelectableContext';
-import { EventKey, SelectCallback, TransitionComponent } from './types';
-import TabPanel, { TabPanelProps } from './TabPanel';
+import TabContext, { type TabContextType } from './TabContext.js';
+import SelectableContext from './SelectableContext.js';
+import { EventKey, SelectCallback, TransitionComponent } from './types.js';
+import TabPanel, { TabPanelProps } from './TabPanel.js';
 
 export type { TabPanelProps };
 export interface TabsProps extends React.PropsWithChildren<unknown> {

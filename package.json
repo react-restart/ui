@@ -11,7 +11,8 @@
     "url": "git+https://github.com/react-restart/ui.git"
   },
   "license": "MIT",
-  "main": "cjs/index.js",
+  "type": "module",
+  "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
@@ -100,7 +101,7 @@
     "@restart/hooks": "^0.6.2",
     "@types/warning": "^3.0.3",
     "dequal": "^2.0.3",
-    "dom-helpers": "^5.2.0",
+    "dom-helpers": "^6.0.1",
     "uncontrollable": "^9.0.0",
     "warning": "^4.0.3"
   },

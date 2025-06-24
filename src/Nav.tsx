@@ -3,16 +3,19 @@ import * as React from 'react';
 import { useContext, useEffect, useRef } from 'react';
 import useForceUpdate from '@restart/hooks/useForceUpdate';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
-import NavContext from './NavContext';
-import SelectableContext, { makeEventKey } from './SelectableContext';
-import TabContext from './TabContext';
-import {
+import NavContext from './NavContext.js';
+import SelectableContext, { makeEventKey } from './SelectableContext.js';
+import TabContext from './TabContext.js';
+import type {
   EventKey,
   DynamicRefForwardingComponent,
   SelectCallback,
-} from './types';
-import { dataAttr, dataProp } from './DataKey';
-import NavItem, { UseNavItemOptions, NavItemProps } from './NavItem';
+} from './types.js';
+import { dataAttr, dataProp } from './DataKey.js';
+import NavItem, {
+  type UseNavItemOptions,
+  type NavItemProps,
+} from './NavItem.js';
 
 export type { UseNavItemOptions, NavItemProps };
 

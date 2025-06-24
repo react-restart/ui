@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EventKey } from './types';
+import type { EventKey } from './types.js';
 
 interface NavContextType {
   role?: string; // used by NavItem to determine it's role

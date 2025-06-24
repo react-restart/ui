@@ -1,15 +1,19 @@
 import { useContext, useRef } from 'react';
 import * as React from 'react';
 import useCallbackRef from '@restart/hooks/useCallbackRef';
-import DropdownContext, { DropdownContextValue } from './DropdownContext';
+import DropdownContext, {
+  type DropdownContextValue,
+} from './DropdownContext.js';
 import usePopper, {
-  UsePopperOptions,
-  Placement,
-  Offset,
-  UsePopperState,
-} from './usePopper';
-import useClickOutside, { ClickOutsideOptions } from './useClickOutside';
-import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
+  type UsePopperOptions,
+  type Placement,
+  type Offset,
+  type UsePopperState,
+} from './usePopper.js';
+import useClickOutside, {
+  type ClickOutsideOptions,
+} from './useClickOutside.js';
+import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig.js';
 
 export interface UseDropdownMenuOptions {
   /**

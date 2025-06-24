@@ -1,10 +1,10 @@
 import { cloneElement, useCallback, useRef } from 'react';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
-import {
+import type {
   TransitionProps as RTGTransitionProps,
   TransitionStatus,
-} from 'react-transition-group/Transition';
-import { getChildRef } from './utils';
+} from 'react-transition-group/Transition.js';
+import { getChildRef } from './utils.js';
 
 export type TransitionProps = RTGTransitionProps & {
   children:
