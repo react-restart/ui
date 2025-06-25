@@ -18,10 +18,6 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "node": {
-        "types": "./cjs/index.d.ts",
-        "default": "./cjs/index.js"
-      },
       "require": {
         "types": "./cjs/index.d.ts",
         "default": "./cjs/index.js"
@@ -32,10 +28,6 @@
       }
     },
     "./*": {
-      "node": {
-        "types": "./cjs/*.d.ts",
-        "default": "./cjs/*.js"
-      },
       "require": {
         "types": "./cjs/*.d.ts",
         "default": "./cjs/*.js"
