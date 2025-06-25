@@ -55,6 +55,7 @@ export default tseslint.config(
           ignoreRestSiblings: false,
         },
       ],
+      'react/prop-types': 'off',
     },
   },
   {
@@ -82,7 +83,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 'off',
       'padded-blocks': 'off',
       'react/no-multi-comp': 'off',
-      'react/prop-types': 'off',
     },
   },
 );

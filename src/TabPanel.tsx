@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useContext } from 'react';
 
-import TabContext from './TabContext';
-import SelectableContext, { makeEventKey } from './SelectableContext';
-import {
+import TabContext from './TabContext.js';
+import SelectableContext, { makeEventKey } from './SelectableContext.js';
+import type {
   EventKey,
   DynamicRefForwardingComponent,
   TransitionCallbacks,
   TransitionComponent,
-} from './types';
-import NoopTransition from './NoopTransition';
+} from './types.js';
+import NoopTransition from './NoopTransition.js';
 
 export interface TabPanelProps
   extends TransitionCallbacks,

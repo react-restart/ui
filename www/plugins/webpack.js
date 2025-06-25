@@ -24,6 +24,9 @@ module.exports = () => ({
         alias: {
           '@restart/ui': path.resolve(__dirname, '../../src'),
         },
+        extensionAlias: {
+          '.js': ['.ts', '.tsx', '.js'],
+        },
       },
     };
   },

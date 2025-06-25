@@ -1,8 +1,8 @@
 import ownerDocument from 'dom-helpers/ownerDocument';
 import canUseDOM from 'dom-helpers/canUseDOM';
 import { useState, useEffect } from 'react';
-import useWindow from './useWindow';
-import { VirtualElement } from './usePopper';
+import useWindow from './useWindow.js';
+import type { VirtualElement } from './usePopper.js';
 
 export type DOMContainer<T extends HTMLElement | VirtualElement = HTMLElement> =
 

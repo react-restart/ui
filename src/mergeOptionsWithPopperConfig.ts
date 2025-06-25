@@ -1,4 +1,9 @@
-import { UsePopperOptions, Offset, Placement, Modifiers } from './usePopper';
+import type {
+  UsePopperOptions,
+  Offset,
+  Placement,
+  Modifiers,
+} from './usePopper.js';
 
 export type Config = {
   flip?: boolean;

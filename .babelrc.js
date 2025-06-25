@@ -1,4 +1,4 @@
-module.exports = (api) => ({
+export default (api) => ({
   presets: [
     ['env-modules', { modules: api.env() === 'cjs' ? 'commonjs' : false }],
     ['@babel/react', { runtime: 'automatic' }],

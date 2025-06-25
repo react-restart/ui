@@ -2,7 +2,7 @@ import * as Popper from '@popperjs/core';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { dequal } from 'dequal';
 import useSafeState from '@restart/hooks/useSafeState';
-import { createPopper } from './popper';
+import { createPopper } from './popper.js';
 
 const disabledApplyStylesModifier = {
   name: 'applyStyles',

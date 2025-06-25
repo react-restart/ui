@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import useEventCallback from '@restart/hooks/useEventCallback';
-import { useButtonProps } from './Button';
+import { useButtonProps } from './Button.js';
 
 export function isTrivialHref(href?: string) {
   return !href || href.trim() === '#';

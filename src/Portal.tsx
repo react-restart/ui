@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import * as React from 'react';
-import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
+import useWaitForDOMRef, { type DOMContainer } from './useWaitForDOMRef.js';
 
 export interface PortalProps {
   children: React.ReactElement;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Placement } from './usePopper';
+import type { Placement } from './usePopper.js';
 
 export type DropdownContextValue = {
   toggle: (

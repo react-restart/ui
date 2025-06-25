@@ -8,23 +8,23 @@ import useForceUpdate from '@restart/hooks/useForceUpdate';
 import useEventListener from '@restart/hooks/useEventListener';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
-import DropdownContext from './DropdownContext';
+import DropdownContext from './DropdownContext.js';
 import DropdownMenu, {
-  DropdownMenuProps,
-  UseDropdownMenuMetadata,
-  UseDropdownMenuOptions,
-} from './DropdownMenu';
+  type DropdownMenuProps,
+  type UseDropdownMenuMetadata,
+  type UseDropdownMenuOptions,
+} from './DropdownMenu.js';
 import DropdownToggle, {
-  DropdownToggleProps,
-  UseDropdownToggleMetadata,
+  type DropdownToggleProps,
+  type UseDropdownToggleMetadata,
   isRoleMenu,
-} from './DropdownToggle';
-import DropdownItem, { DropdownItemProps } from './DropdownItem';
-import SelectableContext from './SelectableContext';
-import { SelectCallback } from './types';
-import { dataAttr } from './DataKey';
-import { Placement } from './usePopper';
-import useWindow from './useWindow';
+} from './DropdownToggle.js';
+import DropdownItem, { type DropdownItemProps } from './DropdownItem.js';
+import SelectableContext from './SelectableContext.js';
+import type { SelectCallback } from './types.js';
+import { dataAttr } from './DataKey.js';
+import type { Placement } from './usePopper.js';
+import useWindow from './useWindow.js';
 
 export type {
   DropdownMenuProps,

@@ -1,6 +1,6 @@
 import css from 'dom-helpers/css';
-import { dataAttr } from './DataKey';
-import getBodyScrollbarWidth from './getScrollbarWidth';
+import { dataAttr } from './DataKey.js';
+import getBodyScrollbarWidth from './getScrollbarWidth.js';
 
 export interface ModalInstance {
   dialog: Element;

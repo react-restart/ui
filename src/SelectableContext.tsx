@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EventKey, SelectCallback } from './types';
+import type { EventKey, SelectCallback } from './types.js';
 
 const SelectableContext = React.createContext<SelectCallback | null>(null);
 

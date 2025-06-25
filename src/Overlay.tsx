@@ -4,17 +4,20 @@ import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import { useState } from 'react';
 import usePopper, {
-  Offset,
-  Placement,
-  UsePopperOptions,
-  UsePopperState,
-  VirtualElement,
-} from './usePopper';
-import useRootClose, { RootCloseOptions } from './useRootClose';
-import useWaitForDOMRef, { DOMContainer } from './useWaitForDOMRef';
-import { TransitionCallbacks, TransitionComponent } from './types';
-import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig';
-import { renderTransition, TransitionHandler } from './ImperativeTransition';
+  type Offset,
+  type Placement,
+  type UsePopperOptions,
+  type UsePopperState,
+  type VirtualElement,
+} from './usePopper.js';
+import useRootClose, { type RootCloseOptions } from './useRootClose.js';
+import useWaitForDOMRef, { type DOMContainer } from './useWaitForDOMRef.js';
+import type { TransitionCallbacks, TransitionComponent } from './types.js';
+import mergeOptionsWithPopperConfig from './mergeOptionsWithPopperConfig.js';
+import {
+  renderTransition,
+  type TransitionHandler,
+} from './ImperativeTransition.js';
 
 export interface OverlayArrowProps extends Record<string, any> {
   ref: React.RefCallback<HTMLElement>;

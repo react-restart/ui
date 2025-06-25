@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useContext } from 'react';
 import useEventCallback from '@restart/hooks/useEventCallback';
 
-import SelectableContext, { makeEventKey } from './SelectableContext';
-import NavContext from './NavContext';
+import SelectableContext, { makeEventKey } from './SelectableContext.js';
+import NavContext from './NavContext.js';
 
-import { EventKey, DynamicRefForwardingComponent } from './types';
-import Button from './Button';
-import { dataAttr } from './DataKey';
+import type { EventKey, DynamicRefForwardingComponent } from './types.js';
+import Button from './Button.js';
+import { dataAttr } from './DataKey.js';
 
 export interface DropdownItemProps extends React.HTMLAttributes<HTMLElement> {
   /**

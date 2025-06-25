@@ -1,7 +1,7 @@
 import * as React from 'react';
 import useRTGTransitionProps, {
-  TransitionProps,
-} from './useRTGTransitionProps';
+  type TransitionProps,
+} from './useRTGTransitionProps.js';
 
 export type RTGTransitionProps = TransitionProps & {
   component: React.ElementType;

@@ -1,6 +1,8 @@
 import { useContext, useCallback, useId } from 'react';
 import * as React from 'react';
-import DropdownContext, { DropdownContextValue } from './DropdownContext';
+import DropdownContext, {
+  type DropdownContextValue,
+} from './DropdownContext.js';
 
 export const isRoleMenu = (el: HTMLElement) =>
   el.getAttribute('role')?.toLowerCase() === 'menu';
