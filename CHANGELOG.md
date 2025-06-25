@@ -1,3 +1,14 @@
+# [2.0.0-beta.5](https://github.com/react-restart/ui/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2025-06-25)
+
+
+### Features
+
+* add full ESM support ([#125](https://github.com/react-restart/ui/issues/125)) ([9fb475a](https://github.com/react-restart/ui/commit/9fb475ae1dbf3e451235eab445cbfef4a44cbdb8))
+
+
+
+
+
 # [2.0.0-beta.4](https://github.com/react-restart/ui/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2025-06-17)
 
 
