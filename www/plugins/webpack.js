@@ -6,20 +6,6 @@ module.exports = () => ({
     return {
       devtool: 'inline-cheap-module-source-map',
 
-      module: {
-        rules: [
-          {
-            test: /\.(j|t)sx?$/,
-            include: [path.resolve(__dirname, '../../src')],
-            use: [
-              getJSLoader(
-                isServer,
-                path.resolve(__dirname, '../babel.config.js'),
-              ),
-            ],
-          },
-        ],
-      },
       resolve: {
         alias: {
           '@restart/ui': path.resolve(__dirname, '../../src'),

@@ -25,7 +25,7 @@ const DropdownMenu = ({ role }) => {
     {
       flip: true,
       offset: [0, 8],
-    }
+    },
   );
 
   useLayoutEffect(() => {
@@ -38,7 +38,7 @@ const DropdownMenu = ({ role }) => {
       role={role}
       className={clsx(
         show ? "flex" : "hidden",
-        "w-48 py-2 flex-col shadow-lg border-gray-200 border bg-white z-10 rounded"
+        "w-48 py-2 flex-col shadow-lg border-gray-200 border bg-white z-10 rounded",
       )}
     >
       <Dropdown.Item className="text-left hover:bg-primary-100 px-6 py-2 focus:ring-2 focus:outline-none">
@@ -307,6 +307,7 @@ your app's needs.
 The example here positions the `Menu` to the `document` body via a `Portal`.
 
 ```jsx live
+import { createPortal } from "react-dom";
 import { Dropdown } from "@restart/ui";
 import Button from "../src/Button";
 
@@ -320,7 +321,7 @@ import Button from "../src/Button";
   </Dropdown.Toggle>
   <Dropdown.Menu offset={[0, 12]}>
     {(props, { show }) =>
-      ReactDOM.createPortal(
+      createPortal(
         <div
           {...props}
           className={`${
@@ -329,7 +330,7 @@ import Button from "../src/Button";
         >
           <p>I am rendered into the document body</p>
         </div>,
-        document.body
+        document.body,
       )
     }
   </Dropdown.Menu>

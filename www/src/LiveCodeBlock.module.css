@@ -1,0 +1,112 @@
+.playgroundHeader {
+  letter-spacing: 0.08rem;
+  padding: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.playgroundEditorHeader {
+  background: var(--ifm-color-emphasis-600);
+  color: var(--ifm-color-content-inverse);
+}
+
+.playgroundEditor {
+  padding: 1rem;
+  outline: none;
+  padding-top: 2rem;
+  font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
+    var(--ifm-font-family-monospace);
+  max-height: var(--docusaurus-jarle-editor-max-height, 400px);
+  overflow-y: auto;
+}
+
+.playgroundButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  box-shadow: none;
+  background: none;
+  font-size: 90%;
+  float: right;
+  color: var(--ifm-color-primary);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.playgroundButton:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+.playgroundButton:before {
+  content: '<';
+}
+
+.playgroundButton:after {
+  content: '/>';
+}
+
+.playgroundEditor::after {
+  content: 'editable';
+
+  top: 0.2rem;
+  left: 0;
+  position: absolute;
+  pointer-events: none;
+  letter-spacing: 0.08rem;
+  font-size: 90%;
+  padding: 0 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.playground > *:first-child {
+  border-top-left-radius: var(--ifm-global-radius);
+  border-top-right-radius: var(--ifm-global-radius);
+}
+
+.playground > *:last-child {
+  border-bottom-left-radius: var(--ifm-global-radius);
+  border-bottom-right-radius: var(--ifm-global-radius);
+}
+
+.playgroundPreview {
+  position: relative;
+
+  border: 1px solid var(--ifm-color-emphasis-200);
+  position: relative;
+  padding: 1rem;
+  padding-top: 2rem;
+}
+
+.infoMessage {
+  font-size: 70%;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.error {
+  all: unset;
+  font-size: 85% !important;
+  font-family: var(--ifm-font-family-monospace);
+  color: var(--ifm-color-danger-dark);
+}
+
+.inline {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr;
+}
+
+.inline > * {
+  display: flex;
+  flex-direction: column;
+}
+
+.inline > *:first-child {
+  height: 100%;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: var(--ifm-global-radius);
+}
+
+.inline > *:last-child {
+  height: 100%;
+
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: var(--ifm-global-radius);
+}
