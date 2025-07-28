@@ -1,3 +1,14 @@
+# [2.0.0-beta.6](https://github.com/react-restart/ui/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2025-07-28)
+
+
+### Bug Fixes
+
+* remove node from exports map ([#126](https://github.com/react-restart/ui/issues/126)) ([6113f4b](https://github.com/react-restart/ui/commit/6113f4b10b73ef5a0b448173fad1a1f7b9f961a2))
+
+
+
+
+
 # [2.0.0-beta.5](https://github.com/react-restart/ui/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2025-06-25)
 
 
