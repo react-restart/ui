@@ -11,15 +11,63 @@ export function useFocusTrap({
   disabled,
 }: {
   container: HTMLElement;
-  disabled?: boolean;
+  disabled?: () => boolean;
 }) {
   const ownerWindow = useWindow();
   const isMounted = useMounted();
 
   const listenersRef = useRef(new Set<(...args: any[]) => void>());
 
+  const handleKeydown = useEventCallback((event: KeyboardEvent) => {
+    if (event.key !== 'Tab' || !container) {
+      return;
+    }
+
+    const tabbables = getTabbableElements(container);
+    const currentActiveElement = activeElement(ownerWindow?.document);
+
+    const isTabbingBackwards =
+      currentActiveElement === tabbables[0] && event.shiftKey;
+
+    const isTabbingForward =
+      currentActiveElement === tabbables[tabbables.length - 1];
+
+    if (!isTabbingBackwards && !isTabbingForward) {
+      return;
+    }
+
+    /**
+     * We want focus to move from the focus trapped container out of the document like
+     * it would if you tabbed from the end or start of the page.
+     *
+     * Generally this Just Works for tabbing forward out of the modal, as modals are often
+     * the last element in the document. In cases where it isn't or if you tabbed backwards
+     * we need to allow focus to move out of the document.
+     *
+     * This is done by way of a little "trick". `tab` events happen before focus moves so
+     * you can shift the focus to a new element and the tab will then move focus forward or backwards
+     * depending on the direction. We take advantage of this by moving focus to the first or last tabbable element
+     * in the document.
+     */
+    const bodyTabbables = getTabbableElements(
+      ownerWindow?.document ?? document!,
+    );
+
+    if (isTabbingBackwards) {
+      if (bodyTabbables[0] !== currentActiveElement) {
+        bodyTabbables[0]?.focus();
+      }
+    } else if (isTabbingForward) {
+      const lastTabbable = bodyTabbables[bodyTabbables.length - 1];
+
+      if (lastTabbable !== currentActiveElement) {
+        lastTabbable?.focus();
+      }
+    }
+  });
+
   const handleEnforceFocus = useEventCallback((_event: FocusEvent) => {
-    if (disabled) {
+    if (disabled?.()) {
       return;
     }
 
@@ -30,68 +78,31 @@ export function useFocusTrap({
       currentActiveElement &&
       !container.contains(currentActiveElement)
     ) {
-      container.focus();
+      const tabbables = getTabbableElements(container);
+
+      (tabbables[0] ?? container).focus();
     }
   });
 
   const start = useCallback(() => {
     const document = ownerWindow?.document;
 
-    if (!document || !isMounted()) {
+    if (!ownerWindow || !document || !isMounted()) {
       return;
     }
 
-    document.addEventListener('focus', handleFocus, { capture: true });
+    ownerWindow.addEventListener('focus', handleFocus, { capture: true });
     document.addEventListener('keydown', handleKeydown);
 
-    listenersRef.current.add(handleFocus);
-    listenersRef.current.add(handleKeydown);
-
-    function handleKeydown(event: KeyboardEvent) {
-      const tabbables = getTabbableElements(container);
-      const currentActiveElement = activeElement(ownerWindow?.document);
-
-      const isTabbingBackwards =
-        currentActiveElement === tabbables[0] && event.shiftKey;
-
-      const isTabbingForward =
-        currentActiveElement === tabbables[tabbables.length - 1];
-
-      if (!isTabbingBackwards && !isTabbingForward) {
-        return;
-      }
-
-      /**
-       * We want focus to move from the focus trapped container out of the document like
-       * it would if you tabbed from the end or start of the page.
-       *
-       * Generally this Just Works for tabbing forward out of the modal, as modals are often
-       * the last element in the document. In cases where it isn't or if you tabbed backwards
-       * we need to allow focus to move out of the document.
-       *
-       * This is done by way of a little "trick". `tab` events happen before focus moves so
-       * you can shift the focus to a new element and the tab will then move focus forward or backwards
-       * depending on the direction. We take advantage of this by moving focus to the first or last tabbable element
-       * in the document.
-       */
-      const bodyTabbables = getTabbableElements(
-        ownerWindow?.document ?? document!,
-      );
-
-      if (isTabbingBackwards) {
-        if (bodyTabbables[0] !== currentActiveElement) {
-          bodyTabbables[0]?.focus();
-        }
-      } else if (isTabbingForward) {
-        const lastTabbable = bodyTabbables[bodyTabbables.length - 1];
-
-        if (lastTabbable !== currentActiveElement) {
-          lastTabbable?.focus();
-        }
-      }
-    }
+    listenersRef.current.add(() =>
+      ownerWindow.removeEventListener('focus', handleFocus, { capture: true }),
+    );
+    listenersRef.current.add(() =>
+      document.removeEventListener('keydown', handleKeydown),
+    );
 
     function handleFocus(event: FocusEvent) {
+      console.log('handleFocus', event.target);
       // the timeout is necessary b/c this will run before the new modal is mounted
       // and so steals focus from it
       setTimeout(() => handleEnforceFocus(event));
