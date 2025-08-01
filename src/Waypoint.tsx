@@ -2,9 +2,9 @@ import useCallbackRef from '@restart/hooks/useCallbackRef';
 import * as React from 'react';
 
 import useWaypoint, {
+  Position,
   type WaypointOptions,
   type WaypointEvent,
-  type Position,
 } from './useWaypoint.js';
 
 export { Position };

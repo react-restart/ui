@@ -2,10 +2,14 @@
   "extends": "..",
   "compilerOptions": {
     "rootDir": "..",
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "noImplicitAny": false,
     "paths": {
-      "@restart/ui/*": ["../src/*"]
+      "@restart/ui/*": ["../src/*"],
+      "@restart/ui": ["../src/index.ts"]
     }
   },
-  "include": ["./src", "../src"]
+  "include": ["./src", "../src"],
+  "exclude": [".docusaurus", "build"]
 }

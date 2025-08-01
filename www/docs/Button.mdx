@@ -1,10 +1,12 @@
 An abstract button component for creating accessible buttons regardless of the HTML
 element used to render it.
 
-```jsx live className=button-example
+```jsx live
 import { Button } from "@restart/ui";
 
-<Button>I'm a Button</Button>;
+<div className="button-example">
+  <Button>I'm a Button</Button>
+</div>;
 ```
 
 Not very impressive on its own, but `Button` does come with a few conveniences
@@ -14,10 +16,10 @@ over the plain HTML element.
 - Ensures that non `button` `as` options remain accessible
 - contextually renders an `<a>` if href or other anchor props are added.
 
-```jsx live className=button-example
+```jsx live
 import { Button } from "@restart/ui";
 
-<div className="space-x-4">
+<div className="space-x-4 button-example">
   <Button>I'm a Button</Button>
   <Button href="/home">I'm a link</Button>
   <Button as="span">I'm a span but also a button</Button>
@@ -73,7 +75,7 @@ function StyledButton(props) {
         !props.disabled &&
           "cursor-pointer hover:bg-primary hover:text-white",
         "active:bg-primary-600 active:text-white",
-        props.disabled && "cursor-not-allowed opacity-60"
+        props.disabled && "cursor-not-allowed opacity-60",
       )}
     />
   );

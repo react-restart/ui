@@ -1,12 +1,10 @@
 import clsx from 'clsx';
-import {
-  Button,
-  useDropdownMenu,
-  useDropdownToggle,
-  useDropdownItem,
-  Dropdown as BaseDropdown,
-  DropdownProps,
-} from '@restart/ui';
+import Button from '@restart/ui/Button';
+import BaseDropdown, { DropdownProps } from '@restart/ui/Dropdown';
+import { useDropdownMenu } from '@restart/ui/DropdownMenu';
+import { useDropdownToggle } from '@restart/ui/DropdownToggle';
+import { useDropdownItem } from '@restart/ui/DropdownItem';
+
 import StyledButton from './Button';
 
 const DropdownMenu = ({ role, ...props }) => {
@@ -30,7 +28,7 @@ const DropdownMenu = ({ role, ...props }) => {
 };
 
 const DropdownItem = ({ eventKey, ...props }) => {
-  const [itemProps, { active }] = useDropdownItem({
+  const [itemProps, { isActive }] = useDropdownItem({
     key: eventKey,
     ...props,
   });
@@ -41,7 +39,7 @@ const DropdownItem = ({ eventKey, ...props }) => {
       {...itemProps}
       className={clsx(
         'text-left hover:bg-primary-100 px-6 py-2 focus:ring-2 focus:outline-none',
-        active && 'bg-primary',
+        isActive && 'bg-primary',
       )}
     />
   );

@@ -39,9 +39,8 @@ to the `root` prop.
 
 ```tsx
 function ScrollArea({ items, onPositionChange }) {
-  const [element, setElement] = useState<HTMLDivElement>(
-    null
-  );
+  const [element, setElement] =
+    useState<HTMLDivElement>(null);
 
   return (
     <div ref={setElement} style={{ overflow: "auto" }}>
@@ -91,9 +90,7 @@ when you want an individual component to respond
 
 ```tsx live
 import getScrollParent from "dom-helpers/scrollParent";
-import useWaypoint, {
-  Position,
-} from "@restart/ui/useWaypoint";
+import { useWaypoint, Position } from "@restart/ui";
 
 function LazyImage({ src }) {
   const [element, attachRef] = useState(null);
@@ -112,7 +109,7 @@ function LazyImage({ src }) {
       root: "scrollParent",
       scrollDirection: "horizontal",
       rootMargin: { right: -80 },
-    }
+    },
   );
 
   return (

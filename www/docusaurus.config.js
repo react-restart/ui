@@ -30,20 +30,14 @@ module.exports = {
   plugins: [require.resolve('./plugins/webpack')],
   presets: [
     [
-      '@4c/docusaurus-preset',
+      '@docusaurus/preset-classic',
       {
-        theme: [
-          '@docusaurus/theme-classic',
-          {
-            customCss: [require.resolve('./src/css/tailwind.css')],
-          },
-        ],
+        theme: {
+          customCss: [require.resolve('./src/css/tailwind.css')],
+        },
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-        },
-        reactMetadata: {
-          src: '../src/**/*.{js,tsx,ts}',
         },
       },
     ],

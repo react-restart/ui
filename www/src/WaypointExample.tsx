@@ -2,7 +2,7 @@ import useCallbackRef from '@restart/hooks/useCallbackRef';
 import useIsomorphicEffect from '@restart/hooks/useIsomorphicEffect';
 import Waypoint, { Position } from '@restart/ui/Waypoint';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface Props {
   horizontal?: boolean;
