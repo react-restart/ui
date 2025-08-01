@@ -1,46 +1,45 @@
-import Dropdown from './Dropdown.js';
-import { useDropdownMenu } from './DropdownMenu.js';
-import { useDropdownToggle } from './DropdownToggle.js';
-import { useDropdownItem } from './DropdownItem.js';
-import Modal from './Modal.js';
-import Overlay from './Overlay.js';
-import Portal from './Portal.js';
-import useRootClose from './useRootClose.js';
-import Nav from './Nav.js';
-import NavItem, { useNavItem } from './NavItem.js';
-import Button from './Button.js';
-import Tabs from './Tabs.js';
-import TabPanel from './TabPanel.js';
+export {
+  default as Dropdown,
+  type DropdownProps,
+  type DropdownMenuProps,
+  type UseDropdownMenuMetadata,
+  type UseDropdownMenuOptions,
+  type DropdownToggleProps,
+  type UseDropdownToggleMetadata,
+  type DropdownItemProps,
+} from './Dropdown.js';
+export { useDropdownMenu } from './DropdownMenu.js';
+export { useDropdownToggle } from './DropdownToggle.js';
+export { useDropdownItem } from './DropdownItem.js';
+export { default as Modal, type ModalProps } from './Modal.js';
+export { default as Overlay, type OverlayProps } from './Overlay.js';
+export { default as Portal, type PortalProps } from './Portal.js';
+export {
+  default as useRootClose,
+  type RootCloseOptions,
+} from './useRootClose.js';
+export {
+  default as Nav,
+  type NavItemProps,
+  type UseNavItemOptions,
+  type NavProps,
+} from './Nav.js';
+export { default as NavItem, useNavItem } from './NavItem.js';
+export { default as Button, type ButtonProps } from './Button.js';
+export { default as Tabs, type TabsProps, type TabPanelProps } from './Tabs.js';
+export { default as TabPanel } from './TabPanel.js';
 
 export {
-  Button,
-  Dropdown,
-  useDropdownMenu,
-  useDropdownToggle,
-  useDropdownItem,
-  Nav,
-  NavItem,
-  useNavItem,
-  Modal,
-  Overlay,
-  Portal,
-  useRootClose,
-  Tabs,
-  TabPanel,
-};
-
-export type { ButtonProps } from './Button.js';
-export type {
-  DropdownProps,
-  DropdownMenuProps,
-  UseDropdownMenuMetadata,
-  UseDropdownMenuOptions,
-  DropdownToggleProps,
-  UseDropdownToggleMetadata,
-  DropdownItemProps,
-} from './Dropdown.js';
-export type { NavItemProps, UseNavItemOptions, NavProps } from './Nav.js';
-export type { ModalProps } from './Modal.js';
-export type { OverlayProps } from './Overlay.js';
-export type { PortalProps } from './Portal.js';
-export type { TabsProps, TabPanelProps } from './Tabs.js';
+  default as Waypoint,
+  type WaypointProps,
+  type WaypointEvent,
+} from './Waypoint.js';
+export {
+  default as useWaypoint,
+  Position,
+  type WaypointOptions,
+} from './useWaypoint.js';
+export {
+  default as useClickOutside,
+  type ClickOutsideOptions,
+} from './useClickOutside.js';

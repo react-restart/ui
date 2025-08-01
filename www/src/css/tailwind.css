@@ -52,6 +52,10 @@ ul {
   --ifm-code-font-size: 95%;
 }
 
+svg {
+  display: initial;
+}
+
 @import 'tailwindcss/utilities';
 
 .button-example button {

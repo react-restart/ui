@@ -2,28 +2,30 @@
 import { useRootClose } from "@restart/ui";
 import Button from "../src/Button";
 
-const ref = useRef();
-const [show, setShow] = useState(false);
-const handleRootClose = () => setShow(false);
+function RootCloseWrapper() {
+  const ref = useRef();
+  const [show, setShow] = useState(false);
+  const handleRootClose = () => setShow(false);
 
-useRootClose(ref, handleRootClose, {
-  disabled: !show,
-});
+  useRootClose(ref, handleRootClose, {
+    disabled: !show,
+  });
 
-return (
-  <div className="flex flex-col items-center space-y-4">
-    <Button type="button" onClick={() => setShow(true)}>
-      Render RootCloseWrapper
-    </Button>
+  return (
+    <div className="flex flex-col items-center space-y-4">
+      <Button type="button" onClick={() => setShow(true)}>
+        Render RootCloseWrapper
+      </Button>
 
-    {show && (
-      <div
-        ref={ref}
-        className="rounded shadow bg-white p-6"
-      >
-        <span>Click anywhere to dismiss me!</span>
-      </div>
-    )}
-  </div>
-);
+      {show && (
+        <div
+          ref={ref}
+          className="rounded shadow bg-white p-6"
+        >
+          <span>Click anywhere to dismiss me!</span>
+        </div>
+      )}
+    </div>
+  );
+}
 ```

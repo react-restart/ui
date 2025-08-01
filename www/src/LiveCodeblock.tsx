@@ -16,6 +16,9 @@ import * as RestartUi from '@restart/ui';
 import Button from './Button';
 import Dropdown from './Dropdown';
 import Tooltip from './Tooltip';
+import Transition from 'react-transition-group/Transition';
+import scrollParent from 'dom-helpers/scrollParent';
+import '../src/css/transitions.css';
 
 // @ts-ignore
 import styles from './LiveCodeBlock.module.css';
@@ -31,10 +34,13 @@ const LocalImports = {
   react: React,
   'react-dom': ReactDOM,
   '@restart/ui': RestartUi,
+  'react-transition-group/Transition': Transition,
+  'dom-helpers/scrollParent': scrollParent,
   clsx,
   '../src/Button': Button,
   '../src/Dropdown': Dropdown,
   '../src/Tooltip': Tooltip,
+  '../src/css/transitions.css': '',
 };
 
 export interface Props
