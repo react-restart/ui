@@ -4,7 +4,7 @@ module.exports = () => ({
   name: 'webpack-plugin',
   configureWebpack(_, isServer, { getJSLoader }) {
     return {
-      devtool: 'inline-cheap-module-source-map',
+      devtool: 'eval-source-map',
 
       resolve: {
         alias: {

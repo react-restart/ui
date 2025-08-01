@@ -12,7 +12,6 @@ import {
 } from 'react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import useMounted from '@restart/hooks/useMounted';
 import useWillUnmount from '@restart/hooks/useWillUnmount';
 
 import usePrevious from '@restart/hooks/usePrevious';
@@ -21,11 +20,13 @@ import ModalManager from './ModalManager.js';
 import useWaitForDOMRef, { type DOMContainer } from './useWaitForDOMRef.js';
 import type { TransitionCallbacks, TransitionComponent } from './types.js';
 import useWindow from './useWindow.js';
+import { useFocusTrap } from './useFocusTrap.js';
 import {
   renderTransition,
   type TransitionHandler,
 } from './ImperativeTransition.js';
 import { isEscKey } from './utils.js';
+import { getTabbableElementsOrSelf } from './tabbable.js';
 
 let manager: ModalManager;
 
@@ -298,10 +299,15 @@ const Modal: React.ForwardRefExoticComponent<
     const container = useWaitForDOMRef(containerRef);
     const modal = useModalManager(providedManager);
 
-    const isMounted = useMounted();
     const prevShow = usePrevious(show);
     const [exited, setExited] = useState(!show);
+    const removeKeydownListenerRef = useRef<(() => void) | null>(null);
     const lastFocusRef = useRef<HTMLElement | null>(null);
+
+    const focusTrap = useFocusTrap({
+      getContainer: () => modal.dialog,
+      disabled: () => !enforceFocus || !modal.isTopModal(),
+    });
 
     useImperativeHandle(ref, () => modal, [modal]);
 
@@ -325,14 +331,7 @@ const Modal: React.ForwardRefExoticComponent<
         handleDocumentKeyDown,
       );
 
-      removeFocusListenerRef.current = listen(
-        document as any,
-        'focus',
-        // the timeout is necessary b/c this will run before the new modal is mounted
-        // and so steals focus from it
-        () => setTimeout(handleEnforceFocus),
-        true,
-      );
+      focusTrap.start();
 
       if (onShow) {
         onShow();
@@ -351,7 +350,8 @@ const Modal: React.ForwardRefExoticComponent<
           !contains(modal.dialog, currentActiveElement)
         ) {
           lastFocusRef.current = currentActiveElement;
-          modal.dialog.focus();
+          const tabbables = getTabbableElementsOrSelf(modal.dialog);
+          tabbables[0]?.focus();
         }
       }
     });
@@ -360,7 +360,7 @@ const Modal: React.ForwardRefExoticComponent<
       modal.remove();
 
       removeKeydownListenerRef.current?.();
-      removeFocusListenerRef.current?.();
+      focusTrap.stop();
 
       if (restoreFocus) {
         // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
@@ -394,22 +394,6 @@ const Modal: React.ForwardRefExoticComponent<
 
     // --------------------------------
 
-    const handleEnforceFocus = useEventCallback(() => {
-      if (!enforceFocus || !isMounted() || !modal.isTopModal()) {
-        return;
-      }
-
-      const currentActiveElement = activeElement(ownerWindow?.document);
-
-      if (
-        modal.dialog &&
-        currentActiveElement &&
-        !contains(modal.dialog, currentActiveElement)
-      ) {
-        modal.dialog.focus();
-      }
-    });
-
     const handleBackdropClick = useEventCallback((e: React.SyntheticEvent) => {
       if (e.target !== e.currentTarget) {
         return;
@@ -431,13 +415,6 @@ const Modal: React.ForwardRefExoticComponent<
         }
       }
     });
-
-    const removeFocusListenerRef = useRef<ReturnType<typeof listen> | null>(
-      null,
-    );
-    const removeKeydownListenerRef = useRef<ReturnType<typeof listen> | null>(
-      null,
-    );
 
     const handleHidden: TransitionCallbacks['onExited'] = (...args) => {
       setExited(true);
