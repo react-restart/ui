@@ -19,6 +19,7 @@ import Tooltip from './Tooltip';
 import Transition from 'react-transition-group/Transition';
 import scrollParent from 'dom-helpers/scrollParent';
 import '../src/css/transitions.css';
+import styled from '@emotion/styled';
 
 // @ts-ignore
 import styles from './LiveCodeBlock.module.css';
@@ -41,6 +42,7 @@ const LocalImports = {
   '../src/Dropdown': Dropdown,
   '../src/Tooltip': Tooltip,
   '../src/css/transitions.css': '',
+  '@emotion/styled': styled,
 };
 
 export interface Props

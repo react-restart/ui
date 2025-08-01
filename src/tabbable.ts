@@ -64,6 +64,10 @@ const FOCUSABLE_SELECTOR = [
   '[contenteditable]:not([contenteditable="false"])',
 ].join(',');
 
+const isFocusable = (element: HTMLElement | SVGElement) =>
+  element.matches(FOCUSABLE_SELECTOR) &&
+  isFocusableElementMatchingSelector(element);
+
 export function getTabbableElements(
   container: Element | Document,
   startAt?: HTMLElement,
@@ -81,4 +85,13 @@ export function getTabbableElements(
   }
 
   return items.filter(isTabbableElementMatchingSelector);
+}
+
+export function getTabbableElementsOrSelf(container: HTMLElement | SVGElement) {
+  const tabbables = getTabbableElements(container);
+  return tabbables.length
+    ? tabbables
+    : isFocusable(container)
+      ? [container]
+      : [];
 }

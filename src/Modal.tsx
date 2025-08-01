@@ -26,6 +26,7 @@ import {
   type TransitionHandler,
 } from './ImperativeTransition.js';
 import { isEscKey } from './utils.js';
+import { getTabbableElementsOrSelf } from './tabbable.js';
 
 let manager: ModalManager;
 
@@ -304,7 +305,7 @@ const Modal: React.ForwardRefExoticComponent<
     const lastFocusRef = useRef<HTMLElement | null>(null);
 
     const focusTrap = useFocusTrap({
-      container: modal.dialog,
+      getContainer: () => modal.dialog,
       disabled: () => !enforceFocus || !modal.isTopModal(),
     });
 
@@ -349,7 +350,8 @@ const Modal: React.ForwardRefExoticComponent<
           !contains(modal.dialog, currentActiveElement)
         ) {
           lastFocusRef.current = currentActiveElement;
-          modal.dialog.focus();
+          const tabbables = getTabbableElementsOrSelf(modal.dialog);
+          tabbables[0]?.focus();
         }
       }
     });

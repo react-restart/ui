@@ -3,14 +3,14 @@ import { useRef } from 'react';
 import useWindow from './useWindow.js';
 import useMounted from '@restart/hooks/useMounted';
 import useEventCallback from '@restart/hooks/useEventCallback';
-import { getTabbableElements } from './tabbable.js';
+import { getTabbableElements, getTabbableElementsOrSelf } from './tabbable.js';
 import activeElement from 'dom-helpers/activeElement';
 
 export function useFocusTrap({
-  container,
+  getContainer,
   disabled,
 }: {
-  container: HTMLElement;
+  getContainer: () => HTMLElement | null;
   disabled?: () => boolean;
 }) {
   const ownerWindow = useWindow();
@@ -19,50 +19,29 @@ export function useFocusTrap({
   const listenersRef = useRef(new Set<(...args: any[]) => void>());
 
   const handleKeydown = useEventCallback((event: KeyboardEvent) => {
+    const container = getContainer();
+
     if (event.key !== 'Tab' || !container) {
       return;
     }
 
-    const tabbables = getTabbableElements(container);
-    const currentActiveElement = activeElement(ownerWindow?.document);
+    const tabbables = getTabbableElementsOrSelf(container);
 
-    const isTabbingBackwards =
-      currentActiveElement === tabbables[0] && event.shiftKey;
+    const firstTabbable = tabbables[0];
+    const lastTabbable = tabbables[tabbables.length - 1];
 
-    const isTabbingForward =
-      currentActiveElement === tabbables[tabbables.length - 1];
-
-    if (!isTabbingBackwards && !isTabbingForward) {
+    if (event.shiftKey && event.target === tabbables[0]) {
+      lastTabbable?.focus();
+      event.preventDefault();
       return;
     }
 
-    /**
-     * We want focus to move from the focus trapped container out of the document like
-     * it would if you tabbed from the end or start of the page.
-     *
-     * Generally this Just Works for tabbing forward out of the modal, as modals are often
-     * the last element in the document. In cases where it isn't or if you tabbed backwards
-     * we need to allow focus to move out of the document.
-     *
-     * This is done by way of a little "trick". `tab` events happen before focus moves so
-     * you can shift the focus to a new element and the tab will then move focus forward or backwards
-     * depending on the direction. We take advantage of this by moving focus to the first or last tabbable element
-     * in the document.
-     */
-    const bodyTabbables = getTabbableElements(
-      ownerWindow?.document ?? document!,
-    );
-
-    if (isTabbingBackwards) {
-      if (bodyTabbables[0] !== currentActiveElement) {
-        bodyTabbables[0]?.focus();
-      }
-    } else if (isTabbingForward) {
-      const lastTabbable = bodyTabbables[bodyTabbables.length - 1];
-
-      if (lastTabbable !== currentActiveElement) {
-        lastTabbable?.focus();
-      }
+    if (
+      (!event.shiftKey && event.target === lastTabbable) ||
+      !container.contains(event.target as Element)
+    ) {
+      firstTabbable?.focus();
+      event.preventDefault();
     }
   });
 
@@ -71,6 +50,7 @@ export function useFocusTrap({
       return;
     }
 
+    const container = getContainer();
     const currentActiveElement = activeElement(ownerWindow?.document);
 
     if (
@@ -78,9 +58,9 @@ export function useFocusTrap({
       currentActiveElement &&
       !container.contains(currentActiveElement)
     ) {
-      const tabbables = getTabbableElements(container);
+      const tabbables = getTabbableElementsOrSelf(container);
 
-      (tabbables[0] ?? container).focus();
+      tabbables[0]?.focus();
     }
   });
 
@@ -92,14 +72,14 @@ export function useFocusTrap({
     }
 
     ownerWindow.addEventListener('focus', handleFocus, { capture: true });
+    ownerWindow.addEventListener('blur', handleBlur);
     document.addEventListener('keydown', handleKeydown);
 
-    listenersRef.current.add(() =>
-      ownerWindow.removeEventListener('focus', handleFocus, { capture: true }),
-    );
-    listenersRef.current.add(() =>
-      document.removeEventListener('keydown', handleKeydown),
-    );
+    listenersRef.current.add(() => {
+      ownerWindow.removeEventListener('focus', handleFocus, { capture: true });
+      ownerWindow.removeEventListener('blur', handleBlur);
+      document.removeEventListener('keydown', handleKeydown);
+    });
 
     function handleFocus(event: FocusEvent) {
       console.log('handleFocus', event.target);
@@ -107,7 +87,11 @@ export function useFocusTrap({
       // and so steals focus from it
       setTimeout(() => handleEnforceFocus(event));
     }
-  }, [container, handleEnforceFocus]);
+
+    function handleBlur(event: FocusEvent) {
+      console.log('handleBlur', event.target);
+    }
+  }, [handleEnforceFocus]);
 
   const stop = useCallback(() => {
     listenersRef.current.forEach((listener) => listener());

@@ -342,7 +342,7 @@ describe('<Modal>', () => {
       render(
         <Modal show className="modal">
           <div>
-            <input autoFocus />
+            <input type="text" autoFocus />
           </div>
         </Modal>,
         { container: focusableContainer },
@@ -350,8 +350,10 @@ describe('<Modal>', () => {
 
       focusableContainer.focus();
 
+      const input = document.getElementsByTagName('input')[0];
+
       await waitFor(() => {
-        expect(document.activeElement!.classList.contains('modal')).toBe(true);
+        expect(document.activeElement).toEqual(input);
       });
     });
   });
