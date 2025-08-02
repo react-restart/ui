@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import useWindow from './useWindow.js';
 import useMounted from '@restart/hooks/useMounted';
 import useEventCallback from '@restart/hooks/useEventCallback';
-import { getTabbableElements, getTabbableElementsOrSelf } from './tabbable.js';
+import { getTabbableElementsOrSelf } from './tabbable.js';
 import activeElement from 'dom-helpers/activeElement';
 
 export function useFocusTrap({
@@ -82,7 +82,6 @@ export function useFocusTrap({
     });
 
     function handleFocus(event: FocusEvent) {
-      console.log('handleFocus', event.target);
       // the timeout is necessary b/c this will run before the new modal is mounted
       // and so steals focus from it
       setTimeout(() => handleEnforceFocus(event));
