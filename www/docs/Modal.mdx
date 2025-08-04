@@ -43,12 +43,18 @@ function Example() {
         <div>
           <h4 id="modal-1-label">Alert!</h4>
           <p>Some important content!</p>
-          <Button
-            onClick={() => setShow(false)}
-            className="float-right"
-          >
-            Close
-          </Button>
+
+          <div className="flex justify-end gap-4">
+            <Button onClick={() => setShow(false)}>
+              Close
+            </Button>
+            <Button
+              onClick={() => setShow(false)}
+              autoFocus
+            >
+              OK
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
