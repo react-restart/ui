@@ -1,3 +1,14 @@
+# [2.0.0-beta.7](https://github.com/react-restart/ui/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2025-08-04)
+
+
+### Features
+
+* Implement modal tab behavior according to current APG recommendati… ([#128](https://github.com/react-restart/ui/issues/128)) ([b30a536](https://github.com/react-restart/ui/commit/b30a536cf92e6170a6c9f78b0890e679386d75dd))
+
+
+
+
+
 # [2.0.0-beta.6](https://github.com/react-restart/ui/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2025-07-28)
 
 
