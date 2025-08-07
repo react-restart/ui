@@ -1,3 +1,14 @@
+# [2.0.0-beta.8](https://github.com/react-restart/ui/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2025-08-07)
+
+
+### Bug Fixes
+
+* remove console.log ([b0a5ddf](https://github.com/react-restart/ui/commit/b0a5ddf764147d228eea5a3b0611b46bed676744))
+
+
+
+
+
 # [2.0.0-beta.7](https://github.com/react-restart/ui/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2025-08-04)
 
 
