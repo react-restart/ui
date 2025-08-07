@@ -72,12 +72,11 @@ export function useFocusTrap({
     }
 
     ownerWindow.addEventListener('focus', handleFocus, { capture: true });
-    ownerWindow.addEventListener('blur', handleBlur);
     document.addEventListener('keydown', handleKeydown);
 
     listenersRef.current.add(() => {
       ownerWindow.removeEventListener('focus', handleFocus, { capture: true });
-      ownerWindow.removeEventListener('blur', handleBlur);
+
       document.removeEventListener('keydown', handleKeydown);
     });
 
@@ -85,10 +84,6 @@ export function useFocusTrap({
       // the timeout is necessary b/c this will run before the new modal is mounted
       // and so steals focus from it
       setTimeout(() => handleEnforceFocus(event));
-    }
-
-    function handleBlur(event: FocusEvent) {
-      console.log('handleBlur', event.target);
     }
   }, [handleEnforceFocus]);
 
