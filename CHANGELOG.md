@@ -1,3 +1,14 @@
+# [2.0.0-beta.9](https://github.com/react-restart/ui/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2025-08-13)
+
+
+### Bug Fixes
+
+* crash on invalid cross origin iframe ([#129](https://github.com/react-restart/ui/issues/129)) ([d2c60f0](https://github.com/react-restart/ui/commit/d2c60f0e1a0cb31c91c1065ce37c89bcfabf5de4))
+
+
+
+
+
 # [2.0.0-beta.8](https://github.com/react-restart/ui/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2025-08-07)
 
 
