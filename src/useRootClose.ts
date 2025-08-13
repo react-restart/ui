@@ -8,6 +8,7 @@ import useClickOutside, {
   getRefTarget,
 } from './useClickOutside.js';
 import { isEscKey } from './utils.js';
+import { getWindowEvent } from './getWindowEvent.js';
 
 const noop = () => {};
 
@@ -47,9 +48,7 @@ function useRootClose(
 
     const doc = ownerDocument(getRefTarget(ref)!);
 
-    // Store the current event to avoid triggering handlers immediately
-    // https://github.com/facebook/react/issues/20074
-    let currentEvent = (doc.defaultView || window).event;
+    let currentEvent = getWindowEvent(doc.defaultView);
 
     const removeKeyupListener = listen(doc as any, 'keyup', (e) => {
       // skip if this event is the same as the one running when we added the handlers
