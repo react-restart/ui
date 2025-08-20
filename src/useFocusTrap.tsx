@@ -21,7 +21,7 @@ export function useFocusTrap({
   const handleKeydown = useEventCallback((event: KeyboardEvent) => {
     const container = getContainer();
 
-    if (event.key !== 'Tab' || !container) {
+    if (event.key !== 'Tab' || !container || disabled?.()) {
       return;
     }
 
