@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type { DynamicRefForwardingComponent } from './types.js';
 
 export type ButtonType = 'button' | 'reset' | 'submit';
 
@@ -108,7 +109,7 @@ export function useButtonProps({
   ];
 }
 
-export interface BaseButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLElement> {
   /**
    * Control the underlying rendered element directly by passing in a valid
    * component type
@@ -127,21 +128,18 @@ export interface BaseButtonProps {
   rel?: string | undefined;
 }
 
-export interface ButtonProps
-  extends BaseButtonProps,
-    React.ComponentPropsWithoutRef<'button'> {}
+const Button: DynamicRefForwardingComponent<'button', ButtonProps> =
+  React.forwardRef<HTMLElement, ButtonProps>(
+    ({ as: asProp, disabled, ...props }, ref) => {
+      const [buttonProps, { tagName: Component }] = useButtonProps({
+        tagName: asProp,
+        disabled,
+        ...props,
+      });
 
-const Button = React.forwardRef<HTMLElement, ButtonProps>(
-  ({ as: asProp, disabled, ...props }, ref) => {
-    const [buttonProps, { tagName: Component }] = useButtonProps({
-      tagName: asProp,
-      disabled,
-      ...props,
-    });
-
-    return <Component {...props} {...buttonProps} ref={ref} />;
-  },
-);
+      return <Component {...props} {...buttonProps} ref={ref} />;
+    },
+  );
 
 Button.displayName = 'Button';
 
