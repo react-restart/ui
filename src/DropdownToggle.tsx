@@ -11,7 +11,7 @@ export interface UseDropdownToggleProps {
   id: string;
   ref: DropdownContextValue['setToggle'];
   onClick: React.MouseEventHandler;
-  'aria-expanded': boolean;
+  'aria-expanded'?: boolean | null;
   'aria-haspopup'?: true;
 }
 
@@ -50,7 +50,6 @@ export function useDropdownToggle(): [
     id,
     ref: setToggle || noop,
     onClick: handleClick,
-    'aria-expanded': !!show,
   };
 
   // This is maybe better down in an effect, but
@@ -58,6 +57,9 @@ export function useDropdownToggle(): [
   // is set so might return new props.
   if (menuElement && isRoleMenu(menuElement)) {
     props['aria-haspopup'] = true;
+    props['aria-expanded'] = show || null;
+  } else {
+    props['aria-expanded'] = !!show;
   }
 
   return [props, { show, toggle }];
