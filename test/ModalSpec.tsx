@@ -356,5 +356,48 @@ describe('<Modal>', () => {
         expect(document.activeElement).toEqual(input);
       });
     });
+
+    it('should return focus to previously focused element in shadow DOM when modal closes', async () => {
+      class CustomElementImplementation extends HTMLElement {
+        constructor() {
+          super();
+          const shadowRoot = this.attachShadow({ mode: 'open' });
+          const button = document.createElement('button');
+          shadowRoot.appendChild(button);
+        }
+      }
+      const CustomElementTag = `focus-test-${Math.floor(
+        Math.random() * 9999999,
+      )}`;
+      window.customElements.define(
+        CustomElementTag,
+        CustomElementImplementation,
+      );
+      function ButtonAndModal(props: { show?: boolean }) {
+        return (
+          <>
+            <CustomElementTag />
+            <Modal {...props}>
+              <input autoFocus />
+            </Modal>
+          </>
+        );
+      }
+
+      const { rerender, container } = render(<ButtonAndModal />);
+      const element = container.querySelector(CustomElementTag);
+      const button = element!.shadowRoot!.querySelector('button');
+      button!.focus();
+
+      expect(document.activeElement).toBe(element);
+      expect(element?.shadowRoot?.activeElement).toBe(button);
+
+      rerender(<ButtonAndModal show />);
+      expect(document.activeElement).not.toBe(button);
+
+      rerender(<ButtonAndModal />);
+      expect(document.activeElement).toBe(element);
+      expect(element?.shadowRoot?.activeElement).toBe(button);
+    });
   });
 });
