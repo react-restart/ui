@@ -8,10 +8,15 @@ export default defineConfig({
     setupFiles: ['test/setup.ts'],
     browser: {
       enabled: true,
-      name: 'chromium',
       provider: 'playwright',
-      // https://playwright.dev
-      providerOptions: {},
+      instances: [
+        {
+          browser: 'chromium',
+        },
+        {
+          browser: 'firefox',
+        },
+      ],
     },
     coverage: {
       provider: 'istanbul',
