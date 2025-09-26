@@ -14,6 +14,7 @@ export { useDropdownItem } from './DropdownItem.js';
 export { default as Modal, type ModalProps } from './Modal.js';
 export { default as Overlay, type OverlayProps } from './Overlay.js';
 export { default as Portal, type PortalProps } from './Portal.js';
+export { default as usePopper } from './usePopper.js';
 export {
   default as useRootClose,
   type RootCloseOptions,

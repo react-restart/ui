@@ -441,7 +441,7 @@ describe('<Dropdown>', () => {
 
   describe('popper config', () => {
     it('can add modifiers', async () => {
-      const spy = vi.fn();
+      const spy = vi.fn(() => ({}));
       const popper = {
         modifiers: [
           {
@@ -465,7 +465,7 @@ describe('<Dropdown>', () => {
         </Dropdown>,
       );
 
-      await waitFor(() => expect(spy).toHaveBeenCalledOnce());
+      await waitFor(() => expect(spy).toHaveBeenCalled());
     });
   });
 });

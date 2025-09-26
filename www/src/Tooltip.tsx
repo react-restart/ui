@@ -3,7 +3,7 @@ import React from 'react';
 
 const Tooltip = React.forwardRef(
   ({ children, arrowProps, popper, show: _, ...props }: any, ref: any) => (
-    <div ref={ref} {...props} className={clsx(props.className, 'absolute')}>
+    <div ref={ref} {...props} className={clsx(props.className, 'absolute')} role='tooltip'>
       <div
         {...arrowProps}
         style={arrowProps.style}

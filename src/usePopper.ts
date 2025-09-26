@@ -1,117 +1,79 @@
-import * as Popper from '@popperjs/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { dequal } from 'dequal';
+//import * as Popper from '@popperjs/core';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useSafeState from '@restart/hooks/useSafeState';
-import { createPopper } from './popper.js';
+import {
+  createPopper,
+  PopperModifierLikeMiddleware,
+  Modifier,
+} from './popper.js';
+import type { Placement } from '@floating-ui/dom';
+import type { Middleware, Strategy } from '@floating-ui/core';
 
-const disabledApplyStylesModifier = {
-  name: 'applyStyles',
-  enabled: false,
-  phase: 'afterWrite',
-  fn: () => undefined,
-};
-
-// until docjs supports type exports...
-export type Modifier<Name, Options extends Popper.Obj> = Popper.Modifier<
-  Name,
-  Options
->;
-export type Options = Popper.Options;
-export type Instance = Popper.Instance;
-export type Placement = Popper.Placement;
-export type VirtualElement = Popper.VirtualElement;
-export type State = Popper.State;
-
-export type OffsetValue = [
-  number | null | undefined,
-  number | null | undefined,
-];
-export type OffsetFunction = (details: {
-  popper: Popper.Rect;
-  reference: Popper.Rect;
-  placement: Placement;
-}) => OffsetValue;
-
-export type Offset = OffsetFunction | OffsetValue;
+export type { Placement, OffsetOptions as Offset } from '@floating-ui/dom';
+export type { Modifier } from './popper.js';
 
 export type ModifierMap = Record<string, Partial<Modifier<any, any>>>;
 export type Modifiers =
-  | Popper.Options['modifiers']
+  | Partial<Modifier<any, any>>[]
   | Record<string, Partial<Modifier<any, any>>>;
 
-export type UsePopperOptions = Omit<
-  Options,
-  'modifiers' | 'placement' | 'strategy'
-> & {
-  enabled?: boolean;
-  placement?: Options['placement'];
-  strategy?: Options['strategy'];
-  modifiers?: Options['modifiers'];
+// VirtualElement compatible with Floating UI
+export type VirtualElement = {
+  getBoundingClientRect(): DOMRect;
+  contextElement?: Element;
 };
 
+// Options for usePopper hook
+export interface UsePopperOptions {
+  enabled?: boolean;
+  placement?: Placement;
+  strategy?: Strategy;
+  modifiers?: Modifiers;
+}
+
+// Popper state returned by the hook
 export interface UsePopperState {
   placement: Placement;
   update: () => void;
-  forceUpdate: () => void;
   attributes: Record<string, Record<string, any>>;
   styles: Record<string, Partial<CSSStyleDeclaration>>;
-  state?: State;
+  state?: any;
 }
 
-const ariaDescribedByModifier: Modifier<
-  'ariaDescribedBy',
-  Record<string, never>
-> = {
-  name: 'ariaDescribedBy',
-  enabled: true,
-  phase: 'afterWrite',
-  effect:
-    ({ state }) =>
-    () => {
-      const { reference, popper } = state.elements;
+const EMPTY_MODIFIERS: Modifier<any, any>[] = [];
+
+function useAriaDescribedBy(
+  reference: HTMLElement | null,
+  popper: HTMLElement | null,
+) {
+  useEffect(() => {
+    if (!reference || !popper) return;
+
+    const role = popper.getAttribute('role')?.toLowerCase();
+    if (popper.id && role === 'tooltip' && 'setAttribute' in reference) {
+      const ids = reference.getAttribute('aria-describedby');
+      if (!ids || !ids.split(',').includes(popper.id)) {
+        reference.setAttribute(
+          'aria-describedby',
+          ids ? `${ids},${popper.id}` : popper.id,
+        );
+      }
+    }
+
+    return () => {
       if ('removeAttribute' in reference) {
         const ids = (reference.getAttribute('aria-describedby') || '')
           .split(',')
           .filter((id) => id.trim() !== popper.id);
-
         if (!ids.length) reference.removeAttribute('aria-describedby');
         else reference.setAttribute('aria-describedby', ids.join(','));
       }
-    },
-  fn: ({ state }) => {
-    const { popper, reference } = state.elements;
+    };
+  }, [reference, popper]);
+}
 
-    const role = popper.getAttribute('role')?.toLowerCase();
-
-    if (popper.id && role === 'tooltip' && 'setAttribute' in reference) {
-      const ids = reference.getAttribute('aria-describedby');
-      if (ids && ids.split(',').indexOf(popper.id) !== -1) {
-        return;
-      }
-
-      reference.setAttribute(
-        'aria-describedby',
-        ids ? `${ids},${popper.id}` : popper.id,
-      );
-    }
-  },
-};
-
-const EMPTY_MODIFIERS = [] as any;
 /**
- * Position an element relative some reference element using Popper.js
- *
- * @param referenceElement
- * @param popperElement
- * @param {object}      options
- * @param {object=}     options.modifiers Popper.js modifiers
- * @param {boolean=}    options.enabled toggle the popper functionality on/off
- * @param {string=}     options.placement The popper element placement relative to the reference element
- * @param {string=}     options.strategy the positioning strategy
- * @param {function=}   options.onCreate called when the popper is created
- * @param {function=}   options.onUpdate called when the popper is updated
- *
- * @returns {UsePopperState} The popper state
+ * React hook for positioning a floating element relative to a reference element using Floating UI
  */
 function usePopper(
   referenceElement: VirtualElement | null | undefined,
@@ -119,110 +81,80 @@ function usePopper(
   {
     enabled = true,
     placement = 'bottom',
-    strategy = 'absolute',
     modifiers = EMPTY_MODIFIERS,
-    ...config
+    strategy = 'absolute',
   }: UsePopperOptions = {},
 ): UsePopperState {
-  const prevModifiers = useRef<UsePopperOptions['modifiers']>(modifiers);
-  const popperInstanceRef = useRef<Instance>(undefined);
+  const popperInstanceRef = useRef<any>(undefined);
 
   const update = useCallback(() => {
-    popperInstanceRef.current?.update();
-  }, []);
-
-  const forceUpdate = useCallback(() => {
-    popperInstanceRef.current?.forceUpdate();
+    popperInstanceRef.current?.update?.();
   }, []);
 
   const [popperState, setState] = useSafeState(
     useState<UsePopperState>({
       placement,
       update,
-      forceUpdate,
       attributes: {},
-      styles: {
-        popper: {},
-        arrow: {},
-      },
+      styles: { popper: {}, arrow: {} },
     }),
   );
 
-  const updateModifier = useMemo<Modifier<'updateStateModifier', any>>(
-    () => ({
-      name: 'updateStateModifier',
-      enabled: true,
-      phase: 'write',
-      requires: ['computeStyles'],
-      fn: ({ state }) => {
-        const styles: UsePopperState['styles'] = {};
-        const attributes: UsePopperState['attributes'] = {};
-
-        Object.keys(state.elements).forEach((element) => {
-          styles[element] = state.styles[element];
-          attributes[element] = state.attributes[element];
-        });
-
-        setState({
-          state,
-          styles,
-          attributes,
-          update,
-          forceUpdate,
-          placement: state.placement,
-        });
-      },
-    }),
-    [update, forceUpdate, setState],
+  useAriaDescribedBy(
+    referenceElement as HTMLElement | null,
+    popperElement as HTMLElement | null,
   );
 
-  const nextModifiers = useMemo(() => {
-    if (!dequal(prevModifiers.current, modifiers)) {
-      prevModifiers.current = modifiers;
-    }
-    return prevModifiers.current!;
-  }, [modifiers]);
+  const updateModifier: Middleware = {
+    name: 'updateStateModifier',
+    fn(args) {
+      setState({
+        ...popperState,
+        styles: {
+          popper: {
+            top: String(args.y ?? 0),
+            left: String(args.x ?? 0),
+            position: args.strategy,
+          },
+        },
+        state: args,
+        placement: args.placement,
+      });
 
+      return {};
+    },
+  };
+
+  // Create the popper instance
   useEffect(() => {
-    if (!popperInstanceRef.current || !enabled) return;
+    if (!enabled || referenceElement == null || popperElement == null) return;
 
-    popperInstanceRef.current.setOptions({
-      placement,
-      strategy,
-      modifiers: [
-        ...nextModifiers,
-        updateModifier,
-        disabledApplyStylesModifier,
-      ],
-    });
-  }, [strategy, placement, updateModifier, enabled, nextModifiers]);
-
-  useEffect(() => {
-    if (!enabled || referenceElement == null || popperElement == null) {
-      return undefined;
-    }
-
-    popperInstanceRef.current = createPopper(referenceElement, popperElement, {
-      ...config,
-      placement,
-      strategy,
-      modifiers: [...nextModifiers, ariaDescribedByModifier, updateModifier],
-    });
+    popperInstanceRef.current?.cleanup?.();
+    popperInstanceRef.current = createPopper(
+      referenceElement as any,
+      popperElement,
+      {
+        placement,
+        strategy,
+        modifiers: [
+          ...((Array.isArray(modifiers)
+            ? modifiers
+            : Object.values(modifiers)) as PopperModifierLikeMiddleware[]),
+          updateModifier,
+        ],
+      },
+    );
 
     return () => {
-      if (popperInstanceRef.current != null) {
-        popperInstanceRef.current.destroy();
-        popperInstanceRef.current = undefined;
-
-        setState((s) => ({
-          ...s,
-          attributes: {},
-          styles: { popper: {} },
-        }));
-      }
+      popperInstanceRef.current?.cleanup?.();
+      popperInstanceRef.current = undefined;
+      setState((s) => ({
+        ...s,
+        attributes: {},
+        styles: { popper: {}, arrow: {} },
+      }));
     };
-    // This is only run once to _create_ the popper
-  }, [enabled, referenceElement, popperElement]);
+  }, [placement, strategy, enabled, referenceElement, popperElement]);
 
   return popperState;
 }

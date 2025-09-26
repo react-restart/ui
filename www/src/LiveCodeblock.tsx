@@ -13,6 +13,7 @@ import {
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as RestartUi from '@restart/ui';
+import useCallbackRef from '@restart/hooks/useCallbackRef';
 import Button from './Button';
 import Dropdown from './Dropdown';
 import Tooltip from './Tooltip';
@@ -35,6 +36,7 @@ const LocalImports = {
   react: React,
   'react-dom': ReactDOM,
   '@restart/ui': RestartUi,
+  '@restart/hooks/useCallbackRef': useCallbackRef,
   'react-transition-group/Transition': Transition,
   'dom-helpers/scrollParent': scrollParent,
   clsx,

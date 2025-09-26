@@ -1,0 +1,105 @@
+# usePopper
+
+`usePopper` is a React hook that provides positioning logic using [Floating UI](https://floating-ui.com/).
+
+## Example
+
+```jsx live renderAsComponent
+import { usePopper } from "@restart/ui";
+import useCallbackRef from "@restart/hooks/useCallbackRef";
+import clsx from "clsx";
+import Button from "../src/Button";
+
+function Example() {
+  const referenceRef = useRef(null);
+  const [popperElement, attachPopperRef] = useCallbackRef();
+  const [arrowElement, attachArrowRef] = useCallbackRef();
+  const [show, setShow] = useState(true);
+
+  const { styles, placement } = usePopper(
+    referenceRef.current,
+    popperElement,
+    {
+      enabled: show,
+      placement: "right",
+      modifiers: [
+        {
+          name: "arrow",
+          options: { element: arrowElement },
+        },
+        {
+          name: "offset",
+          options: {
+            offset: [0, 100],
+          },
+        },
+        {
+          name: "preventOverflow",
+          options: {
+            padding: 8,
+            boundary: "viewport",
+          },
+        },
+        {
+          name: "eventListeners",
+          options: {
+            scroll: true,
+            resize: true,
+          },
+        },
+        {
+          name: "flip",
+          options: {
+            fallbackPlacements: ["top"],
+          },
+        },
+      ],
+    }
+  );
+
+  return (
+    <div className="flex flex-col items-center">
+      <Button
+        type="button"
+        ref={referenceRef}
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+      >
+        Hover me
+      </Button>
+      {show && (
+        <div
+          ref={attachPopperRef}
+          style={{
+            ...styles.popper,
+            zIndex: 9999,
+            background: "black",
+            color: "white",
+            padding: "6px 10px",
+            borderRadius: 6,
+            fontSize: 14,
+            whiteSpace: "nowrap",
+            display: "inline-block",
+          }}
+          id="floating-ui-positioned-div"
+          role="tooltip"
+        >
+          Hi there!
+          <div
+            ref={attachArrowRef}
+            className={clsx(
+              "absolute w-3 h-3 z-[-1]",
+              "before:absolute before:rotate-45 before:bg-black before:top-0 before:left-0 before:w-3 before:h-3",
+              placement === "left" && "-right-1",
+              placement === "right" && "-left-1",
+              placement === "bottom" && "-top-1",
+              placement === "top" && "-bottom-1"
+            )}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+```
