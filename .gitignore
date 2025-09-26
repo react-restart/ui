@@ -34,3 +34,5 @@ node_modules
 # Build artifacts
 /examples/static
 /lib
+
+test/__screenshots__
