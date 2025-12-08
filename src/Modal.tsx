@@ -173,6 +173,15 @@ export interface BaseModalProps extends TransitionCallbacks {
   enforceFocus?: boolean;
 
   /**
+   * Options passed to focus function when `enforceFocus` is set to `true`
+   *
+   * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
+   */
+  enforceFocusOptions?: {
+    preventScroll: boolean;
+  };
+
+  /**
    * When `true` The modal will restore focus to previously focused element once
    * modal is hidden
    */
@@ -272,6 +281,7 @@ const Modal: React.ForwardRefExoticComponent<
 
       autoFocus = true,
       enforceFocus = true,
+      enforceFocusOptions,
       restoreFocus = true,
       restoreFocusOptions,
       mountDialogOnEnter = true,
@@ -307,6 +317,7 @@ const Modal: React.ForwardRefExoticComponent<
     const focusTrap = useFocusTrap({
       getContainer: () => modal.dialog,
       disabled: () => !enforceFocus || !modal.isTopModal(),
+      enforceFocusOptions,
     });
 
     useImperativeHandle(ref, () => modal, [modal]);

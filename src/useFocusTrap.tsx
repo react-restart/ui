@@ -9,9 +9,19 @@ import activeElement from 'dom-helpers/activeElement';
 export function useFocusTrap({
   getContainer,
   disabled,
+  enforceFocusOptions,
 }: {
   getContainer: () => HTMLElement | null;
   disabled?: () => boolean;
+
+  /**
+   * Options passed to focus function when trap container regains focus
+   *
+   * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
+   */
+  enforceFocusOptions?: {
+    preventScroll: boolean;
+  };
 }) {
   const ownerWindow = useWindow();
   const isMounted = useMounted();
@@ -60,7 +70,7 @@ export function useFocusTrap({
     ) {
       const tabbables = getTabbableElementsOrSelf(container);
 
-      tabbables[0]?.focus();
+      tabbables[0]?.focus(enforceFocusOptions);
     }
   });
 
