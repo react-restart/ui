@@ -60,7 +60,7 @@ export function useFocusTrap({
     ) {
       const tabbables = getTabbableElementsOrSelf(container);
 
-      tabbables[0]?.focus();
+      tabbables[0]?.focus({ preventScroll: true });
     }
   });
 
