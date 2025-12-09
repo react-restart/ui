@@ -1,3 +1,9 @@
+# [2.0.0-beta.12](https://github.com/react-restart/ui/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2025-12-09)
+
+
+
+
+
 # [2.0.0-beta.11](https://github.com/react-restart/ui/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2025-12-09)
 
 
