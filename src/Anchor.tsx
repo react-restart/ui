@@ -19,8 +19,8 @@ export interface AnchorProps extends React.HTMLAttributes<HTMLElement> {
  * cases where the `href` is missing or trivial like "#" are treated like buttons.
  */
 const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
-  ({ onKeyDown, ...props }, ref) => {
-    const [buttonProps] = useButtonProps({ tagName: 'a', ...props });
+  ({ onKeyDown, disabled, ...props }, ref) => {
+    const [buttonProps] = useButtonProps({ tagName: 'a', disabled, ...props });
 
     const handleKeyDown = useEventCallback(
       (e: React.KeyboardEvent<HTMLElement>) => {
@@ -35,7 +35,16 @@ const Anchor = React.forwardRef<HTMLAnchorElement, AnchorProps>(
       );
     }
 
-    return <a ref={ref} {...props} onKeyDown={onKeyDown} />;
+    return (
+      <a
+        ref={ref}
+        {...props}
+        href={disabled ? undefined : props.href}
+        aria-disabled={disabled || props['aria-disabled']}
+        onClick={buttonProps.onClick}
+        onKeyDown={onKeyDown}
+      />
+    );
   },
 );
 

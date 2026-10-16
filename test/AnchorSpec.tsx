@@ -112,4 +112,37 @@ describe('Anchor', () => {
       ).container.firstElementChild!.hasAttribute('role'),
     ).toEqual(false);
   });
+
+  it('disables a non-trivial link without making it a button', () => {
+    const onClick = vi.fn();
+    const onParentClick = vi.fn();
+    const { container } = render(
+      <div onClick={onParentClick}>
+        <Anchor href="#destination" disabled onClick={onClick} />
+      </div>,
+    );
+    const anchor = container.querySelector('a')!;
+
+    expect(fireEvent.click(anchor)).toBe(false);
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onParentClick).not.toHaveBeenCalled();
+    expect(anchor.hasAttribute('href')).toBe(false);
+    expect(anchor.getAttribute('aria-disabled')).toBe('true');
+    expect(anchor.hasAttribute('role')).toBe(false);
+  });
+
+  it('preserves native Space behavior for a non-trivial link', () => {
+    const onClick = vi.fn();
+    const onKeyDown = vi.fn();
+    const { container } = render(
+      <Anchor href="#destination" onClick={onClick} onKeyDown={onKeyDown} />,
+    );
+    const anchor = container.firstElementChild!;
+
+    expect(fireEvent.keyDown(anchor, { key: ' ' })).toBe(true);
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onKeyDown).toHaveBeenCalledOnce();
+    expect(anchor.getAttribute('href')).toBe('#destination');
+    expect(anchor.hasAttribute('aria-disabled')).toBe(false);
+  });
 });
