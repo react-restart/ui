@@ -9,10 +9,10 @@ export interface WaypointEvent {
 }
 
 export interface Rect {
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
+  top?: number | undefined;
+  bottom?: number | undefined;
+  left?: number | undefined;
+  right?: number | undefined;
 }
 
 export type WaypointCallback = (
@@ -32,7 +32,11 @@ export interface WaypointOptions
    * indicating that the root is not ready yet, or the string "scrollParent" to
    * have the waypoint calculate the scroll parent itself.
    */
-  root?: RootElement | 'scrollParent' | ((element: Element) => RootElement);
+  root?:
+    | RootElement
+    | 'scrollParent'
+    | ((element: Element) => RootElement)
+    | undefined;
 
   /**
    * A valid CSS `margin` property or object containing the specific "top", "left", etc properties.
@@ -40,12 +44,12 @@ export interface WaypointOptions
    * position. A positive margin will cause the waypoint to "enter" the waypoint early while a
    * negative margin will have the opposite effect.
    */
-  rootMargin?: string | Rect;
+  rootMargin?: string | Rect | undefined;
 
   /**
    * Set the direction of the scroll to consider when tracking the waypoint's position
    */
-  scrollDirection?: 'vertical' | 'horizontal';
+  scrollDirection?: 'vertical' | 'horizontal' | undefined;
 }
 
 export enum Position {

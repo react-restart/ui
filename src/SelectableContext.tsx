@@ -4,7 +4,7 @@ import type { EventKey, SelectCallback } from './types.js';
 const SelectableContext = React.createContext<SelectCallback | null>(null);
 
 export const makeEventKey = (
-  eventKey?: EventKey | null,
+  eventKey?: EventKey | null | undefined,
   href: string | null = null,
 ): string | null => {
   if (eventKey != null) return String(eventKey);

@@ -28,8 +28,8 @@ export const getRefTarget = (
 ) => ref && ('current' in ref ? ref.current : ref);
 
 export interface ClickOutsideOptions {
-  disabled?: boolean;
-  clickTrigger?: MouseEvents;
+  disabled?: boolean | undefined;
+  clickTrigger?: MouseEvents | undefined;
 }
 
 const InitialTriggerEvents: Partial<Record<MouseEvents, MouseEvents>> = {

@@ -13,35 +13,35 @@ export interface DropdownItemProps extends React.HTMLAttributes<HTMLElement> {
   /**
    * Element used to render the component.
    */
-  as?: React.ElementType;
+  as?: React.ElementType | undefined;
 
   /**
    * Highlight the menu item as active.
    */
-  active?: boolean;
+  active?: boolean | undefined;
 
   /**
    * Disable the menu item, making it unselectable.
    */
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 
   /**
    * Value passed to the `onSelect` handler, useful for identifying the selected menu item.
    */
-  eventKey?: EventKey;
+  eventKey?: EventKey | undefined;
 
   /**
    * HTML `href` attribute corresponding to `a.href`.
    */
-  href?: string;
+  href?: string | undefined;
 }
 
 interface UseDropdownItemOptions {
-  key?: EventKey | null;
-  href?: string;
-  active?: boolean;
-  disabled?: boolean;
-  onClick?: React.MouseEventHandler;
+  key?: EventKey | null | undefined;
+  href?: string | undefined;
+  active?: boolean | undefined;
+  disabled?: boolean | undefined;
+  onClick?: React.MouseEventHandler | undefined;
 }
 
 /**

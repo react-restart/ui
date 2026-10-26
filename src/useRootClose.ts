@@ -13,7 +13,7 @@ import { getWindowEvent } from './getWindowEvent.js';
 const noop = () => {};
 
 export interface RootCloseOptions extends ClickOutsideOptions {
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 }
 
 /**

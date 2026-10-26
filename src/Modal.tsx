@@ -32,8 +32,8 @@ let manager: ModalManager;
 
 export interface ModalTransitionProps extends TransitionCallbacks {
   in: boolean;
-  appear?: boolean;
-  unmountOnExit?: boolean;
+  appear?: boolean | undefined;
+  unmountOnExit?: boolean | undefined;
   children: React.ReactElement;
 }
 
@@ -59,43 +59,43 @@ export interface RenderModalBackdropProps {
   This is due to Typescript not playing well with index signatures e.g. when using Omit
 */
 export interface BaseModalProps extends TransitionCallbacks {
-  children?: React.ReactElement<any>;
-  role?: string;
-  style?: React.CSSProperties;
-  className?: string;
+  children?: React.ReactElement<any> | undefined;
+  role?: string | undefined;
+  style?: React.CSSProperties | undefined;
+  className?: string | undefined;
 
   /**
    * Set the visibility of the Modal
    */
-  show?: boolean;
+  show?: boolean | undefined;
   /**
    * A DOM element, a `ref` to an element, or function that returns either. The Modal is appended to it's `container` element.
    *
    */
-  container?: DOMContainer;
+  container?: DOMContainer | undefined;
   /**
    * A callback fired when the Modal is opening.
    */
-  onShow?: () => void;
+  onShow?: (() => void) | undefined;
   /**
    * A callback fired when either the backdrop is clicked, or the escape key is pressed.
    *
    * The `onHide` callback only signals intent from the Modal,
    * you must actually set the `show` prop to `false` for the Modal to close.
    */
-  onHide?: () => void;
+  onHide?: (() => void) | undefined;
 
   /**
    * A ModalManager instance used to track and manage the state of open
    * Modals. Useful when customizing how modals interact within a container
    */
-  manager?: ModalManager;
+  manager?: ModalManager | undefined;
 
   /**
    * Include a backdrop component. A `static`backdrop
    * will not trigger a Modal onHide when clicked.
    */
-  backdrop?: true | false | 'static';
+  backdrop?: true | false | 'static' | undefined;
 
   /**
    * A function that returns the dialog component. Useful for custom
@@ -105,7 +105,9 @@ export interface BaseModalProps extends TransitionCallbacks {
    * renderDialog={props => <MyDialog {...props} />}
    * ```
    */
-  renderDialog?: (props: RenderModalDialogProps) => React.ReactNode;
+  renderDialog?:
+    | ((props: RenderModalDialogProps) => React.ReactNode)
+    | undefined;
   /**
    * A function that returns a backdrop component. Useful for custom
    * backdrop rendering.
@@ -114,46 +116,48 @@ export interface BaseModalProps extends TransitionCallbacks {
    *  renderBackdrop={props => <MyBackdrop {...props} />}
    * ```
    */
-  renderBackdrop?: (props: RenderModalBackdropProps) => React.ReactNode;
+  renderBackdrop?:
+    | ((props: RenderModalBackdropProps) => React.ReactNode)
+    | undefined;
   /**
    * A callback fired when the escape key, if specified in `keyboard`, is pressed.
    *
    * If preventDefault() is called on the keyboard event, closing the modal will be cancelled.
    */
-  onEscapeKeyDown?: (e: KeyboardEvent) => void;
+  onEscapeKeyDown?: ((e: KeyboardEvent) => void) | undefined;
   /**
    * A callback fired when the backdrop, if specified, is clicked.
    */
-  onBackdropClick?: (e: React.SyntheticEvent) => void;
+  onBackdropClick?: ((e: React.SyntheticEvent) => void) | undefined;
 
   /**
    * Close the modal when escape key is pressed
    */
-  keyboard?: boolean;
+  keyboard?: boolean | undefined;
 
   /**
    * A `react-transition-group` `<Transition/>` component used
    * to control animations for the dialog component.
    */
-  transition?: ModalTransitionComponent;
+  transition?: ModalTransitionComponent | undefined;
 
   /**
    * A transition handler, called with the `show` state and dialog element.
    * Should return a promise when the transition is complete
    */
-  runTransition?: TransitionHandler;
+  runTransition?: TransitionHandler | undefined;
 
   /**
    * A `react-transition-group` `<Transition/>` component used
    * to control animations for the backdrop components.
    */
-  backdropTransition?: ModalTransitionComponent;
+  backdropTransition?: ModalTransitionComponent | undefined;
 
   /**
    * A transition handler, called with the `show` state and backdrop element.
    * Should return a promise when the transition is complete
    */
-  runBackdropTransition?: TransitionHandler;
+  runBackdropTransition?: TransitionHandler | undefined;
 
   /**
    * When `true` The modal will automatically shift focus to itself when it opens, and
@@ -163,29 +167,31 @@ export interface BaseModalProps extends TransitionCallbacks {
    * Generally this should never be set to `false` as it makes the Modal less
    * accessible to assistive technologies, like screen readers.
    */
-  autoFocus?: boolean;
+  autoFocus?: boolean | undefined;
   /**
    * When `true` The modal will prevent focus from leaving the Modal while open.
    *
    * Generally this should never be set to `false` as it makes the Modal less
    * accessible to assistive technologies, like screen readers.
    */
-  enforceFocus?: boolean;
+  enforceFocus?: boolean | undefined;
 
   /**
    * When `true` The modal will restore focus to previously focused element once
    * modal is hidden
    */
-  restoreFocus?: boolean;
+  restoreFocus?: boolean | undefined;
 
   /**
    * Options passed to focus function when `restoreFocus` is set to `true`
    *
    * @link  https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#Parameters
    */
-  restoreFocusOptions?: {
-    preventScroll: boolean;
-  };
+  restoreFocusOptions?:
+    | {
+        preventScroll: boolean;
+      }
+    | undefined;
 
   /**
    * Lazy mount the dialog element when the Modal is shown.

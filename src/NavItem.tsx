@@ -13,36 +13,36 @@ export interface NavItemProps extends React.HTMLAttributes<HTMLElement> {
   /**
    * Highlight the NavItem as active.
    */
-  active?: boolean;
+  active?: boolean | undefined;
 
   /**
    * Element used to render the component.
    */
-  as?: React.ElementType;
+  as?: React.ElementType | undefined;
 
   /**
    * Disable the NavItem, making it unselectable.
    */
-  disabled?: boolean;
+  disabled?: boolean | undefined;
 
   /**
    * Value passed to the `onSelect` handler, useful for identifying the selected NavItem.
    */
-  eventKey?: EventKey;
+  eventKey?: EventKey | undefined;
 
   /**
    * HTML `href` attribute corresponding to `a.href`.
    */
-  href?: string;
+  href?: string | undefined;
 }
 
 export interface UseNavItemOptions {
-  key?: string | null;
-  onClick?: React.MouseEventHandler;
-  active?: boolean;
-  disabled?: boolean;
-  id?: string;
-  role?: string;
+  key?: string | null | undefined;
+  onClick?: React.MouseEventHandler | undefined;
+  active?: boolean | undefined;
+  disabled?: boolean | undefined;
+  id?: string | undefined;
+  role?: string | undefined;
 }
 
 export function useNavItem({

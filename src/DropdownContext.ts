@@ -12,7 +12,7 @@ export type DropdownContextValue = {
   setToggle: (ref: HTMLElement | null) => void;
 
   show: boolean;
-  placement?: Placement;
+  placement?: Placement | undefined;
 };
 
 const DropdownContext = React.createContext<DropdownContextValue | null>(null);

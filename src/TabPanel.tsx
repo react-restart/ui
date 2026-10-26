@@ -17,41 +17,41 @@ export interface TabPanelProps
   /**
    * Element used to render the component.
    */
-  as?: React.ElementType;
+  as?: React.ElementType | undefined;
 
   /**
    * A key that associates the `TabPanel` with it's controlling `NavLink`.
    */
-  eventKey?: EventKey;
+  eventKey?: EventKey | undefined;
 
   /**
    * Toggles the active state of the TabPanel, this is generally controlled by `Tabs`.
    */
-  active?: boolean;
+  active?: boolean | undefined;
 
   /**
    * Use animation when showing or hiding `<TabPanel>`s. Use a react-transition-group
    * `<Transition/>` component.
    */
-  transition?: TransitionComponent;
+  transition?: TransitionComponent | undefined;
 
   /**
    * Wait until the first "enter" transition to mount the tab (add it to the DOM)
    */
-  mountOnEnter?: boolean;
+  mountOnEnter?: boolean | undefined;
 
   /**
    * Unmount the tab (remove it from the DOM) when it is no longer visible
    */
-  unmountOnExit?: boolean;
+  unmountOnExit?: boolean | undefined;
 }
 
 export interface TabPanelMetadata extends TransitionCallbacks {
-  eventKey?: EventKey;
-  isActive?: boolean;
-  transition?: TransitionComponent;
-  mountOnEnter?: boolean;
-  unmountOnExit?: boolean;
+  eventKey?: EventKey | undefined;
+  isActive?: boolean | undefined;
+  transition?: TransitionComponent | undefined;
+  mountOnEnter?: boolean | undefined;
+  unmountOnExit?: boolean | undefined;
 }
 
 export function useTabPanel({

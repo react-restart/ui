@@ -11,7 +11,7 @@ export function useFocusTrap({
   disabled,
 }: {
   getContainer: () => HTMLElement | null;
-  disabled?: () => boolean;
+  disabled?: (() => boolean) | undefined;
 }) {
   const ownerWindow = useWindow();
   const isMounted = useMounted();

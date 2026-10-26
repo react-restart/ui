@@ -43,33 +43,33 @@ export interface OverlayProps extends TransitionCallbacks {
    * automatically adjust it's placement in case of overlap with the viewport or toggle.
    * Refer to the [flip docs](https://popper.js.org/popper-documentation.html#modifiers..flip.enabled) for more info
    */
-  flip?: boolean;
+  flip?: boolean | undefined;
 
   /** Specify where the overlay element is positioned in relation to the target element */
-  placement?: Placement;
+  placement?: Placement | undefined;
 
   /**
    * Control offset of the overlay to the reference element.
    * A convenience shortcut to setting `popperConfig.modfiers.offset`
    */
-  offset?: Offset;
+  offset?: Offset | undefined;
 
   /**
    * Control how much space there is between the edge of the boundary element and overlay.
    * A convenience shortcut to setting `popperConfig.modfiers.preventOverflow.padding`
    */
-  containerPadding?: number;
+  containerPadding?: number | undefined;
 
   /**
    * A set of popper options and props passed directly to react-popper's Popper component.
    */
-  popperConfig?: Omit<UsePopperOptions, 'placement'>;
+  popperConfig?: Omit<UsePopperOptions, 'placement'> | undefined;
 
   /**
    * A DOM Element, [Virtual Element](https://popper.js.org/docs/v2/virtual-elements/), Ref to an element, or
    * function that returns either. The `target` element is where the overlay is positioned relative to.
    */
-  container?: DOMContainer;
+  container?: DOMContainer | undefined;
 
   /**
    * A DOM Element, Ref to an element, or function that returns either. The `target` element is where
@@ -80,19 +80,19 @@ export interface OverlayProps extends TransitionCallbacks {
   /**
    * Set the visibility of the Overlay
    */
-  show?: boolean;
+  show?: boolean | undefined;
 
   /**
    * A `react-transition-group` `<Transition/>` component
    * used to animate the overlay as it changes visibility.
    */
-  transition?: TransitionComponent;
+  transition?: TransitionComponent | undefined;
 
   /**
    * A transition handler, called with the `show` state and overlay element.
    * Should return a promise when the transition is complete
    */
-  runTransition?: TransitionHandler;
+  runTransition?: TransitionHandler | undefined;
 
   /**
    * A Callback fired by the Overlay when it wishes to be hidden.
@@ -101,22 +101,22 @@ export interface OverlayProps extends TransitionCallbacks {
    *
    * @type func
    */
-  onHide?: (e: Event) => void;
+  onHide?: ((e: Event) => void) | undefined;
 
   /**
    * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
    */
-  rootClose?: boolean;
+  rootClose?: boolean | undefined;
 
   /**
    * Specify disabled for disable RootCloseWrapper
    */
-  rootCloseDisabled?: boolean;
+  rootCloseDisabled?: boolean | undefined;
 
   /**
    * Specify event for toggling overlay
    */
-  rootCloseEvent?: RootCloseOptions['clickTrigger'];
+  rootCloseEvent?: RootCloseOptions['clickTrigger'] | undefined;
 
   /**
    * A render prop that returns an overlay element.

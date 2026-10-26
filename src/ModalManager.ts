@@ -8,9 +8,9 @@ export interface ModalInstance {
 }
 
 export interface ModalManagerOptions {
-  ownerDocument?: Document;
-  handleContainerOverflow?: boolean;
-  isRTL?: boolean;
+  ownerDocument?: Document | undefined;
+  handleContainerOverflow?: boolean | undefined;
+  isRTL?: boolean | undefined;
 }
 
 export type ContainerState = {

@@ -26,17 +26,17 @@ export interface NavProps
   /**
    * Key for the currently active NavItem.
    */
-  activeKey?: EventKey;
+  activeKey?: EventKey | undefined;
 
   /**
    * Element used to render the component.
    */
-  as?: React.ElementType;
+  as?: React.ElementType | undefined;
 
   /**
    * A callback fired when a NavItem has been selected.
    */
-  onSelect?: SelectCallback;
+  onSelect?: SelectCallback | undefined;
 }
 
 const EVENT_KEY_ATTR = dataAttr('event-key');
