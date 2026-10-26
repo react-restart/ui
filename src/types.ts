@@ -34,10 +34,10 @@ export interface DynamicRefForwardingComponent<
     props: AssignPropsWithRef<As, { as?: As } & P>,
     context?: any,
   ): React.ReactNode;
-  propTypes?: any;
-  contextTypes?: any;
-  defaultProps?: Partial<P>;
-  displayName?: string;
+  propTypes?: any | undefined;
+  contextTypes?: any | undefined;
+  defaultProps?: Partial<P> | undefined;
+  displayName?: string | undefined;
 }
 
 export interface DynamicFunctionComponent<
@@ -48,10 +48,10 @@ export interface DynamicFunctionComponent<
     props: AssignPropsWithoutRef<As, { as?: As } & P>,
     context?: any,
   ): React.ReactNode;
-  propTypes?: any;
-  contextTypes?: any;
-  defaultProps?: Partial<P>;
-  displayName?: string;
+  propTypes?: any | undefined;
+  contextTypes?: any | undefined;
+  defaultProps?: Partial<P> | undefined;
+  displayName?: string | undefined;
 }
 
 export class DynamicComponent<
@@ -74,35 +74,35 @@ export interface TransitionCallbacks {
   /**
    * Callback fired before the component transitions in
    */
-  onEnter?(node: HTMLElement, isAppearing: boolean): any;
+  onEnter?: ((node: HTMLElement, isAppearing: boolean) => any) | undefined;
   /**
    * Callback fired as the component begins to transition in
    */
-  onEntering?(node: HTMLElement, isAppearing: boolean): any;
+  onEntering?: ((node: HTMLElement, isAppearing: boolean) => any) | undefined;
   /**
    * Callback fired after the component finishes transitioning in
    */
-  onEntered?(node: HTMLElement, isAppearing: boolean): any;
+  onEntered?: ((node: HTMLElement, isAppearing: boolean) => any) | undefined;
   /**
    * Callback fired right before the component transitions out
    */
-  onExit?(node: HTMLElement): any;
+  onExit?: ((node: HTMLElement) => any) | undefined;
   /**
    * Callback fired as the component begins to transition out
    */
-  onExiting?(node: HTMLElement): any;
+  onExiting?: ((node: HTMLElement) => any) | undefined;
   /**
    * Callback fired after the component finishes transitioning out
    */
-  onExited?(node: HTMLElement): any;
+  onExited?: ((node: HTMLElement) => any) | undefined;
 }
 
 export interface TransitionProps extends TransitionCallbacks {
-  in?: boolean;
-  appear?: boolean;
+  in?: boolean | undefined;
+  appear?: boolean | undefined;
   children: React.ReactElement<any>;
-  mountOnEnter?: boolean;
-  unmountOnExit?: boolean;
+  mountOnEnter?: boolean | undefined;
+  unmountOnExit?: boolean | undefined;
 }
 
 export type TransitionComponent = React.ComponentType<TransitionProps>;

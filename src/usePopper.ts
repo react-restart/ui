@@ -43,10 +43,10 @@ export type UsePopperOptions = Omit<
   Options,
   'modifiers' | 'placement' | 'strategy'
 > & {
-  enabled?: boolean;
-  placement?: Options['placement'];
-  strategy?: Options['strategy'];
-  modifiers?: Options['modifiers'];
+  enabled?: boolean | undefined;
+  placement?: Options['placement'] | undefined;
+  strategy?: Options['strategy'] | undefined;
+  modifiers?: Options['modifiers'] | undefined;
 };
 
 export interface UsePopperState {

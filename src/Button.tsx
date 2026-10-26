@@ -3,17 +3,19 @@ import * as React from 'react';
 export type ButtonType = 'button' | 'reset' | 'submit';
 
 export interface AnchorOptions {
-  href?: string;
-  rel?: string;
-  target?: string;
+  href?: string | undefined;
+  rel?: string | undefined;
+  target?: string | undefined;
 }
 
 export interface UseButtonPropsOptions extends AnchorOptions {
-  type?: ButtonType;
-  disabled?: boolean;
-  onClick?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
-  tabIndex?: number;
-  tagName?: keyof React.JSX.IntrinsicElements;
+  type?: ButtonType | undefined;
+  disabled?: boolean | undefined;
+  onClick?:
+    | React.EventHandler<React.MouseEvent | React.KeyboardEvent>
+    | undefined;
+  tabIndex?: number | undefined;
+  tagName?: keyof React.JSX.IntrinsicElements | undefined;
   role?: React.AriaRole | undefined;
 }
 
@@ -24,14 +26,16 @@ export function isTrivialHref(href?: string) {
 export interface AriaButtonProps {
   type?: ButtonType | undefined;
   disabled: boolean | undefined;
-  role?: React.AriaRole;
+  role?: React.AriaRole | undefined;
   tabIndex?: number | undefined;
   href?: string | undefined;
   target?: string | undefined;
   rel?: string | undefined;
   'aria-disabled'?: true | undefined;
-  onClick?: (event: React.MouseEvent | React.KeyboardEvent) => void;
-  onKeyDown?: (event: React.KeyboardEvent) => void;
+  onClick?:
+    | ((event: React.MouseEvent | React.KeyboardEvent) => void)
+    | undefined;
+  onKeyDown?: ((event: React.KeyboardEvent) => void) | undefined;
 }
 
 export interface UseButtonPropsMetadata {

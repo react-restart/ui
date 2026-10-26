@@ -15,7 +15,9 @@ const defaultRenderComponent = (ref: React.RefCallback<any>) => (
 );
 
 export interface WaypointProps extends WaypointOptions {
-  renderComponent?: (ref: React.RefCallback<any>) => React.ReactElement;
+  renderComponent?:
+    | ((ref: React.RefCallback<any>) => React.ReactElement)
+    | undefined;
 
   /**
    * The callback fired when a waypoint's position is updated. This generally

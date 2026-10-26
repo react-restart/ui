@@ -21,7 +21,7 @@ export type TransitionHandler = (
 export interface UseTransitionOptions {
   in: boolean;
   onTransition: TransitionHandler;
-  initial?: boolean;
+  initial?: boolean | undefined;
 }
 
 export function useTransition({

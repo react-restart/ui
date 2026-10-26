@@ -53,24 +53,24 @@ export interface DropdownProps {
    *
    * @default 'bottom-start'
    */
-  placement?: Placement;
+  placement?: Placement | undefined;
 
   /**
    * Sets the initial visibility of the Dropdown.
    */
-  defaultShow?: boolean;
+  defaultShow?: boolean | undefined;
 
   /**
    * Whether or not the Dropdown is visible.
    *
    * @controllable onToggle
    */
-  show?: boolean;
+  show?: boolean | undefined;
 
   /**
    * A callback fired when a DropdownItem has been selected.
    */
-  onSelect?: SelectCallback;
+  onSelect?: SelectCallback | undefined;
 
   /**
    * A callback fired when the Dropdown wishes to change visibility. Called with
@@ -86,14 +86,14 @@ export interface DropdownProps {
    *
    * @controllable show
    */
-  onToggle?: (nextShow: boolean, meta: ToggleMetadata) => void;
+  onToggle?: ((nextShow: boolean, meta: ToggleMetadata) => void) | undefined;
 
   /**
    * A css selector string that will return __focusable__ menu items.
    * Selectors should be relative to the menu component:
    * e.g. ` > li:not('.disabled')`
    */
-  itemSelector?: string;
+  itemSelector?: string | undefined;
 
   /**
    * Controls the focus behavior for when the Dropdown is opened. Set to
@@ -104,7 +104,7 @@ export interface DropdownProps {
    * where it will default to `keyboard` to match the recommended [ARIA Authoring
    * practices](https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton).
    */
-  focusFirstItemOnShow?: boolean | 'keyboard';
+  focusFirstItemOnShow?: boolean | 'keyboard' | undefined;
 
   /**
    * A render prop that returns the root dropdown element. The `props`

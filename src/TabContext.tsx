@@ -3,8 +3,8 @@ import type { EventKey, SelectCallback, TransitionComponent } from './types.js';
 
 export interface TabContextType {
   onSelect: SelectCallback;
-  activeKey?: EventKey;
-  transition?: TransitionComponent;
+  activeKey?: EventKey | undefined;
+  transition?: TransitionComponent | undefined;
   mountOnEnter: boolean;
   unmountOnExit: boolean;
   getControlledId: (key: EventKey) => any;

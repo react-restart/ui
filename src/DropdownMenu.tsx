@@ -22,31 +22,31 @@ export interface UseDropdownMenuOptions {
    * toggle. See the [flip docs](https://popper.js.org/docs/v2/modifiers/flip/)
    * for more info.
    */
-  flip?: boolean;
+  flip?: boolean | undefined;
 
   /**
    * Controls the visible state of the menu, generally this is provided by the
    * parent `Dropdown` component, but may also be specified as a prop directly.
    */
-  show?: boolean;
+  show?: boolean | undefined;
 
   /**
    * Use the `fixed` positioning strategy in Popper. This is used if the
    * dropdown toggle is in a fixed container.
    */
-  fixed?: boolean;
+  fixed?: boolean | undefined;
 
   /**
    * The PopperJS placement for positioning the Dropdown menu in relation to it's Toggle.
    * Generally this is provided by the parent `Dropdown` component,
    * but may also be specified as a prop directly.
    */
-  placement?: Placement;
+  placement?: Placement | undefined;
 
   /**
    * Whether or not to use Popper for positioning the menu.
    */
-  usePopper?: boolean;
+  usePopper?: boolean | undefined;
 
   /**
    * Whether or not to add scroll and resize listeners to update menu position.
@@ -54,28 +54,28 @@ export interface UseDropdownMenuOptions {
    * See the [event listeners docs](https://popper.js.org/docs/v2/modifiers/event-listeners/)
    * for more info.
    */
-  enableEventListeners?: boolean;
+  enableEventListeners?: boolean | undefined;
 
   /**
    * Offset of the dropdown menu from the dropdown toggle. See the
    * [offset docs](https://popper.js.org/docs/v2/modifiers/offset/) for more info.
    */
-  offset?: Offset;
+  offset?: Offset | undefined;
 
   /**
    * Override the default event used by RootCloseWrapper.
    */
-  rootCloseEvent?: ClickOutsideOptions['clickTrigger'];
+  rootCloseEvent?: ClickOutsideOptions['clickTrigger'] | undefined;
 
   /**
    * A set of popper options and props passed directly to react-popper's Popper component.
    */
-  popperConfig?: Omit<UsePopperOptions, 'enabled' | 'placement'>;
+  popperConfig?: Omit<UsePopperOptions, 'enabled' | 'placement'> | undefined;
 }
 
 export type UserDropdownMenuProps = Record<string, any> & {
   ref: React.RefCallback<HTMLElement>;
-  style?: React.CSSProperties;
+  style?: React.CSSProperties | undefined;
   'aria-labelledby'?: string;
 };
 
@@ -86,9 +86,9 @@ export type UserDropdownMenuArrowProps = Record<string, any> & {
 
 export interface UseDropdownMenuMetadata {
   show: boolean;
-  placement?: Placement;
+  placement?: Placement | undefined;
   hasShown: boolean;
-  toggle?: DropdownContextValue['toggle'];
+  toggle?: DropdownContextValue['toggle'] | undefined;
   popper: UsePopperState | null;
   arrowProps: Partial<UserDropdownMenuArrowProps>;
 }

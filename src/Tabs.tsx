@@ -9,23 +9,23 @@ import TabPanel, { TabPanelProps } from './TabPanel.js';
 
 export type { TabPanelProps };
 export interface TabsProps extends React.PropsWithChildren<unknown> {
-  id?: string;
+  id?: string | undefined;
 
   /**
    * Sets a default animation strategy for all children `<TabPanel>`s.
    * Use a react-transition-group `<Transition/>` component.
    */
-  transition?: TransitionComponent;
+  transition?: TransitionComponent | undefined;
 
   /**
    * Wait until the first "enter" transition to mount tabs (add them to the DOM)
    */
-  mountOnEnter?: boolean;
+  mountOnEnter?: boolean | undefined;
 
   /**
    * Unmount tabs (remove it from the DOM) when they are no longer visible
    */
-  unmountOnExit?: boolean;
+  unmountOnExit?: boolean | undefined;
 
   /**
    * A function that takes an `eventKey` and `type` and returns a unique id for
@@ -38,26 +38,28 @@ export interface TabsProps extends React.PropsWithChildren<unknown> {
    *
    * @defaultValue (eventKey, type) => `${props.id}-${type}-${eventKey}`
    */
-  generateChildId?: (eventKey: EventKey, type: 'tab' | 'pane') => string;
+  generateChildId?:
+    | ((eventKey: EventKey, type: 'tab' | 'pane') => string)
+    | undefined;
 
   /**
    * A callback fired when a tab is selected.
    *
    * @controllable activeKey
    */
-  onSelect?: SelectCallback;
+  onSelect?: SelectCallback | undefined;
 
   /**
    * The `eventKey` of the currently active tab.
    *
    * @controllable onSelect
    */
-  activeKey?: EventKey;
+  activeKey?: EventKey | undefined;
 
   /**
    * Default value for `eventKey`.
    */
-  defaultActiveKey?: EventKey;
+  defaultActiveKey?: EventKey | undefined;
 }
 
 const Tabs = (props: TabsProps) => {

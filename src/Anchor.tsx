@@ -8,10 +8,10 @@ export function isTrivialHref(href?: string) {
 }
 
 export interface AnchorProps extends React.HTMLAttributes<HTMLElement> {
-  href?: string;
-  disabled?: boolean;
-  role?: string;
-  tabIndex?: number;
+  href?: string | undefined;
+  disabled?: boolean | undefined;
+  role?: string | undefined;
+  tabIndex?: number | undefined;
 }
 
 /**

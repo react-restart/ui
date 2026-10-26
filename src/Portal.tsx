@@ -15,7 +15,7 @@ export interface PortalProps {
   /**
    * Callback that is triggered when the portal content is rendered.
    */
-  onRendered?: (element: any) => void;
+  onRendered?: ((element: any) => void) | undefined;
 }
 
 /**
